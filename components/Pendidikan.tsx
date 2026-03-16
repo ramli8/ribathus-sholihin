@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  BookOpen,
-  GraduationCap,
-  Clock,
-  BookText,
-  Microscope,
-  Globe,
-} from 'lucide-react';
+import { BookOpen, GraduationCap, Clock, BookText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const fadeUp = {
@@ -15,19 +8,53 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 };
 
-const formalPrograms = [
-  { name: 'MI / SD-IT Inklusif Berkarakter', icon: GraduationCap },
-  { name: 'MTs / SMP Integrasi Kurikulum', icon: BookOpen },
-  { name: 'MA / SMA Unggulan Sains & Agama', icon: Microscope },
+import { useProfil } from '@/hooks/useProfil';
+import * as LucideIcons from 'lucide-react';
+
+const fallbackFormal = [
+  { name: 'MI / SD-IT Inklusif Berkarakter', icon: 'GraduationCap' },
+  { name: 'MTs / SMP Integrasi Kurikulum', icon: 'BookOpen' },
+  { name: 'MA / SMA Unggulan Sains & Agama', icon: 'Microscope' },
 ];
 
-const nonFormalPrograms = [
-  { name: 'Madrasah Diniyah (Kitab Salafi)', icon: BookText },
-  { name: "Tahfidz Al-Qur'an 30 Juz Bersanad", icon: Clock },
-  { name: 'Kajian Bahasa (Arab & Inggris)', icon: Globe },
+const fallbackDiniyah = [
+  { name: 'Madrasah Diniyah (Kitab Salafi)', icon: 'BookText' },
+  { name: "Tahfidz Al-Qur'an 30 Juz Bersanad", icon: 'Clock' },
+  { name: 'Kajian Bahasa (Arab & Inggris)', icon: 'Globe' },
 ];
 
 export default function Pendidikan() {
+  const { data: profile } = useProfil();
+
+  // Helper to safely parse the JSON strings
+  const parseProgramList = (
+    jsonString: string | undefined,
+    defaultList: any[]
+  ) => {
+    if (!jsonString) return defaultList;
+    try {
+      const parsed = JSON.parse(jsonString);
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultList;
+    } catch {
+      return defaultList;
+    }
+  };
+
+  const formalPrograms = parseProgramList(
+    profile?.pendidikanFormalList,
+    fallbackFormal
+  );
+  const nonFormalPrograms = parseProgramList(
+    profile?.pendidikanDiniyahList,
+    fallbackDiniyah
+  );
+
+  // Helper to render icon component string names
+  const renderIcon = (iconName: string, size = 18) => {
+    const Icon =
+      (LucideIcons as Record<string, any>)[iconName] || LucideIcons.CheckCircle;
+    return <Icon size={size} />;
+  };
   return (
     <section
       id="pendidikan"
@@ -79,15 +106,11 @@ export default function Pendidikan() {
             <span className="uppercase tracking-wider">Kurikulum Terpadu</span>
           </div>
           <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6 font-heading tracking-tight">
-            Pendidikan{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400">
-              Komprehensif
-            </span>
+            {profile?.pendidikanTitle || 'Pendidikan Komprehensif'}
           </h3>
-          <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto">
-            Perpaduan harmonis antara kedalaman ilmu-ilmu keislaman salaf dan
-            kecakapan sains teknologi kontemporer untuk mencetak generasi
-            unggul.
+          <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto whitespace-pre-line">
+            {profile?.pendidikanDesc ||
+              'Perpaduan harmonis antara kedalaman ilmu-ilmu keislaman salaf dan kecakapan sains teknologi kontemporer untuk mencetak generasi unggul.'}
           </p>
         </motion.div>
 
@@ -112,31 +135,33 @@ export default function Pendidikan() {
                 </div>
                 <div>
                   <h4 className="text-xl font-bold text-slate-900 dark:text-white font-heading">
-                    Pendidikan Formal
+                    {profile?.pendidikanFormalTitle || 'Pendidikan Formal'}
                   </h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
-                    Integrasi sains dan agama
+                  <p className="text-sm text-slate-500 dark:text-slate-400 whitespace-pre-line">
+                    {profile?.pendidikanFormalDesc ||
+                      'Integrasi sains dan agama'}
                   </p>
                 </div>
               </div>
 
               <div className="space-y-4 flex-grow">
-                {formalPrograms.map((program, idx) => {
-                  const Icon = program.icon;
-                  return (
-                    <div
-                      key={idx}
-                      className="group/item flex items-center gap-4 p-4 rounded-2xl bg-white/50 dark:bg-slate-700/30 hover:bg-white/80 dark:hover:bg-slate-700/60 transition-colors backdrop-blur-md border border-white/40 dark:border-white/5"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 group-hover/item:text-emerald-600 dark:group-hover/item:text-emerald-400 group-hover/item:bg-emerald-50 dark:group-hover/item:bg-emerald-900/20 transition-colors flex-shrink-0">
-                        <Icon size={18} />
+                {formalPrograms.map(
+                  (program: Record<string, any>, idx: number) => {
+                    return (
+                      <div
+                        key={idx}
+                        className="group/item flex items-center gap-4 p-4 rounded-2xl bg-white/50 dark:bg-slate-700/30 hover:bg-white/80 dark:hover:bg-slate-700/60 transition-colors backdrop-blur-md border border-white/40 dark:border-white/5"
+                      >
+                        <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 group-hover/item:text-emerald-600 dark:group-hover/item:text-emerald-400 group-hover/item:bg-emerald-50 dark:group-hover/item:bg-emerald-900/20 transition-colors flex-shrink-0">
+                          {renderIcon(program.icon as string)}
+                        </div>
+                        <span className="text-slate-700 dark:text-slate-300 font-medium group-hover/item:text-slate-900 dark:group-hover/item:text-white transition-colors">
+                          {program.name as string}
+                        </span>
                       </div>
-                      <span className="text-slate-700 dark:text-slate-300 font-medium group-hover/item:text-slate-900 dark:group-hover/item:text-white transition-colors">
-                        {program.name}
-                      </span>
-                    </div>
-                  );
-                })}
+                    );
+                  }
+                )}
               </div>
             </div>
           </motion.div>
@@ -160,31 +185,33 @@ export default function Pendidikan() {
                 </div>
                 <div>
                   <h4 className="text-xl font-bold text-slate-900 dark:text-white font-heading">
-                    Pendidikan Diniyah
+                    {profile?.pendidikanDiniyahTitle || 'Pendidikan Diniyah'}
                   </h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
-                    Mengkaji warisan keilmuan Islam
+                  <p className="text-sm text-slate-500 dark:text-slate-400 whitespace-pre-line">
+                    {profile?.pendidikanDiniyahDesc ||
+                      'Mengkaji warisan keilmuan Islam'}
                   </p>
                 </div>
               </div>
 
               <div className="space-y-4 flex-grow">
-                {nonFormalPrograms.map((program, idx) => {
-                  const Icon = program.icon;
-                  return (
-                    <div
-                      key={idx}
-                      className="group/item flex items-center gap-4 p-4 rounded-2xl bg-white/50 dark:bg-slate-700/30 hover:bg-white/80 dark:hover:bg-slate-700/60 transition-colors backdrop-blur-md border border-white/40 dark:border-white/5"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 group-hover/item:text-teal-600 dark:group-hover/item:text-teal-400 group-hover/item:bg-teal-50 dark:group-hover/item:bg-teal-900/20 transition-colors flex-shrink-0">
-                        <Icon size={18} />
+                {nonFormalPrograms.map(
+                  (program: Record<string, any>, idx: number) => {
+                    return (
+                      <div
+                        key={idx}
+                        className="group/item flex items-center gap-4 p-4 rounded-2xl bg-white/50 dark:bg-slate-700/30 hover:bg-white/80 dark:hover:bg-slate-700/60 transition-colors backdrop-blur-md border border-white/40 dark:border-white/5"
+                      >
+                        <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 group-hover/item:text-teal-600 dark:group-hover/item:text-teal-400 group-hover/item:bg-teal-50 dark:group-hover/item:bg-teal-900/20 transition-colors flex-shrink-0">
+                          {renderIcon(program.icon as string)}
+                        </div>
+                        <span className="text-slate-700 dark:text-slate-300 font-medium group-hover/item:text-slate-900 dark:group-hover/item:text-white transition-colors">
+                          {program.name as string}
+                        </span>
                       </div>
-                      <span className="text-slate-700 dark:text-slate-300 font-medium group-hover/item:text-slate-900 dark:group-hover/item:text-white transition-colors">
-                        {program.name}
-                      </span>
-                    </div>
-                  );
-                })}
+                    );
+                  }
+                )}
               </div>
             </div>
           </motion.div>
@@ -209,13 +236,11 @@ export default function Pendidikan() {
             </div>
             <div className="text-center md:text-left">
               <h4 className="text-2xl font-bold text-white mb-2 font-heading">
-                Sistem Disiplin 24 Jam
+                {profile?.pendidikanDisiplinTitle || 'Sistem Disiplin 24 Jam'}
               </h4>
-              <p className="text-emerald-50/90 font-light leading-relaxed text-base md:text-lg max-w-3xl">
-                Jadwal santri dikelola secara proporsional namun disiplin,
-                dimulai dari qiyamullail sebelum subuh hingga mudzakarah di
-                malam hari, membentuk rutinitas produktif dan ibadah yang
-                istiqamah.
+              <p className="text-emerald-50/90 font-light leading-relaxed text-base md:text-lg max-w-3xl whitespace-pre-line">
+                {profile?.pendidikanDisiplinDesc ||
+                  'Jadwal santri dikelola secara proporsional namun disiplin, dimulai dari qiyamullail sebelum subuh hingga mudzakarah di malam hari, membentuk rutinitas produktif dan ibadah yang istiqamah.'}
               </p>
             </div>
           </div>

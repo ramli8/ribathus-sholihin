@@ -38,31 +38,6 @@ const quickLinks = [
   'Galeri Kegiatan',
 ];
 
-const contactInfo = [
-  {
-    icon: MapPin,
-    label: 'Alamat',
-    value:
-      'Jl. Pesantren No. 99, Desa Sidomulyo, Kec. Jombang, Kab. Jombang, Jawa Timur 61413',
-  },
-  {
-    icon: Phone,
-    label: 'Telepon',
-    value: '+62 812-3456-7890',
-    subtext: '(Admin)',
-  },
-  {
-    icon: Mail,
-    label: 'Email',
-    value: 'info@ribathussholihin.sch.id',
-  },
-  {
-    icon: Clock,
-    label: 'Jam Operasional',
-    value: 'Senin - Sabtu, 08:00 - 16:00 WIB',
-  },
-];
-
 const socialLinks = [
   { icon: Instagram, href: '#', label: 'Instagram' },
   { icon: Facebook, href: '#', label: 'Facebook' },
@@ -70,7 +45,39 @@ const socialLinks = [
   { icon: MessageCircle, href: '#', label: 'WhatsApp' },
 ];
 
+import { useProfil } from '@/hooks/useProfil';
+
 export default function Kontak() {
+  const { data: profile } = useProfil();
+
+  const brandingName = profile?.nama || 'Ribathus Sholihin';
+
+  const contactInfo = [
+    {
+      icon: MapPin,
+      label: 'Alamat',
+      value:
+        profile?.alamat ||
+        'Jl. Pesantren No. 99, Desa Sidomulyo, Kec. Jombang, Kab. Jombang, Jawa Timur 61413',
+    },
+    {
+      icon: Phone,
+      label: 'Telepon',
+      value: profile?.telepon || '+62 812-3456-7890',
+      subtext: '(Admin)',
+    },
+    {
+      icon: Mail,
+      label: 'Email',
+      value: profile?.email || 'info@ribathussholihin.sch.id',
+    },
+    {
+      icon: Clock,
+      label: 'Jam Operasional',
+      value: 'Senin - Sabtu, 08:00 - 16:00 WIB',
+    },
+  ];
+
   return (
     <footer
       id="kontak"
@@ -125,22 +132,21 @@ export default function Kontak() {
           >
             <Link href="#" className="flex items-center gap-4 mb-8 group">
               <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
-                RS
+                {brandingName.substring(0, 2).toUpperCase()}
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-xl text-white font-heading tracking-tight">
-                  Ribathus Sholihin
+                <span className="font-bold text-xl text-white font-heading tracking-tight text-left">
+                  {brandingName}
                 </span>
-                <span className="text-sm text-emerald-300/80 font-medium tracking-wider uppercase">
+                <span className="text-sm text-emerald-300/80 font-medium tracking-wider uppercase text-left">
                   Pondok Pesantren
                 </span>
               </div>
             </Link>
 
             <p className="text-slate-300/90 text-sm md:text-base leading-relaxed mb-8 flex-grow font-light">
-              Mencetak generasi rabbani yang tangguh secara spiritual dan
-              intelektual, mencerahkan peradaban dengan landasan Ahlussunnah wal
-              Jama'ah.
+              {profile?.deskripsi ||
+                'Mencetak generasi rabbani yang tangguh secara spiritual dan intelektual, mencerahkan peradaban dengan landasan Ahlussunnah wal Jamaah.'}
             </p>
 
             {/* Social Links - Minimalist Glass */}
@@ -205,7 +211,7 @@ export default function Kontak() {
                     <div className="w-10 h-10 rounded-2xl bg-white/5 backdrop-blur-md flex items-center justify-center text-emerald-400 flex-shrink-0 border border-white/10 group-hover:bg-emerald-500/20 group-hover:text-emerald-300 transition-colors duration-300">
                       <Icon size={18} />
                     </div>
-                    <div>
+                    <div className="text-left">
                       <p className="text-xs text-slate-400 uppercase tracking-wider mb-1 font-medium">
                         {info.label}
                       </p>

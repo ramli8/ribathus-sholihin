@@ -1,11 +1,44 @@
 'use client';
 
-import { ArrowRight, Play, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, Play, Sparkles, X } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useProfil } from '@/hooks/useProfil';
 
 export default function Beranda() {
+  const { data: profile } = useProfil();
+  const [showVideo, setShowVideo] = useState(false);
+
+  const stats = [
+    {
+      value: `${profile?.statsSantri || 1000}+`,
+      label: 'Santri Aktif',
+    },
+    {
+      value: `${profile?.statsTahun || 35}+`,
+      label: 'Tahun Mengabdi',
+    },
+    {
+      value: `${profile?.statsAsatidz || 50}+`,
+      label: 'Pengajar Ahli',
+    },
+    {
+      value: `${profile?.statsLulusan ?? 100}%`,
+      label: 'Lulusan Unggul',
+    },
+  ];
+
+  const getYoutubeEmbedUrl = (url: string) => {
+    if (!url) return '';
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    const videoId = match && match[2].length === 11 ? match[2] : null;
+    return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1` : '';
+  };
+
   return (
     <section
       id="#"
@@ -93,14 +126,15 @@ export default function Beranda() {
             }}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-6 font-heading"
           >
-            Mencetak Generasi <br className="hidden md:block" />
+            {profile?.heroTitle?.split("Qur'ani")[0] || 'Mencetak Generasi '}
+            <br className="hidden md:block" />
             <span className="relative whitespace-nowrap">
               <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-700 dark:from-emerald-400 dark:via-teal-400 dark:to-emerald-500">
                 Qur&apos;ani
               </span>
               <span className="absolute -bottom-2 left-0 right-0 h-3 bg-emerald-200/50 dark:bg-emerald-900/50 -rotate-1 skew-x-12 z-0 rounded-sm"></span>
             </span>{' '}
-            & Berakhlakul Karimah
+            {profile?.heroTitle?.split("Qur'ani")[1] || '& Berakhlakul Karimah'}
           </motion.h1>
 
           <motion.p
@@ -113,8 +147,8 @@ export default function Beranda() {
             }}
             className="text-lg md:text-2xl text-slate-600 dark:text-slate-400 font-light max-w-3xl mx-auto leading-relaxed"
           >
-            Membangun peradaban Islam yang rahmatan lil &apos;alamin melalui
-            pendidikan berkualitas dengan harmoni ilmu dunia dan akhirat.
+            {profile?.heroSubtitle ||
+              "Membangun peradaban Islam yang rahmatan lil 'alamin melalui pendidikan berkualitas dengan harmoni ilmu dunia dan akhirat."}
           </motion.p>
         </div>
 
@@ -138,7 +172,14 @@ export default function Beranda() {
             </span>
           </Link>
 
-          <button className="group flex h-14 w-full sm:w-auto items-center justify-center gap-3 rounded-2xl bg-white/40 dark:bg-slate-800/40 backdrop-blur-xl border border-white/50 dark:border-slate-700/50 px-8 text-slate-700 dark:text-slate-200 font-medium transition-all duration-300 hover:bg-white/60 dark:hover:bg-slate-800/60 hover:scale-[1.02]">
+          <button
+            onClick={() => {
+              if (profile?.youtubeUrl) {
+                setShowVideo(true);
+              }
+            }}
+            className="group flex h-14 w-full sm:w-auto items-center justify-center gap-3 rounded-2xl bg-white/40 dark:bg-slate-800/40 backdrop-blur-xl border border-white/50 dark:border-slate-700/50 px-8 text-slate-700 dark:text-slate-200 font-medium transition-all duration-300 hover:bg-white/60 dark:hover:bg-slate-800/60 hover:scale-[1.02]"
+          >
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white transition-transform group-hover:scale-110">
               <Play className="h-3.5 w-3.5 ml-0.5" fill="currentColor" />
             </div>
@@ -153,12 +194,7 @@ export default function Beranda() {
           transition={{ duration: 0.9, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
           className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 w-full max-w-5xl mx-auto"
         >
-          {[
-            { value: '1000+', label: 'Santri Aktif' },
-            { value: '35+', label: 'Tahun Mengabdi' },
-            { value: '50+', label: 'Pengajar Ahli' },
-            { value: '100%', label: 'Lulusan Unggul' },
-          ].map((stat, i) => (
+          {stats.map((stat) => (
             <div
               key={stat.label}
               className="relative overflow-hidden flex flex-col items-center justify-center p-6 md:p-8 rounded-3xl bg-white/40 dark:bg-slate-800/40 backdrop-blur-2xl border border-white/60 dark:border-slate-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.02)] transition-all duration-500 hover:-translate-y-1 hover:bg-white/60 dark:hover:bg-slate-800/60 group"
@@ -175,6 +211,48 @@ export default function Beranda() {
           ))}
         </motion.div>
       </div>
+
+      {/* YouTube Embed Modal */}
+      <AnimatePresence>
+        {showVideo && profile?.youtubeUrl && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            onClick={() => setShowVideo(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+              className="relative w-full max-w-4xl mx-4 aspect-video"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowVideo(false)}
+                className="absolute -top-12 right-0 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+              >
+                <span className="text-sm font-medium">Tutup</span>
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors">
+                  <X className="h-4 w-4" />
+                </div>
+              </button>
+
+              {/* Video Iframe */}
+              <iframe
+                src={getYoutubeEmbedUrl(profile.youtubeUrl)}
+                className="w-full h-full rounded-2xl shadow-2xl"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

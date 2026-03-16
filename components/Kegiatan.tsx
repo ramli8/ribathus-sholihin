@@ -1,7 +1,20 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+
+interface Kegiatan {
+  id: number;
+  judul: string;
+  deskripsi?: string;
+  tanggal: string;
+  lokasi?: string;
+  coverUrl?: string;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -18,66 +31,122 @@ const staggerContainer = {
   },
 };
 
-const activities = [
-  {
-    name: 'Pramuka Santri',
-    desc: 'Kemandirian & kepemimpinan',
-    image:
-      'https://images.unsplash.com/photo-1526976668912-1a811878dd37?q=80&w=400&auto=format&fit=crop',
-    colSpan: 'md:col-span-2 lg:col-span-2 lg:row-span-2', // Large Feature
-  },
-  {
-    name: 'Pencak Silat',
-    desc: 'Seni bela diri',
-    image:
-      'https://images.unsplash.com/photo-1518310383802-640c2de39ffb?q=80&w=400&auto=format&fit=crop',
-    colSpan: 'col-span-1',
-  },
-  {
-    name: 'Kaligrafi',
-    desc: "Seni khath Al-Qur'an",
-    image:
-      'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=400&auto=format&fit=crop',
-    colSpan: 'col-span-1',
-  },
-  {
-    name: 'Jurnalistik',
-    desc: 'Pelatihan mading & essay',
-    image:
-      'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?q=80&w=400&auto=format&fit=crop',
-    colSpan: 'col-span-1',
-  },
-  {
-    name: 'Multimedia',
-    desc: 'Fotografi & desain',
-    image:
-      'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=400&auto=format&fit=crop',
-    colSpan: 'col-span-1',
-  },
-  {
-    name: 'Seni Hadroh',
-    desc: 'Selawat Al-Banjari',
-    image:
-      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=400&auto=format&fit=crop',
-    colSpan: 'col-span-1 md:col-span-2 lg:col-span-1',
-  },
-  {
-    name: 'Public Speaking',
-    desc: 'Pidato 3 bahasa',
-    image:
-      'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=400&auto=format&fit=crop',
-    colSpan: 'col-span-1',
-  },
-  {
-    name: 'Robotics',
-    desc: 'Inovasi teknologi',
-    image:
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a782?q=80&w=400&auto=format&fit=crop',
-    colSpan: 'col-span-1 md:col-span-2 lg:col-span-2', // Wide feature
-  },
-];
-
 export default function Kegiatan() {
+  const [kegiatanList, setKegiatanList] = useState<Kegiatan[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/kegiatan?published=true')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setKegiatanList(data.data);
+        }
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+  };
+
+  if (loading) {
+    return (
+      <section
+        id="kegiatan"
+        className="py-24 md:py-32 bg-slate-50 dark:bg-slate-950"
+      >
+        <div className="container mx-auto px-4 text-center">
+          <div className="animate-pulse text-slate-400">Memuat kegiatan...</div>
+        </div>
+      </section>
+    );
+  }
+
+  // Default activities if database is empty
+  const defaultActivities = [
+    {
+      name: 'Pramuka Santri',
+      desc: 'Kemandirian & kepemimpinan',
+      image:
+        'https://images.unsplash.com/photo-1526976668912-1a811878dd37?q=80&w=400&auto=format&fit=crop',
+      colSpan: 'lg:col-span-2 lg:row-span-2',
+    },
+    {
+      name: 'Pencak Silat',
+      desc: 'Seni bela diri',
+      image:
+        'https://images.unsplash.com/photo-1518310383802-640c2de39ffb?q=80&w=400&auto=format&fit=crop',
+      colSpan: '',
+    },
+    {
+      name: 'Kaligrafi',
+      desc: "Seni khath Al-Qur'an",
+      image:
+        'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=400&auto=format&fit=crop',
+      colSpan: '',
+    },
+    {
+      name: 'Jurnalistik',
+      desc: 'Pelatihan mading & essay',
+      image:
+        'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?q=80&w=400&auto=format&fit=crop',
+      colSpan: 'lg:col-span-2',
+    },
+    {
+      name: 'Multimedia',
+      desc: 'Fotografi & desain',
+      image:
+        'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=400&auto=format&fit=crop',
+      colSpan: '',
+    },
+    {
+      name: 'Seni Hadroh',
+      desc: 'Selawat Al-Banjari',
+      image:
+        'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=400&auto=format&fit=crop',
+      colSpan: '',
+    },
+    {
+      name: 'Public Speaking',
+      desc: 'Pidato 3 bahasa',
+      image:
+        'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=400&auto=format&fit=crop',
+      colSpan: '',
+    },
+    {
+      name: 'Robotics',
+      desc: 'Inovasi teknologi',
+      image:
+        'https://images.unsplash.com/photo-1581092921461-eab62e97a782?q=80&w=400&auto=format&fit=crop',
+      colSpan: '',
+    },
+  ];
+
+  // Use database data or fallback to defaults
+  const activities =
+    kegiatanList.length > 0
+      ? kegiatanList.map((k, i) => ({
+          name: k.judul,
+          desc: k.deskripsi || '',
+          image:
+            k.coverUrl ||
+            defaultActivities[
+              Math.floor(Math.random() * defaultActivities.length)
+            ].image,
+          colSpan:
+            i % 5 === 0
+              ? 'lg:col-span-2 lg:row-span-2'
+              : i % 5 === 3
+                ? 'lg:col-span-2'
+                : '',
+        }))
+      : defaultActivities;
   return (
     <section
       id="kegiatan"

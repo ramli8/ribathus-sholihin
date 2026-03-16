@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowRight, CreditCard, Copy, Check, QrCode } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const fadeUp = {
@@ -34,6 +34,11 @@ const bankAccounts = [
 
 export default function Donasi() {
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
+  const [qrisPattern, setQrisPattern] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    setQrisPattern(Array.from({ length: 36 }, () => Math.random() > 0.5));
+  }, []);
 
   const handleCopy = (text: string, key: string) => {
     navigator.clipboard.writeText(text);
@@ -149,9 +154,7 @@ export default function Donasi() {
                       <div
                         key={i}
                         className={`rounded-sm transition-colors duration-[2s] ${
-                          Math.random() > 0.5
-                            ? 'bg-slate-800'
-                            : 'bg-transparent'
+                          qrisPattern[i] ? 'bg-slate-800' : 'bg-transparent'
                         }`}
                       />
                     ))}

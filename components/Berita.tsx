@@ -1,9 +1,24 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, User, BookOpen, Clock } from 'lucide-react';
+
+interface Berita {
+  id: number;
+  judul: string;
+  slug: string;
+  isi: string;
+  coverUrl?: string;
+  kategori?: string;
+  penulis?: string;
+  viewed: number;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -20,46 +35,45 @@ const staggerContainer = {
   },
 };
 
-const news = [
-  {
-    title: 'Kunjungan Silaturahim Ulama Timur Tengah ke Ribathus Sholihin',
-    category: 'Berita Utama',
-    date: '12 Oct 2025',
-    author: 'Admin',
-    readTime: '5 min',
-    thumbnail:
-      'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=800&auto=format&fit=crop',
-    excerpt:
-      'Alhamdulillah, hari ini pesantren kedatangan tamu mulia dari hadramaut untuk memberikan ijazah kubro dan pengarahan kurikulum kepada segenap jajaran asatidz dan santri senior...',
-    colSpan: 'md:col-span-2 lg:col-span-2', // Large featured post
-  },
-  {
-    title: 'Adab Sebelum Ilmu: Pesan Kiai untuk Santri Baru',
-    category: 'Kolom Opini',
-    date: '05 Oct 2025',
-    author: 'Ust. Fahrur Rozi',
-    readTime: '8 min',
-    thumbnail:
-      'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=400&auto=format&fit=crop',
-    excerpt:
-      'Dalam tradisi salaf, mempelajari adab memakan waktu lebih lama daripada mempelajari ilmu itu sendiri. Hal ini mengajarkan kita pentingnya membersihkan wadah...',
-    colSpan: 'col-span-1',
-  },
-  {
-    title: 'Juara 1 Lomba Baca Kitab Kuning (MQK) Tingkat Provinsi',
-    category: 'Prestasi',
-    date: '28 Sep 2025',
-    author: 'Humas',
-    readTime: '3 min',
-    thumbnail:
-      'https://images.unsplash.com/photo-1507643179173-617d654551a3?q=80&w=400&auto=format&fit=crop',
-    excerpt:
-      "Selamat kepada Ananda M. Hafidzul Qur'an yang berhasil meraih juara pertama pada perlombaan bergengsi tahunan Kemenag. Semoga ilmu yang didapat barokah...",
-    colSpan: 'col-span-1',
-  },
-];
-
 export default function Berita() {
+  const [beritaList, setBeritaList] = useState<Berita[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/berita?published=true')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setBeritaList(data.data);
+        }
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+  };
+
+  const getReadTime = (text: string) => {
+    const words = text.split(' ').length;
+    const minutes = Math.ceil(words / 200);
+    return `${minutes} min`;
+  };
+
+  if (loading) {
+    return (
+      <section id="berita" className="py-24 md:py-32 bg-slate-50 dark:bg-slate-950">
+        <div className="container mx-auto px-4 text-center">
+          <div className="animate-pulse text-slate-400">Memuat berita...</div>
+        </div>
+      </section>
+    );
+  }
   return (
     <section
       id="berita"
@@ -147,22 +161,23 @@ export default function Berita() {
           variants={staggerContainer}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
         >
-          {news.map((item, idx) => {
+          {beritaList.slice(0, 3).map((berita, idx) => {
             const isFeatured = idx === 0;
+            const colSpan = idx === 0 ? 'md:col-span-2 lg:col-span-2' : 'col-span-1';
 
             return (
               <motion.article
-                key={idx}
+                key={berita.id}
                 variants={fadeUp}
-                className={`group relative rounded-3xl overflow-hidden bg-white/40 dark:bg-slate-800/40 backdrop-blur-2xl border border-white/60 dark:border-slate-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_8px_30px_rgba(16,185,129,0.1)] hover:-translate-y-1 flex flex-col ${item.colSpan}`}
+                className={`group relative rounded-3xl overflow-hidden bg-white/40 dark:bg-slate-800/40 backdrop-blur-2xl border border-white/60 dark:border-slate-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_8px_30px_rgba(16,185,129,0.1)] hover:-translate-y-1 flex flex-col ${colSpan}`}
               >
                 {/* Thumbnail Image Container */}
                 <div
                   className={`relative ${isFeatured ? 'h-64 md:h-80 lg:h-[400px]' : 'h-48 md:h-56'} w-full overflow-hidden shrink-0`}
                 >
                   <Image
-                    src={item.thumbnail}
-                    alt={item.title}
+                    src={berita.coverUrl || 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=800&auto=format&fit=crop'}
+                    alt={berita.judul}
                     fill
                     className="object-cover transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out"
                     sizes={
@@ -175,7 +190,7 @@ export default function Berita() {
 
                   {/* Category Badge Floating on Image */}
                   <div className="absolute top-6 left-6 inline-flex items-center px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-medium tracking-wider shadow-lg">
-                    {item.category}
+                    {berita.kategori || 'Umum'}
                   </div>
                 </div>
 
@@ -185,37 +200,39 @@ export default function Berita() {
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500 dark:text-slate-400 mb-4">
                     <span className="flex items-center gap-1.5 bg-slate-100/50 dark:bg-slate-800/50 px-2 py-1 rounded-md">
                       <Calendar size={12} className="text-emerald-500" />{' '}
-                      {item.date}
+                      {formatDate(berita.createdAt)}
                     </span>
-                    <span className="flex items-center gap-1.5">
-                      <User size={12} className="text-emerald-500" />{' '}
-                      {item.author}
-                    </span>
+                    {berita.penulis && (
+                      <span className="flex items-center gap-1.5">
+                        <User size={12} className="text-emerald-500" />{' '}
+                        {berita.penulis}
+                      </span>
+                    )}
                     <span className="flex items-center gap-1.5">
                       <Clock size={12} className="text-emerald-500" />{' '}
-                      {item.readTime}
+                      {getReadTime(berita.isi)}
                     </span>
                   </div>
 
                   {/* Title */}
                   <Link
-                    href="#"
+                    href={`/berita/${berita.slug}`}
                     className={`block font-bold text-slate-900 dark:text-white mb-3 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors font-heading ${isFeatured ? 'text-2xl md:text-3xl' : 'text-xl'}`}
                   >
-                    {item.title}
+                    {berita.judul}
                   </Link>
 
                   {/* Excerpt */}
                   <p
                     className={`text-slate-600 dark:text-slate-400 font-light leading-relaxed mb-6 flex-grow ${isFeatured ? 'text-base md:text-lg line-clamp-3' : 'text-sm line-clamp-3'}`}
                   >
-                    {item.excerpt}
+                    {berita.isi.substring(0, 200)}...
                   </p>
 
                   {/* Read More Link */}
                   <div className="mt-auto pt-4 border-t border-slate-200/50 dark:border-slate-700/50">
                     <Link
-                      href="#"
+                      href={`/berita/${berita.slug}`}
                       className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors"
                     >
                       Baca Selengkapnya

@@ -7,6 +7,8 @@ import { Menu, X, Sun, Moon, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { useProfil } from '@/hooks/useProfil';
+
 const navLinks = [
   { name: 'Beranda', href: '#' },
   { name: 'Profil', href: '#profil' },
@@ -22,6 +24,7 @@ export default function Navigasi() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { data: profile } = useProfil();
 
   useEffect(() => {
     setMounted(true);
@@ -31,6 +34,8 @@ export default function Navigasi() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const brandingName = profile?.nama || 'Ribathus Sholihin';
 
   return (
     <motion.nav
@@ -55,11 +60,11 @@ export default function Navigasi() {
           {/* Logo */}
           <Link href="#" className="flex items-center gap-3 group">
             <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white font-bold tracking-tighter text-lg shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
-              RS
+              {brandingName.substring(0, 2).toUpperCase()}
             </div>
-            <div className="flex-col hidden sm:flex">
+            <div className="flex-col hidden sm:flex text-left">
               <span className="font-bold text-lg tracking-tight text-slate-900 dark:text-white font-heading leading-none">
-                Ribathus Sholihin
+                {brandingName}
               </span>
               <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-widest uppercase mt-0.5">
                 Pondok Pesantren

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans, Outfit } from 'next/font/google';
-import { ThemeProvider } from '@/components/ThemeProvider';
 import './globals.css';
 
 const sans = Plus_Jakarta_Sans({
@@ -18,6 +17,9 @@ export const metadata: Metadata = {
   description: 'Website Profil Pondok Pesantren Ribathus Sholihin',
 };
 
+import { ThemeProvider } from '@/context/ThemeContext';
+import { SidebarProvider } from '@/context/SidebarContext';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,13 +30,8 @@ export default function RootLayout({
       <body
         className={`${sans.variable} ${outfit.variable} antialiased min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans text-zinc-800 dark:text-zinc-200`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
+        <ThemeProvider>
+          <SidebarProvider>{children}</SidebarProvider>
         </ThemeProvider>
       </body>
     </html>

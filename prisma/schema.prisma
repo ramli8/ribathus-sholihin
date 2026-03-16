@@ -1,0 +1,154 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// User untuk admin authentication
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Profil Pesantren
+model ProfilPesantren {
+  id          Int      @id @default(autoincrement())
+  nama        String
+  alamat      String
+  deskripsi   String
+  visi        String?
+  misi        String?
+  telepon     String?
+  email       String?
+  logoUrl     String?
+  coverUrl    String?
+  profilHeaderTitle String?
+  pengasuh    String?
+  pengasuhFotoUrl  String?
+  pengasuhDeskripsi String?
+  sejarahDeskripsi String?
+  statsTahun  Int      @default(0)
+  statsSantri Int      @default(0)
+  statsAsatidz Int     @default(0)
+  // Homepage Hero Section
+  heroTitle   String?  @default("Mencetak Generasi Qur'ani & Berakhlakul Karimah")
+  heroSubtitle String? @default("Membangun peradaban Islam yang rahmatan lil 'alamin melalui pendidikan berkualitas dengan harmoni ilmu dunia dan akhirat.")
+  youtubeUrl  String?
+  statsLulusan Int?    @default(100)
+
+  // Pendidikan Section
+  pendidikanTitle            String?
+  pendidikanDesc             String?
+  pendidikanFormalTitle      String?
+  pendidikanFormalDesc       String?
+  pendidikanFormalList       String?  // JSON string
+  pendidikanDiniyahTitle     String?
+  pendidikanDiniyahDesc      String?
+  pendidikanDiniyahList      String?  // JSON string
+  pendidikanDisiplinTitle    String?
+  pendidikanDisiplinDesc     String?
+
+  // PSB (Penerimaan Santri Baru) Section
+  psbTitle                   String?
+  psbDesc                    String?
+  psbSyaratList              String?  // JSON string
+  psbAlurList                String?  // JSON string
+  psbBiayaList               String?  // JSON string
+  psbBrosurUrl               String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Berita/Artikel
+model Berita {
+  id          Int      @id @default(autoincrement())
+  judul       String
+  slug        String   @unique
+  isi         String
+  coverUrl    String?
+  kategori    String?
+  penulis     String?
+  viewed      Int      @default(0)
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Galeri Foto
+model Galeri {
+  id          Int      @id @default(autoincrement())
+  judul       String
+  deskripsi   String?
+  imageUrl    String
+  kategori    String?
+  featured    Boolean  @default(false)
+  viewed      Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Kegiatan Santri
+model Kegiatan {
+  id          Int      @id @default(autoincrement())
+  judul       String
+  deskripsi   String?
+  tanggal     DateTime
+  lokasi      String?
+  coverUrl    String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Pendaftaran Santri Baru
+model Pendaftaran {
+  id              Int      @id @default(autoincrement())
+  nama            String
+  email           String
+  telepon         String
+  alamat          String
+  tanggalLahir    DateTime
+  namaWali        String
+  teleponWali     String
+  pendidikanTerakhir String
+  status          String   @default("pending") // pending, verified, rejected
+  catatan         String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Donasi
+model Donasi {
+  id            Int      @id @default(autoincrement())
+  nama          String?
+  email         String?
+  jumlah        Float
+  pesan         String?
+  status        String   @default("pending") // pending, paid, cancelled
+  metodePembayaran String?
+  buktiBayarUrl  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// Pengaturan Website
+model Pengaturan {
+  id            Int      @id @default(autoincrement())
+  key           String   @unique
+  value         String?
+  label         String?
+  type          String   @default("text") // text, number, boolean, json
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
