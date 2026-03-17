@@ -6,6 +6,7 @@ import { useTheme } from 'next-themes';
 import { Menu, X, Sun, Moon, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 
 import { useProfil } from '@/hooks/useProfil';
 
@@ -25,6 +26,7 @@ export default function Navigasi() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { data: profile } = useProfil();
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
@@ -59,30 +61,38 @@ export default function Navigasi() {
         >
           {/* Logo */}
           <Link href="#" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white font-bold tracking-tighter text-lg shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
-              {brandingName.substring(0, 2).toUpperCase()}
-            </div>
+            {profile?.logoUrl ? (
+              <img
+                src={profile.logoUrl}
+                alt={brandingName}
+                className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white font-bold tracking-tighter text-lg shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
+                {brandingName.substring(0, 2).toUpperCase()}
+              </div>
+            )}
             <div className="flex-col hidden sm:flex text-left">
               <span className="font-bold text-lg tracking-tight text-slate-900 dark:text-white font-heading leading-none">
                 {brandingName}
-              </span>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-widest uppercase mt-0.5">
-                Pondok Pesantren
               </span>
             </div>
           </Link>
 
           {/* Desktop Menu - Floating Pill Style */}
           <div className="hidden lg:flex items-center gap-1 px-4 py-1.5 rounded-full bg-slate-50/50 dark:bg-slate-800/30 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors rounded-full hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"
-              >
-                {link.name}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const targetHref = pathname === '/' ? link.href : `/${link.href}`;
+              return (
+                <Link
+                  key={link.name}
+                  href={targetHref}
+                  className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors rounded-full hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Actions */}
@@ -147,16 +157,20 @@ export default function Navigasi() {
             className="lg:hidden absolute left-4 right-4 top-full mt-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/50 dark:border-slate-700/50 rounded-3xl overflow-hidden"
           >
             <div className="p-6 flex flex-col gap-2">
-              {navLinks.map((link, index) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="py-3 px-4 text-base font-medium text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-white dark:hover:bg-slate-800 rounded-2xl transition-all"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              ))}
+              {navLinks.map((link, index) => {
+                const targetHref =
+                  pathname === '/' ? link.href : `/${link.href}`;
+                return (
+                  <Link
+                    key={link.name}
+                    href={targetHref}
+                    className="py-3 px-4 text-base font-medium text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-white dark:hover:bg-slate-800 rounded-2xl transition-all"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
 
               <div className="w-full h-px bg-slate-200/50 dark:bg-slate-700/50 my-2" />
 

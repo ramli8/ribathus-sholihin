@@ -2,19 +2,27 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, BookOpen } from 'lucide-react';
+import {
+  Home,
+  BookOpen,
+  Building2,
+  Trophy,
+  CreditCard,
+  Settings,
+} from 'lucide-react';
 import { useSidebar } from '../context/SidebarContext';
 import {
   GridIcon,
-  CalenderIcon,
   ListIcon,
-  VideoIcon,
   PlugInIcon,
-  UserCircleIcon,
-  BoltIcon,
   HorizontaLDots,
   ChevronDownIcon,
 } from '../icons/index';
+
+interface ProfilData {
+  nama: string;
+  logoUrl?: string;
+}
 
 type NavItem = {
   name: string;
@@ -43,21 +51,6 @@ const navItems: NavItem[] = [
     path: '/admin/beranda',
   },
   {
-    icon: <ListIcon />,
-    name: 'Kelola Berita',
-    path: '/admin/berita',
-  },
-  {
-    icon: <CalenderIcon />,
-    name: 'Kelola Kegiatan',
-    path: '/admin/kegiatan',
-  },
-  {
-    icon: <VideoIcon />,
-    name: 'Kelola Galeri',
-    path: '/admin/galeri',
-  },
-  {
     icon: <PlugInIcon />,
     name: 'Profil Pesantren',
     path: '/admin/profil',
@@ -67,17 +60,28 @@ const navItems: NavItem[] = [
     name: 'Kelola Pendidikan & PSB',
     path: '/admin/pendidikan',
   },
-];
-
-const othersItems: NavItem[] = [
   {
-    icon: <UserCircleIcon />,
-    name: 'User Management',
-    path: '/admin/users',
-    roleRequired: 'superadmin',
+    icon: <Building2 size={22} />,
+    name: 'Kelola Fasilitas',
+    path: '/admin/fasilitas',
   },
   {
-    icon: <BoltIcon />,
+    icon: <Trophy size={22} />,
+    name: 'Kelola Ekstrakurikuler',
+    path: '/admin/ekstrakurikuler',
+  },
+  {
+    icon: <ListIcon />,
+    name: 'Kelola Berita',
+    path: '/admin/berita',
+  },
+  {
+    icon: <CreditCard size={22} />,
+    name: 'Kelola Donasi',
+    path: '/admin/donasi',
+  },
+  {
+    icon: <Settings size={22} />,
     name: 'Pengaturan',
     path: '/admin/pengaturan',
   },
@@ -86,6 +90,24 @@ const othersItems: NavItem[] = [
 const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const pathname = usePathname();
+  const [profil, setProfil] = useState<ProfilData | null>(null);
+
+  useEffect(() => {
+    fetch('/api/profil')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.data) {
+          setProfil({
+            nama: data.data.nama || 'Ribathus Sholihin',
+            logoUrl: data.data.logoUrl,
+          });
+        }
+      })
+      .catch(console.error);
+  }, []);
+
+  const brandingName = profil?.nama || 'Ribathus Sholihin';
+  const initials = brandingName.substring(0, 2).toUpperCase();
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: 'main' | 'others';
@@ -100,21 +122,18 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
 
   useEffect(() => {
     let submenuMatched = false;
-    ['main', 'others'].forEach((menuType) => {
-      const items = menuType === 'main' ? navItems : othersItems;
-      items.forEach((nav, index) => {
-        if (nav.subItems) {
-          nav.subItems.forEach((subItem) => {
-            if (isActive(subItem.path)) {
-              setOpenSubmenu({
-                type: menuType as 'main' | 'others',
-                index,
-              });
-              submenuMatched = true;
-            }
-          });
-        }
-      });
+    navItems.forEach((nav, index) => {
+      if (nav.subItems) {
+        nav.subItems.forEach((subItem) => {
+          if (isActive(subItem.path)) {
+            setOpenSubmenu({
+              type: 'main',
+              index,
+            });
+            submenuMatched = true;
+          }
+        });
+      }
     });
 
     if (!submenuMatched) {
@@ -134,38 +153,32 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
     }
   }, [openSubmenu]);
 
-  const handleSubmenuToggle = (index: number, menuType: 'main' | 'others') => {
+  const handleSubmenuToggle = (index: number) => {
     setOpenSubmenu((prevOpenSubmenu) => {
       if (
         prevOpenSubmenu &&
-        prevOpenSubmenu.type === menuType &&
+        prevOpenSubmenu.type === 'main' &&
         prevOpenSubmenu.index === index
       ) {
         return null;
       }
-      return { type: menuType, index };
+      return { type: 'main' as const, index };
     });
   };
 
   const filteredNavItems = navItems.filter(
     (item) => !item.roleRequired || user?.role === item.roleRequired
   );
-  const filteredOthersItems = othersItems.filter(
-    (item) => !item.roleRequired || user?.role === item.roleRequired
-  );
 
-  const renderMenuItems = (
-    navItems: NavItem[],
-    menuType: 'main' | 'others'
-  ) => (
+  const renderMenuItems = (navItems: NavItem[]) => (
     <ul className="flex flex-col gap-4">
       {navItems.map((nav, index) => (
         <li key={nav.name}>
           {nav.subItems ? (
             <button
-              onClick={() => handleSubmenuToggle(index, menuType)}
+              onClick={() => handleSubmenuToggle(index)}
               className={`menu-item group ${
-                openSubmenu?.type === menuType && openSubmenu?.index === index
+                openSubmenu?.type === 'main' && openSubmenu?.index === index
                   ? 'menu-item-active'
                   : 'menu-item-inactive'
               } cursor-pointer ${
@@ -176,7 +189,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
             >
               <span
                 className={`${
-                  openSubmenu?.type === menuType && openSubmenu?.index === index
+                  openSubmenu?.type === 'main' && openSubmenu?.index === index
                     ? 'menu-item-icon-active'
                     : 'menu-item-icon-inactive'
                 }`}
@@ -189,8 +202,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
               {(isExpanded || isHovered || isMobileOpen) && (
                 <ChevronDownIcon
                   className={`ml-auto w-5 h-5 transition-transform duration-200 ${
-                    openSubmenu?.type === menuType &&
-                    openSubmenu?.index === index
+                    openSubmenu?.type === 'main' && openSubmenu?.index === index
                       ? 'rotate-180 text-brand-500'
                       : ''
                   }`}
@@ -223,13 +235,13 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
           {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
             <div
               ref={(el) => {
-                subMenuRefs.current[`${menuType}-${index}`] = el;
+                subMenuRefs.current[`main-${index}`] = el;
               }}
               className="overflow-hidden transition-all duration-300"
               style={{
                 height:
-                  openSubmenu?.type === menuType && openSubmenu?.index === index
-                    ? `${subMenuHeight[`${menuType}-${index}`]}px`
+                  openSubmenu?.type === 'main' && openSubmenu?.index === index
+                    ? `${subMenuHeight[`main-${index}`]}px`
                     : '0px',
               }}
             >
@@ -276,19 +288,27 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
           !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start'
         }`}
       >
-        <Link href="/">
+        <Link href="/admin">
           {isExpanded || isHovered || isMobileOpen ? (
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-linear-to-br from-emerald-500 to-teal-600 rounded flex items-center justify-center text-white font-bold text-lg">
-                RS
-              </div>
+              {profil?.logoUrl ? (
+                <img
+                  src={profil.logoUrl}
+                  alt={brandingName}
+                  className="w-9 h-9 object-contain rounded"
+                />
+              ) : (
+                <div className="w-9 h-9 bg-linear-to-br from-emerald-500 to-teal-600 rounded flex items-center justify-center text-white font-bold text-lg">
+                  {initials}
+                </div>
+              )}
               <span className="text-gray-900 dark:text-white text-xl font-bold tracking-tight">
-                Ribathus
+                {brandingName}
               </span>
             </div>
           ) : (
             <div className="w-8 h-8 bg-linear-to-br from-emerald-500 to-teal-600 rounded flex items-center justify-center text-white font-bold text-sm">
-              RS
+              {initials.substring(0, 1)}
             </div>
           )}
         </Link>
@@ -296,39 +316,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
-            <div>
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? 'lg:justify-center'
-                    : 'justify-start'
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  'Menu Utama'
-                ) : (
-                  <HorizontaLDots />
-                )}
-              </h2>
-              {renderMenuItems(filteredNavItems, 'main')}
-            </div>
-
-            <div className="">
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? 'lg:justify-center'
-                    : 'justify-start'
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  'Lainnya'
-                ) : (
-                  <HorizontaLDots />
-                )}
-              </h2>
-              {renderMenuItems(filteredOthersItems, 'others')}
-            </div>
+            <div>{renderMenuItems(filteredNavItems, 'main')}</div>
           </div>
         </nav>
       </div>

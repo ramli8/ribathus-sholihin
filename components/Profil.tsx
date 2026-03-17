@@ -62,20 +62,10 @@ export default function Profil() {
             Tentang Kami
           </div>
           <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6 font-heading tracking-tight leading-tight text-balance">
-            {profile.profilHeaderTitle ? (
-              profile.profilHeaderTitle
-            ) : (
-              <>
-                Membangun Karakter dari{' '}
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-600 to-teal-600">
-                  Tradisi
-                </span>{' '}
-                &{' '}
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-600 to-teal-600">
-                  Inovasi
-                </span>
-              </>
-            )}
+            {profile?.profilHeaderTitle || 'Membangun Karakter dari'}{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+              {profile?.profilHeaderTitleHighlight || 'Tradisi & Inovasi'}
+            </span>
           </h3>
           <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-light leading-relaxed">
             {profile.deskripsi}

@@ -119,7 +119,10 @@ export default function Pendaftaran() {
             PENERIMAAN SANTRI BARU (PSB)
           </div>
           <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6 font-heading tracking-tight">
-            {profile?.psbTitle || 'Langkah Awal Menuju Masa Depan Gemilang'}
+            {profile?.psbTitle || 'Langkah Awal'}{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+              {profile?.psbTitleHighlight || 'Menuju Masa Depan Gemilang'}
+            </span>
           </h3>
           <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto whitespace-pre-line">
             {profile?.psbDesc ||

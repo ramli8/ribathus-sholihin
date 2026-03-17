@@ -20,12 +20,12 @@ interface ProfilFormData {
   telepon: string;
   email: string;
   profilHeaderTitle: string;
+  profilHeaderTitleHighlight: string;
   pengasuh: string;
   pengasuhFotoUrl: string;
   pengasuhDeskripsi: string;
   sejarahDeskripsi: string;
   logoUrl: string;
-  coverUrl: string;
 }
 
 export default function AdminProfilPage() {
@@ -42,12 +42,12 @@ export default function AdminProfilPage() {
     telepon: '',
     email: '',
     profilHeaderTitle: '',
+    profilHeaderTitleHighlight: '',
     pengasuh: '',
     pengasuhFotoUrl: '',
     pengasuhDeskripsi: '',
     sejarahDeskripsi: '',
     logoUrl: '',
-    coverUrl: '',
   });
 
   useEffect(() => {
@@ -69,12 +69,12 @@ export default function AdminProfilPage() {
           telepon: data.data.telepon || '',
           email: data.data.email || '',
           profilHeaderTitle: data.data.profilHeaderTitle || '',
+          profilHeaderTitleHighlight: data.data.profilHeaderTitleHighlight || '',
           pengasuh: data.data.pengasuh || '',
           pengasuhFotoUrl: data.data.pengasuhFotoUrl || '',
           pengasuhDeskripsi: data.data.pengasuhDeskripsi || '',
           sejarahDeskripsi: data.data.sejarahDeskripsi || '',
           logoUrl: data.data.logoUrl || '',
-          coverUrl: data.data.coverUrl || '',
         });
       }
     } catch {
@@ -113,7 +113,7 @@ export default function AdminProfilPage() {
 
   const handleUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: 'logoUrl' | 'coverUrl' | 'pengasuhFotoUrl'
+    field: 'logoUrl' | 'pengasuhFotoUrl'
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -156,15 +156,6 @@ export default function AdminProfilPage() {
             Kelola informasi profil yang tampil di section Profil halaman utama
           </p>
         </div>
-        <a
-          href="/#profil"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-colors"
-        >
-          <Eye size={16} />
-          Lihat Halaman
-        </a>
       </div>
 
       {/* Form */}
@@ -178,18 +169,31 @@ export default function AdminProfilPage() {
           <div>
             <SectionTitle title="Tentang Kami (Deskripsi Utama)" />
             <div className="space-y-4">
-              <FormInput
-                label="Judul Utama (Header Profil)"
-                placeholder="Membangun Karakter dari Tradisi & Inovasi"
-                required
-                value={formData.profilHeaderTitle}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    profilHeaderTitle: e.target.value,
-                  }))
-                }
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormInput
+                  label="Judul Utama (Header Profil)"
+                  placeholder="Membangun Karakter dari"
+                  required
+                  value={formData.profilHeaderTitle}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      profilHeaderTitle: e.target.value,
+                    }))
+                  }
+                />
+                <FormInput
+                  label="Judul Highlight (teks berwarna)"
+                  placeholder="Tradisi & Inovasi"
+                  value={formData.profilHeaderTitleHighlight}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      profilHeaderTitleHighlight: e.target.value,
+                    }))
+                  }
+                />
+              </div>
               <FormTextarea
                 label="Deskripsi"
                 required

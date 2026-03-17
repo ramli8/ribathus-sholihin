@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import AppHeader from '@/layout/AppHeader';
 import AppSidebar from '@/layout/AppSidebar';
 import { useSidebar } from '@/context/SidebarContext';
@@ -18,11 +18,22 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const pathname = usePathname();
   const { isExpanded, isHovered } = useSidebar();
+  
+  // Memoize isLogin check
+  const isLogin = useMemo(() => pathname === '/admin/login', [pathname]);
+
+  // Initialize state - loading is true for auth check, false for login
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
+    // Skip auth check for login page
+    if (isLogin) {
+      return;
+    }
+
     fetch('/api/auth/me')
       .then((res) => res.json())
       .then((data) => {
@@ -38,8 +49,14 @@ export default function AdminLayout({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [router]);
+  }, [router, isLogin]);
 
+  // Render login page without layout (skip loading check)
+  if (isLogin) {
+    return <>{children}</>;
+  }
+
+  // Show loading for admin pages during auth check
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -51,6 +68,7 @@ export default function AdminLayout({
     );
   }
 
+  // Render admin pages with layout
   return (
     <div className="flex h-screen overflow-hidden bg-white dark:bg-gray-dark">
       <AppSidebar user={user} />

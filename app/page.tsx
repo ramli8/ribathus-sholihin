@@ -4,7 +4,6 @@ import Profil from '@/components/Profil';
 import Pendidikan from '@/components/Pendidikan';
 import Pendaftaran from '@/components/Pendaftaran';
 import Fasilitas from '@/components/Fasilitas';
-import Galeri from '@/components/Galeri';
 import Kegiatan from '@/components/Kegiatan';
 import Berita from '@/components/Berita';
 import Donasi from '@/components/Donasi';
@@ -19,7 +18,6 @@ export default function Home() {
       <Pendidikan />
       <Pendaftaran />
       <Fasilitas />
-      <Galeri />
       <Kegiatan />
       <Berita />
       <Donasi />

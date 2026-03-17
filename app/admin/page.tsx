@@ -22,33 +22,38 @@ const StatisticsChart = dynamic(
 
 interface Stats {
   berita: number;
-  kegiatan: number;
-  galeri: number;
   pengunjung: number;
+}
+
+interface ProfilData {
+  nama: string;
+  logoUrl?: string;
 }
 
 export default function AdminDashboardPage() {
   const [statsData, setStatsData] = useState<Stats>({
     berita: 0,
-    kegiatan: 0,
-    galeri: 0,
     pengunjung: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [profil, setProfil] = useState<ProfilData | null>(null);
 
   useEffect(() => {
     Promise.all([
       fetch('/api/berita').then((r) => r.json()),
-      fetch('/api/kegiatan').then((r) => r.json()),
-      fetch('/api/galeri').then((r) => r.json()),
+      fetch('/api/profil').then((r) => r.json()),
     ])
-      .then(([beritaRes, kegiatanRes, galeriRes]) => {
+      .then(([beritaRes, profilRes]) => {
         setStatsData({
           berita: beritaRes.success ? beritaRes.data.length : 0,
-          kegiatan: kegiatanRes.success ? kegiatanRes.data.length : 0,
-          galeri: galeriRes.success ? galeriRes.data.length : 0,
           pengunjung: Math.floor(Math.random() * 1000) + 500,
         });
+        if (profilRes.success && profilRes.data) {
+          setProfil({
+            nama: profilRes.data.nama || 'Ribathus Sholihin',
+            logoUrl: profilRes.data.logoUrl,
+          });
+        }
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -60,22 +65,6 @@ export default function AdminDashboardPage() {
       value: statsData.berita,
       icon: <ListIcon className="text-gray-800 size-6 dark:text-white/90" />,
       change: '+12.5%',
-      isPositive: true,
-    },
-    {
-      label: 'Total Kegiatan',
-      value: statsData.kegiatan,
-      icon: (
-        <CalenderIcon className="text-gray-800 size-6 dark:text-white/90" />
-      ),
-      change: '+2.3%',
-      isPositive: true,
-    },
-    {
-      label: 'Total Galeri',
-      value: statsData.galeri,
-      icon: <VideoIcon className="text-gray-800 size-6 dark:text-white/90" />,
-      change: '+5.1%',
       isPositive: true,
     },
     {
@@ -100,6 +89,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
+      {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
         {statCards.map((stat, idx) => (
           <motion.div

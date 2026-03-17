@@ -13,10 +13,33 @@ interface AppHeaderProps {
   } | null;
 }
 
+interface ProfilData {
+  nama: string;
+  logoUrl?: string;
+}
+
 const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
+  const [profil, setProfil] = useState<ProfilData | null>(null);
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
+
+  useEffect(() => {
+    fetch('/api/profil')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.data) {
+          setProfil({
+            nama: data.data.nama || 'Ribathus Sholihin',
+            logoUrl: data.data.logoUrl,
+          });
+        }
+      })
+      .catch(console.error);
+  }, []);
+
+  const brandingName = profil?.nama || 'Ribathus Sholihin';
+  const initials = brandingName.substring(0, 2).toUpperCase();
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -90,11 +113,19 @@ const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
 
           <Link href="/" className="lg:hidden">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-linear-to-br from-emerald-500 to-teal-600 rounded flex items-center justify-center text-white font-bold text-lg">
-                RS
-              </div>
+              {profil?.logoUrl ? (
+                <img
+                  src={profil.logoUrl}
+                  alt={brandingName}
+                  className="w-9 h-9 object-contain rounded"
+                />
+              ) : (
+                <div className="w-9 h-9 bg-linear-to-br from-emerald-500 to-teal-600 rounded flex items-center justify-center text-white font-bold text-lg">
+                  {initials}
+                </div>
+              )}
               <span className="text-gray-900 dark:text-white text-xl font-bold tracking-tight">
-                Ribathus
+                {brandingName}
               </span>
             </div>
           </Link>
@@ -123,7 +154,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
             <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
               Panel Admin /{' '}
               <span className="text-gray-900 dark:text-white font-semibold italic">
-                Ribathus Sholihin
+                {brandingName}
               </span>
             </div>
           </div>
@@ -135,7 +166,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
         >
           <div className="flex items-center gap-2 2xsm:gap-3">
             <ThemeToggleButton />
-            <NotificationDropdown />
           </div>
           <UserDropdown user={user} />
         </div>

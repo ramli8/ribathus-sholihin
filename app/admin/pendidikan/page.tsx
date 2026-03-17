@@ -46,6 +46,7 @@ interface AlurSyaratItem {
 
 interface PendidikanFormData {
   pendidikanTitle: string;
+  pendidikanTitleHighlight: string;
   pendidikanDesc: string;
   pendidikanFormalTitle: string;
   pendidikanFormalDesc: string;
@@ -56,6 +57,7 @@ interface PendidikanFormData {
   pendidikanDisiplinTitle: string;
   pendidikanDisiplinDesc: string;
   psbTitle: string;
+  psbTitleHighlight: string;
   psbDesc: string;
   psbSyaratList: AlurSyaratItem[];
   psbAlurList: AlurSyaratItem[];
@@ -70,6 +72,7 @@ export default function AdminPendidikanPage() {
 
   const [formData, setFormData] = useState<PendidikanFormData>({
     pendidikanTitle: '',
+    pendidikanTitleHighlight: '',
     pendidikanDesc: '',
     pendidikanFormalTitle: '',
     pendidikanFormalDesc: '',
@@ -80,6 +83,7 @@ export default function AdminPendidikanPage() {
     pendidikanDisiplinTitle: '',
     pendidikanDisiplinDesc: '',
     psbTitle: '',
+    psbTitleHighlight: '',
     psbDesc: '',
     psbSyaratList: [],
     psbAlurList: [],
@@ -114,6 +118,7 @@ export default function AdminPendidikanPage() {
 
         setFormData({
           pendidikanTitle: data.data.pendidikanTitle || '',
+          pendidikanTitleHighlight: data.data.pendidikanTitleHighlight || '',
           pendidikanDesc: data.data.pendidikanDesc || '',
           pendidikanFormalTitle: data.data.pendidikanFormalTitle || '',
           pendidikanFormalDesc: data.data.pendidikanFormalDesc || '',
@@ -130,6 +135,7 @@ export default function AdminPendidikanPage() {
           pendidikanDisiplinTitle: data.data.pendidikanDisiplinTitle || '',
           pendidikanDisiplinDesc: data.data.pendidikanDisiplinDesc || '',
           psbTitle: data.data.psbTitle || '',
+          psbTitleHighlight: data.data.psbTitleHighlight || '',
           psbDesc: data.data.psbDesc || '',
           psbSyaratList: safeParseJSON(data.data.psbSyaratList, []).map(
             (text: string) => ({ id: Math.random().toString(), value: text })
@@ -239,24 +245,6 @@ export default function AdminPendidikanPage() {
             Atur konten Akademik, Kurikulum, dan Penerimaan Santri Baru
           </p>
         </div>
-        <div className="flex gap-2">
-          <a
-            href="/#pendidikan"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg hover:bg-emerald-100 transition-colors"
-          >
-            <Eye size={16} /> Pendidikan
-          </a>
-          <a
-            href="/#pendaftaran"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20 rounded-lg hover:bg-teal-100 transition-colors"
-          >
-            <Eye size={16} /> PSB
-          </a>
-        </div>
       </div>
 
       <motion.div
@@ -269,18 +257,31 @@ export default function AdminPendidikanPage() {
           <div>
             <SectionTitle title="A. Header Pendidikan" />
             <div className="space-y-4">
-              <FormInput
-                label="Judul Pendidikan"
-                required
-                value={formData.pendidikanTitle}
-                onChange={(e) =>
-                  setFormData((p) => ({
-                    ...p,
-                    pendidikanTitle: e.target.value,
-                  }))
-                }
-                placeholder="Pendidikan Komprehensif"
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormInput
+                  label="Judul Pendidikan (teks biasa)"
+                  required
+                  value={formData.pendidikanTitle}
+                  onChange={(e) =>
+                    setFormData((p) => ({
+                      ...p,
+                      pendidikanTitle: e.target.value,
+                    }))
+                  }
+                  placeholder="Pendidikan"
+                />
+                <FormInput
+                  label="Judul Highlight (teks berwarna)"
+                  value={formData.pendidikanTitleHighlight}
+                  onChange={(e) =>
+                    setFormData((p) => ({
+                      ...p,
+                      pendidikanTitleHighlight: e.target.value,
+                    }))
+                  }
+                  placeholder="Komprehensif"
+                />
+              </div>
               <FormTextarea
                 label="Deskripsi Pendidikan"
                 rows={2}
@@ -548,14 +549,27 @@ export default function AdminPendidikanPage() {
           <div>
             <SectionTitle title="A. Header PSB" />
             <div className="space-y-4">
-              <FormInput
-                label="Judul PSB"
-                value={formData.psbTitle}
-                onChange={(e) =>
-                  setFormData((p) => ({ ...p, psbTitle: e.target.value }))
-                }
-                placeholder="Langkah Awal Menuju Masa Depan Gemilang"
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormInput
+                  label="Judul PSB (teks biasa)"
+                  value={formData.psbTitle}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, psbTitle: e.target.value }))
+                  }
+                  placeholder="Langkah Awal"
+                />
+                <FormInput
+                  label="Judul Highlight (teks berwarna)"
+                  value={formData.psbTitleHighlight}
+                  onChange={(e) =>
+                    setFormData((p) => ({
+                      ...p,
+                      psbTitleHighlight: e.target.value,
+                    }))
+                  }
+                  placeholder="Menuju Masa Depan Gemilang"
+                />
+              </div>
               <FormTextarea
                 label="Deskripsi PSB"
                 rows={2}

@@ -12,15 +12,27 @@ export interface ProfilData {
   telepon?: string;
   email?: string;
   logoUrl?: string;
-  coverUrl?: string;
   profilHeaderTitle?: string;
+  profilHeaderTitleHighlight?: string;
   pengasuh?: string;
   pengasuhFotoUrl?: string;
   pengasuhDeskripsi?: string;
   sejarahDeskripsi?: string;
 
+  // Social Media
+  instagramUrl?: string;
+  tiktokUrl?: string;
+  facebookUrl?: string;
+  youtubeChannelUrl?: string;
+  whatsappUrl?: string;
+
+  // Operational Info
+  jamOperasional?: string;
+  gmapLocation?: string;
+
   // Pendidikan Section
   pendidikanTitle?: string;
+  pendidikanTitleHighlight?: string;
   pendidikanDesc?: string;
   pendidikanFormalTitle?: string;
   pendidikanFormalDesc?: string;
@@ -33,11 +45,39 @@ export interface ProfilData {
 
   // PSB (Pendaftaran) Section
   psbTitle?: string;
+  psbTitleHighlight?: string;
   psbDesc?: string;
   psbSyaratList?: string;
   psbAlurList?: string;
   psbBiayaList?: string;
   psbBrosurUrl?: string;
+
+  // Fasilitas Section
+  fasilitasTitle?: string;
+  fasilitasTitleHighlight?: string;
+  fasilitasDesc?: string;
+  fasilitasList?: string;
+
+  // Ekstrakurikuler Section
+  ekstraTitle?: string;
+  ekstraTitleHighlight?: string;
+  ekstraDesc?: string;
+  ekstraList?: string;
+
+  // Berita Section
+  beritaTitle?: string;
+  beritaTitleHighlight?: string;
+  beritaDesc?: string;
+
+  // Donasi Section
+  donasiTitle?: string;
+  donasiTitleHighlight?: string;
+  donasiQuote?: string;
+  donasiQuoteSource?: string;
+  donasiBankAccounts?: string;
+  donasiQrisImageUrl?: string;
+  donasiWhatsappNumber?: string;
+  donasiWallets?: string;
 
   statsTahun?: number;
   statsSantri?: number;

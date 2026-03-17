@@ -3,6 +3,8 @@
 import { ArrowRight, CreditCard, Copy, Check, QrCode } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { useProfil } from '@/hooks/useProfil';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -19,22 +21,16 @@ const staggerContainer = {
   },
 };
 
-const bankAccounts = [
-  {
-    bank: 'Bank Syariah Indonesia (BSI)',
-    number: '712 345 6789',
-    name: 'a.n. Yayasan Ribathus Sholihin',
-  },
-  {
-    bank: 'Bank Muamalat',
-    number: '000 123 4567',
-    name: 'a.n. PP. Ribathus Sholihin',
-  },
-];
+interface BankAccount {
+  bank: string;
+  number: string;
+  name: string;
+}
 
 export default function Donasi() {
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
   const [qrisPattern, setQrisPattern] = useState<boolean[]>([]);
+  const { data: profile } = useProfil();
 
   useEffect(() => {
     setQrisPattern(Array.from({ length: 36 }, () => Math.random() > 0.5));
@@ -44,6 +40,51 @@ export default function Donasi() {
     navigator.clipboard.writeText(text);
     setCopiedAccount(key);
     setTimeout(() => setCopiedAccount(null), 2000);
+  };
+
+  // Dynamic data from profile
+  const title = profile?.donasiTitle || 'Salurkan Infaq';
+  const titleHighlight = profile?.donasiTitleHighlight || 'Terbaik Anda';
+  const quote =
+    profile?.donasiQuote ||
+    'Jika seseorang meninggal dunia, maka terputuslah amalannya kecuali tiga perkara: sedekah jariyah, ilmu yang dimanfaatkan, atau doa anak yang sholeh';
+  const quoteSource = profile?.donasiQuoteSource || 'HR. Muslim';
+  const whatsappNumber = profile?.donasiWhatsappNumber || '';
+  const qrisImageUrl = profile?.donasiQrisImageUrl || '';
+
+  let bankAccounts: BankAccount[] = [
+    {
+      bank: 'Bank Syariah Indonesia (BSI)',
+      number: '712 345 6789',
+      name: 'a.n. Yayasan Ribathus Sholihin',
+    },
+    {
+      bank: 'Bank Muamalat',
+      number: '000 123 4567',
+      name: 'a.n. PP. Ribathus Sholihin',
+    },
+  ];
+  if (profile?.donasiBankAccounts) {
+    try {
+      bankAccounts = JSON.parse(profile.donasiBankAccounts);
+    } catch {}
+  }
+
+  let wallets = ['GoPay', 'OVO', 'DANA', 'ShopeePay', 'BCA', 'Mandiri'];
+  if (profile?.donasiWallets) {
+    wallets = profile.donasiWallets
+      .split(',')
+      .map((w) => w.trim())
+      .filter(Boolean);
+  }
+
+  const handleKonfirmasi = () => {
+    if (whatsappNumber) {
+      const msg = encodeURIComponent(
+        "Assalamu'alaikum, saya ingin mengkonfirmasi transfer donasi ke Pondok Pesantren Ribathus Sholihin."
+      );
+      window.open(`https://wa.me/${whatsappNumber}?text=${msg}`, '_blank');
+    }
   };
 
   return (
@@ -99,17 +140,15 @@ export default function Donasi() {
             <span className="uppercase tracking-wider">Salurkan Donasi</span>
           </div>
           <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6 font-heading tracking-tight">
-            Salurkan Infaq{' '}
+            {title}{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400">
-              Terbaik Anda
+              {titleHighlight}
             </span>
           </h3>
           <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto">
-            &quot;Jika seseorang meninggal dunia, maka terputuslah amalannya
-            kecuali tiga perkara: sedekah jariyah, ilmu yang dimanfaatkan, atau
-            doa anak yang sholeh&quot; <br />
+            &quot;{quote}&quot; <br />
             <span className="text-sm border-t border-slate-200/50 dark:border-slate-700/50 mt-4 pt-2 inline-block">
-              (HR. Muslim)
+              ({quoteSource})
             </span>
           </p>
         </motion.div>
@@ -145,39 +184,49 @@ export default function Donasi() {
                 Indonesia.
               </p>
 
-              {/* Functional QR Code container styling (Glassmorphism over Gradients) */}
+              {/* QRIS Image or Fake QR */}
               <div className="bg-white/95 backdrop-blur-3xl rounded-3xl p-6 mb-8 inline-block shadow-2xl border-4 border-white/20 hover:scale-105 transition-transform duration-500">
                 <div className="w-48 h-48 bg-slate-50 rounded-2xl flex items-center justify-center relative overflow-hidden border border-slate-100">
-                  {/* Fake QR pattern for demo */}
-                  <div className="absolute inset-0 grid grid-cols-6 gap-1.5 p-5">
-                    {Array.from({ length: 36 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className={`rounded-sm transition-colors duration-[2s] ${
-                          qrisPattern[i] ? 'bg-slate-800' : 'bg-transparent'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  {/* QR Core Anchors */}
-                  <div className="absolute top-4 left-4 w-8 h-8 border-[6px] border-slate-800 rounded-md" />
-                  <div className="absolute top-4 right-4 w-8 h-8 border-[6px] border-slate-800 rounded-md" />
-                  <div className="absolute bottom-4 left-4 w-8 h-8 border-[6px] border-slate-800 rounded-md" />
+                  {qrisImageUrl ? (
+                    <Image
+                      src={qrisImageUrl}
+                      alt="QRIS Code"
+                      fill
+                      className="object-contain p-2"
+                      sizes="192px"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 grid grid-cols-6 gap-1.5 p-5">
+                      {Array.from({ length: 36 }).map((_, i) => (
+                        <div
+                          key={i}
+                          className={`rounded-sm transition-colors duration-[2s] ${
+                            qrisPattern[i] ? 'bg-slate-800' : 'bg-transparent'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  {!qrisImageUrl && (
+                    <>
+                      <div className="absolute top-4 left-4 w-8 h-8 border-[6px] border-slate-800 rounded-md" />
+                      <div className="absolute top-4 right-4 w-8 h-8 border-[6px] border-slate-800 rounded-md" />
+                      <div className="absolute bottom-4 left-4 w-8 h-8 border-[6px] border-slate-800 rounded-md" />
+                    </>
+                  )}
                 </div>
               </div>
 
               {/* Supported Wallets Pills */}
               <div className="flex flex-wrap justify-center gap-2 max-w-xs w-full mt-auto">
-                {['GoPay', 'OVO', 'DANA', 'ShopeePay', 'BCA', 'Mandiri'].map(
-                  (wallet) => (
-                    <span
-                      key={wallet}
-                      className="px-3 py-1.5 bg-white/10 backdrop-blur-xl rounded-lg text-[10px] font-medium text-white border border-white/20 hover:bg-white/20 transition-colors"
-                    >
-                      {wallet}
-                    </span>
-                  )
-                )}
+                {wallets.map((wallet) => (
+                  <span
+                    key={wallet}
+                    className="px-3 py-1.5 bg-white/10 backdrop-blur-xl rounded-lg text-[10px] font-medium text-white border border-white/20 hover:bg-white/20 transition-colors"
+                  >
+                    {wallet}
+                  </span>
+                ))}
               </div>
             </div>
           </motion.div>
@@ -236,8 +285,11 @@ export default function Donasi() {
               ))}
             </div>
 
-            {/* Minimalist CTA */}
-            <button className="group relative mt-auto w-full overflow-hidden rounded-2xl bg-slate-900 px-6 py-4 dark:bg-emerald-600 shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(16,185,129,0.25)]">
+            {/* Minimalist CTA - WhatsApp Confirmation */}
+            <button
+              onClick={handleKonfirmasi}
+              className="group relative mt-auto w-full overflow-hidden rounded-2xl bg-slate-900 px-6 py-4 dark:bg-emerald-600 shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(16,185,129,0.25)]"
+            >
               <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-150%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(150%)]">
                 <div className="relative h-full w-8 bg-white/20" />
               </div>

@@ -74,9 +74,17 @@ export default function Kontak() {
     {
       icon: Clock,
       label: 'Jam Operasional',
-      value: 'Senin - Sabtu, 08:00 - 16:00 WIB',
+      value: profile?.jamOperasional || 'Senin - Sabtu, 08:00 - 16:00 WIB',
     },
   ];
+
+  // Dynamic social media links - only show if URL exists
+  const socialLinks = [
+    { icon: Instagram, href: profile?.instagramUrl || '', label: 'Instagram' },
+    { icon: Facebook, href: profile?.facebookUrl || '', label: 'Facebook' },
+    { icon: Youtube, href: profile?.youtubeChannelUrl || '', label: 'YouTube' },
+    { icon: MessageCircle, href: profile?.whatsappUrl || '', label: 'WhatsApp' },
+  ].filter(link => link.href !== '');
 
   return (
     <footer
@@ -157,6 +165,8 @@ export default function Kontak() {
                   <Link
                     key={idx}
                     href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={social.label}
                     className="w-12 h-12 rounded-2xl bg-white/5 backdrop-blur-md flex items-center justify-center text-slate-300 hover:bg-emerald-500 hover:text-white transition-all duration-300 border border-white/10 hover:border-emerald-400/50 group"
                   >
@@ -255,22 +265,35 @@ export default function Kontak() {
                   Lokasi Pesantren
                 </span>
                 <span className="block text-emerald-50 text-sm drop-shadow-sm">
-                  Jombang, Jawa Timur
+                  {profile?.alamat || 'Jombang, Jawa Timur'}
                 </span>
               </div>
             </div>
 
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.678884808992!2d112.2234!3d-7.5456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMzInNDQuMiJTIDExMsKwMTMnMjQuMiJF!5e0!3m2!1sen!2sid!4v1234567890"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="w-full h-full grayscale-[50%] contrast-[1.2] opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
-              title="Lokasi Pesantren"
-            />
+            {profile?.gmapLocation ? (
+              <iframe
+                src={profile.gmapLocation}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="w-full h-full grayscale-[50%] contrast-[1.2] opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                title="Lokasi Pesantren"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-slate-800/50">
+                <div className="text-center p-8">
+                  <MapPin size={48} className="mx-auto mb-4 text-emerald-500" />
+                  <p className="text-slate-400 text-sm">
+                    Peta lokasi belum dikonfigurasi.<br />
+                    Silakan tambahkan di halaman pengaturan.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </motion.div>
 

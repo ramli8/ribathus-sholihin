@@ -31,8 +31,8 @@ model ProfilPesantren {
   telepon     String?
   email       String?
   logoUrl     String?
-  coverUrl    String?
   profilHeaderTitle String?
+  profilHeaderTitleHighlight String?
   pengasuh    String?
   pengasuhFotoUrl  String?
   pengasuhDeskripsi String?
@@ -46,8 +46,20 @@ model ProfilPesantren {
   youtubeUrl  String?
   statsLulusan Int?    @default(100)
 
+  // Social Media
+  instagramUrl String?
+  tiktokUrl    String?
+  facebookUrl  String?
+  youtubeChannelUrl String?
+  whatsappUrl  String?
+
+  // Operational Info
+  jamOperasional String?
+  gmapLocation   String?  // Google Maps Embed URL
+
   // Pendidikan Section
   pendidikanTitle            String?
+  pendidikanTitleHighlight   String?
   pendidikanDesc             String?
   pendidikanFormalTitle      String?
   pendidikanFormalDesc       String?
@@ -60,11 +72,39 @@ model ProfilPesantren {
 
   // PSB (Penerimaan Santri Baru) Section
   psbTitle                   String?
+  psbTitleHighlight          String?
   psbDesc                    String?
   psbSyaratList              String?  // JSON string
   psbAlurList                String?  // JSON string
   psbBiayaList               String?  // JSON string
   psbBrosurUrl               String?
+
+  // Fasilitas Section
+  fasilitasTitle             String?
+  fasilitasTitleHighlight    String?
+  fasilitasDesc              String?
+  fasilitasList              String?  // JSON string
+
+  // Ekstrakurikuler Section
+  ekstraTitle                String?
+  ekstraTitleHighlight       String?
+  ekstraDesc                 String?
+  ekstraList                 String?  // JSON string
+
+  // Berita Section
+  beritaTitle                String?
+  beritaTitleHighlight       String?
+  beritaDesc                 String?
+
+  // Donasi Section
+  donasiTitle                String?
+  donasiTitleHighlight       String?
+  donasiQuote                String?
+  donasiQuoteSource          String?
+  donasiBankAccounts         String?  // JSON string [{bank, number, name}]
+  donasiQrisImageUrl         String?
+  donasiWhatsappNumber       String?
+  donasiWallets              String?  // JSON string ["GoPay", "OVO", ...]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -85,31 +125,6 @@ model Berita {
   updatedAt   DateTime @updatedAt
 }
 
-// Galeri Foto
-model Galeri {
-  id          Int      @id @default(autoincrement())
-  judul       String
-  deskripsi   String?
-  imageUrl    String
-  kategori    String?
-  featured    Boolean  @default(false)
-  viewed      Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-// Kegiatan Santri
-model Kegiatan {
-  id          Int      @id @default(autoincrement())
-  judul       String
-  deskripsi   String?
-  tanggal     DateTime
-  lokasi      String?
-  coverUrl    String?
-  published   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
 
 // Pendaftaran Santri Baru
 model Pendaftaran {

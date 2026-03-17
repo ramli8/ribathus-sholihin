@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getProfil, createProfilService } from '@/services/profilService';
+import { getProfil, createProfilService, updateProfilService } from '@/services/profilService';
 
 export async function GET() {
   try {
@@ -27,6 +27,29 @@ export async function POST(request: Request) {
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message || 'Gagal membuat profil' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const body = await request.json();
+    const profil = await getProfil();
+    if (!profil) {
+      return NextResponse.json(
+        { error: 'Profil tidak ditemukan' },
+        { status: 404 }
+      );
+    }
+    const updated = await updateProfilService(profil.id, body);
+    return NextResponse.json({
+      success: true,
+      data: updated,
+    });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message || 'Gagal memperbarui profil' },
       { status: 500 }
     );
   }

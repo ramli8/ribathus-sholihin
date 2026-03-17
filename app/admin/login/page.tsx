@@ -1,10 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Lock, Mail, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
+import { Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
+
+interface ProfilData {
+  nama: string;
+  logoUrl?: string;
+}
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -17,6 +22,21 @@ export default function AdminLoginPage() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [profil, setProfil] = useState<ProfilData | null>(null);
+
+  useEffect(() => {
+    fetch('/api/profil')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.data) {
+          setProfil({
+            nama: data.data.nama || 'Ribathus Sholihin',
+            logoUrl: data.data.logoUrl,
+          });
+        }
+      })
+      .catch(console.error);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +66,9 @@ export default function AdminLoginPage() {
       setIsLoading(false);
     }
   };
+
+  const brandingName = profil?.nama || 'Ribathus Sholihin';
+  const initials = brandingName.substring(0, 2).toUpperCase();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-slate-100 to-emerald-50 dark:from-slate-950 dark:via-slate-900 dark:to-emerald-950 px-4">
@@ -93,15 +116,25 @@ export default function AdminLoginPage() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl text-white font-bold text-2xl shadow-lg shadow-emerald-500/30 mb-4"
+              className="inline-flex items-center justify-center mb-4"
             >
-              RS
+              {profil?.logoUrl ? (
+                <img
+                  src={profil.logoUrl}
+                  alt={brandingName}
+                  className="w-20 h-20 object-contain rounded-2xl shadow-lg shadow-emerald-500/30"
+                />
+              ) : (
+                <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white font-bold text-3xl shadow-lg shadow-emerald-500/30">
+                  {initials}
+                </div>
+              )}
             </motion.div>
             <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white font-heading mb-2">
               Admin Dashboard
             </h1>
             <p className="text-slate-600 dark:text-slate-400 text-sm font-light">
-              Pondok Pesantren Ribathus Sholihin
+              {brandingName}
             </p>
           </div>
 

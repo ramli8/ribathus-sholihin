@@ -4,7 +4,15 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Calendar, User, BookOpen, Clock } from 'lucide-react';
+import {
+  ArrowRight,
+  Calendar,
+  User,
+  BookOpen,
+  Clock,
+  Newspaper,
+} from 'lucide-react';
+import { useProfil } from '@/hooks/useProfil';
 
 interface Berita {
   id: number;
@@ -38,6 +46,13 @@ const staggerContainer = {
 export default function Berita() {
   const [beritaList, setBeritaList] = useState<Berita[]>([]);
   const [loading, setLoading] = useState(true);
+  const { data: profile } = useProfil();
+
+  const beritaTitle = profile?.beritaTitle || 'Warta';
+  const beritaTitleHighlight = profile?.beritaTitleHighlight || 'Terkini';
+  const beritaDesc =
+    profile?.beritaDesc ||
+    'Ikuti perkembangan pondok, warta kegiatan santri, hingga goresan pena inspiratif dari jajaran asatidz.';
 
   useEffect(() => {
     fetch('/api/berita?published=true')
@@ -67,7 +82,10 @@ export default function Berita() {
 
   if (loading) {
     return (
-      <section id="berita" className="py-24 md:py-32 bg-slate-50 dark:bg-slate-950">
+      <section
+        id="berita"
+        className="py-24 md:py-32 bg-slate-50 dark:bg-slate-950"
+      >
         <div className="container mx-auto px-4 text-center">
           <div className="animate-pulse text-slate-400">Memuat berita...</div>
         </div>
@@ -128,29 +146,15 @@ export default function Berita() {
               <span className="uppercase tracking-wider">Kabar & Literasi</span>
             </div>
             <h3 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 font-heading tracking-tight">
-              Warta{' '}
+              {beritaTitle}{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400">
-                Terkini
+                {beritaTitleHighlight}
               </span>
             </h3>
             <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-light leading-relaxed">
-              Ikuti perkembangan pondok, warta kegiatan santri, hingga goresan
-              pena inspiratif dari jajaran asatidz.
+              {beritaDesc}
             </p>
           </div>
-
-          <Link
-            href="#"
-            className="group inline-flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-medium hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors shrink-0"
-          >
-            Lihat Semua Berita
-            <div className="w-8 h-8 rounded-full bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/40 dark:border-slate-700/50 flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-900/30 transition-colors">
-              <ArrowRight
-                size={14}
-                className="group-hover:translate-x-0.5 transition-transform"
-              />
-            </div>
-          </Link>
         </motion.div>
 
         {/* News Bento Grid - Modern Minimalist Glass Cards */}
@@ -163,90 +167,102 @@ export default function Berita() {
         >
           {beritaList.slice(0, 3).map((berita, idx) => {
             const isFeatured = idx === 0;
-            const colSpan = idx === 0 ? 'md:col-span-2 lg:col-span-2' : 'col-span-1';
 
             return (
-              <motion.article
+              <motion.div
                 key={berita.id}
-                variants={fadeUp}
-                className={`group relative rounded-3xl overflow-hidden bg-white/40 dark:bg-slate-800/40 backdrop-blur-2xl border border-white/60 dark:border-slate-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_8px_30px_rgba(16,185,129,0.1)] hover:-translate-y-1 flex flex-col ${colSpan}`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
               >
-                {/* Thumbnail Image Container */}
-                <div
-                  className={`relative ${isFeatured ? 'h-64 md:h-80 lg:h-[400px]' : 'h-48 md:h-56'} w-full overflow-hidden shrink-0`}
+                <Link
+                  href={`/berita/${berita.slug}`}
+                  className="group block relative rounded-2xl sm:rounded-[2rem] overflow-hidden bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-sm hover:shadow-xl transition-all duration-300 h-[22rem] sm:h-[28rem] hover:-translate-y-2 flex flex-col"
                 >
-                  <Image
-                    src={berita.coverUrl || 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=800&auto=format&fit=crop'}
-                    alt={berita.judul}
-                    fill
-                    className="object-cover transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out"
-                    sizes={
-                      isFeatured
-                        ? '(max-width: 768px) 100vw, 66vw'
-                        : '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                    }
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-
-                  {/* Category Badge Floating on Image */}
-                  <div className="absolute top-6 left-6 inline-flex items-center px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-medium tracking-wider shadow-lg">
-                    {berita.kategori || 'Umum'}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-6 md:p-8 flex flex-col flex-grow relative z-10">
-                  {/* Meta Info */}
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500 dark:text-slate-400 mb-4">
-                    <span className="flex items-center gap-1.5 bg-slate-100/50 dark:bg-slate-800/50 px-2 py-1 rounded-md">
-                      <Calendar size={12} className="text-emerald-500" />{' '}
-                      {formatDate(berita.createdAt)}
-                    </span>
-                    {berita.penulis && (
-                      <span className="flex items-center gap-1.5">
-                        <User size={12} className="text-emerald-500" />{' '}
-                        {berita.penulis}
-                      </span>
-                    )}
-                    <span className="flex items-center gap-1.5">
-                      <Clock size={12} className="text-emerald-500" />{' '}
-                      {getReadTime(berita.isi)}
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  <Link
-                    href={`/berita/${berita.slug}`}
-                    className={`block font-bold text-slate-900 dark:text-white mb-3 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors font-heading ${isFeatured ? 'text-2xl md:text-3xl' : 'text-xl'}`}
-                  >
-                    {berita.judul}
-                  </Link>
-
-                  {/* Excerpt */}
-                  <p
-                    className={`text-slate-600 dark:text-slate-400 font-light leading-relaxed mb-6 flex-grow ${isFeatured ? 'text-base md:text-lg line-clamp-3' : 'text-sm line-clamp-3'}`}
-                  >
-                    {berita.isi.substring(0, 200)}...
-                  </p>
-
-                  {/* Read More Link */}
-                  <div className="mt-auto pt-4 border-t border-slate-200/50 dark:border-slate-700/50">
-                    <Link
-                      href={`/berita/${berita.slug}`}
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors"
-                    >
-                      Baca Selengkapnya
-                      <ArrowRight
-                        size={14}
-                        className="group-hover:translate-x-1 transition-transform"
+                  <div className="relative h-48 sm:h-56 bg-slate-100 dark:bg-zinc-800 overflow-hidden shrink-0">
+                    {berita.coverUrl ? (
+                      <Image
+                        src={berita.coverUrl}
+                        alt={berita.judul}
+                        fill
+                        className="object-cover transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
-                    </Link>
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-slate-400">
+                        <Newspaper className="w-12 h-12 opacity-50" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none" />
+
+                    {/* Category Badge Floating on Image */}
+                    <div className="absolute top-6 left-6 inline-flex items-center px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-medium tracking-wider shadow-lg">
+                      {berita.kategori || 'Umum'}
+                    </div>
                   </div>
-                </div>
-              </motion.article>
+
+                  {/* Content */}
+                  <div className="p-6 md:p-8 flex flex-col flex-grow relative z-10">
+                    {/* Meta Info */}
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500 dark:text-slate-400 mb-4">
+                      <span className="flex items-center gap-1.5 bg-slate-100/50 dark:bg-slate-800/50 px-2 py-1 rounded-md">
+                        <Calendar size={12} className="text-emerald-500" />{' '}
+                        {formatDate(berita.createdAt)}
+                      </span>
+                      {berita.penulis && (
+                        <span className="flex items-center gap-1.5">
+                          <User size={12} className="text-emerald-500" />{' '}
+                          {berita.penulis}
+                        </span>
+                      )}
+                      <span className="flex items-center gap-1.5">
+                        <Clock size={12} className="text-emerald-500" />{' '}
+                        {getReadTime(berita.isi)}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="block font-bold text-slate-900 dark:text-white mb-3 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors font-heading line-clamp-2 min-h-[3.5rem] md:min-h-[4rem] text-xl">
+                      {berita.judul}
+                    </h3>
+
+                    {/* Excerpt */}
+                    <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2 md:line-clamp-3 leading-relaxed grow">
+                      {berita.isi
+                        .replace(/<[^>]*>?/g, '')
+                        .replace(/&nbsp;/g, ' ')
+                        .substring(0, 150)}
+                      ...
+                    </p>
+
+                    {/* Read More Link */}
+                    <div className="mt-auto flex items-center justify-between text-sm pt-4 border-t border-slate-100 dark:border-zinc-800">
+                      <span className="font-semibold text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors">
+                        Baca Detail
+                      </span>
+                      <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white transition-all transform group-hover:scale-110">
+                        <ArrowRight size={16} />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
             );
           })}
         </motion.div>
+
+        {beritaList.length > 0 && (
+          <div className="mt-16 text-center">
+            <Link
+              href="/berita"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-emerald-600 dark:text-emerald-400 font-semibold rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:border-emerald-200 dark:hover:border-emerald-800 transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-1"
+            >
+              Lihat Semua Berita
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
