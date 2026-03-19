@@ -124,7 +124,7 @@ export default function Profil() {
               <Target className="w-40 h-40" />
             </div>
 
-            <div className="relative z-10 flex-grow">
+            <div className="relative z-10 grow">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-white/80 dark:bg-slate-700/80 backdrop-blur-md border border-white/50 dark:border-slate-600 mb-6 text-emerald-600 dark:text-emerald-400 shadow-sm group-hover:scale-110 transition-transform duration-300">
                 <Target className="w-6 h-6" />
               </div>
@@ -150,7 +150,7 @@ export default function Profil() {
               <Compass className="w-40 h-40" />
             </div>
 
-            <div className="relative z-10 flex-grow">
+            <div className="relative z-10 grow">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md border border-white/20 mb-6 text-white shadow-sm group-hover:scale-110 transition-transform duration-300">
                 <Compass className="w-6 h-6" />
               </div>
