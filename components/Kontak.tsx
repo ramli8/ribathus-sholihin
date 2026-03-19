@@ -137,7 +137,6 @@ export default function Kontak() {
           variants={staggerContainer}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-8 mb-16"
         >
-          {/* Brand Info Card - Large */}
           <motion.div
             variants={fadeUp}
             className="lg:col-span-4 p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.1)] flex flex-col h-full hover:bg-white/10 transition-colors duration-500"
