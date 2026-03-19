@@ -1,22 +1,17 @@
 'use client';
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import {
-  Home,
   BookOpen,
   Building2,
-  Trophy,
   CreditCard,
+  Home,
   Settings,
+  Trophy,
 } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSidebar } from '../context/SidebarContext';
-import {
-  GridIcon,
-  ListIcon,
-  PlugInIcon,
-  ChevronDownIcon,
-} from '../icons/index';
+import { ChevronDownIcon, ListIcon, PlugInIcon } from '../icons/index';
 
 interface ProfilData {
   nama: string;
@@ -39,11 +34,6 @@ interface AppSidebarProps {
 }
 
 const navItems: NavItem[] = [
-  {
-    icon: <GridIcon />,
-    name: 'Dashboard',
-    path: '/admin',
-  },
   {
     icon: <Home size={22} />,
     name: 'Kelola Beranda',
@@ -287,7 +277,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
           !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start'
         }`}
       >
-        <Link href="/admin">
+        <Link href="/admin/beranda">
           {isExpanded || isHovered || isMobileOpen ? (
             <div className="flex items-center gap-3">
               {profil?.logoUrl ? (

@@ -13,7 +13,7 @@ interface ProfilData {
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect') || '/admin';
+  const redirect = searchParams.get('redirect') || '/admin/beranda';
 
   const [formData, setFormData] = useState({
     username: '',
