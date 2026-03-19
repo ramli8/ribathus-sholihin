@@ -201,9 +201,17 @@ export default function AdminPendidikanPage() {
     if (!file) return;
 
     // Validate file type
-    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const allowedTypes = [
+      'application/pdf',
+      'image/jpeg',
+      'image/png',
+      'image/webp',
+      'image/gif',
+    ];
     if (!allowedTypes.includes(file.type)) {
-      alert.error('Tipe file tidak didukung. Gunakan PDF, JPG, PNG, WebP, atau GIF');
+      alert.error(
+        'Tipe file tidak didukung. Gunakan PDF, JPG, PNG, WebP, atau GIF'
+      );
       e.target.value = '';
       return;
     }
@@ -216,14 +224,14 @@ export default function AdminPendidikanPage() {
     }
 
     setUploadingBrosur(true);
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('folder', 'brosur');
+    const uploadData = new FormData();
+    uploadData.append('file', file);
+    uploadData.append('folder', 'brosur');
 
     try {
       const res = await fetch('/api/upload', {
         method: 'POST',
-        body: formData,
+        body: uploadData,
       });
       const data = await res.json();
 
@@ -246,11 +254,14 @@ export default function AdminPendidikanPage() {
             }
           }
         }
-        
+
         setFormData((prev) => ({ ...prev, psbBrosurUrl: data.data.url }));
         alert.success('Brosur berhasil diunggah');
       } else {
-        alert.error('Gagal mengunggah brosur', data.error || 'Silakan coba lagi');
+        alert.error(
+          'Gagal mengunggah brosur',
+          data.error || 'Silakan coba lagi'
+        );
       }
     } catch (error) {
       console.error('Upload error:', error);
@@ -263,7 +274,7 @@ export default function AdminPendidikanPage() {
 
   const handleDeleteBrosur = async () => {
     if (!formData.psbBrosurUrl) return;
-    
+
     const filename = formData.psbBrosurUrl.split('/').pop();
     if (!filename) return;
 
@@ -820,7 +831,9 @@ export default function AdminPendidikanPage() {
                 >
                   <Upload size={20} />
                   <span className="text-sm font-medium">
-                    {uploadingBrosur ? 'Mengunggah...' : 'Unggah Brosur (PDF/Image)'}
+                    {uploadingBrosur
+                      ? 'Mengunggah...'
+                      : 'Unggah Brosur (PDF/Image)'}
                   </span>
                 </label>
                 {formData.psbBrosurUrl && (
@@ -835,8 +848,9 @@ export default function AdminPendidikanPage() {
                 )}
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Pilih file PDF atau gambar (JPG, PNG, WebP, GIF) untuk diunggah sebagai brosur resmi. 
-                Url brosur yang tersimpan akan dibagikan ke pengunjung web.
+                Pilih file PDF atau gambar (JPG, PNG, WebP, GIF) untuk diunggah
+                sebagai brosur resmi. Url brosur yang tersimpan akan dibagikan
+                ke pengunjung web.
               </p>
             </div>
           </div>
