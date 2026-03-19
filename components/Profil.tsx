@@ -35,12 +35,13 @@ export default function Profil() {
     pengasuhFotoUrl: '',
     pengasuhDeskripsi: '',
     sejarahDeskripsi: '',
+    profilHeaderTitleHighlight: 'Tradisi & Inovasi',
   };
 
   return (
     <section
       id="profil"
-      className="py-24 md:py-32 bg-gradient-to-b from-emerald-50/50 via-white to-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 relative overflow-hidden"
+      className="py-24 md:py-32 bg-linear-to-b from-emerald-50/50 via-white to-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 relative overflow-hidden"
     >
       {/* Light Blur Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -63,7 +64,7 @@ export default function Profil() {
           </div>
           <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6 font-heading tracking-tight leading-tight text-balance">
             {profile?.profilHeaderTitle || 'Membangun Karakter dari'}{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-600 to-teal-600">
               {profile?.profilHeaderTitleHighlight || 'Tradisi & Inovasi'}
             </span>
           </h3>
@@ -198,7 +199,7 @@ export default function Profil() {
                 />
               ) : (
                 <>
-                  <div className="absolute inset-0 opacity-20 dark:opacity-40 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-600 via-transparent to-transparent"></div>
+                  <div className="absolute inset-0 opacity-20 dark:opacity-40 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-emerald-600 via-transparent to-transparent"></div>
                   <div className="relative z-10 w-24 h-24 rounded-full border-4 border-emerald-500/20 dark:border-emerald-400/20 flex items-center justify-center backdrop-blur-sm group-hover:border-emerald-500/40 transition-colors duration-500">
                     <Users className="w-10 h-10 text-emerald-600/50 dark:text-emerald-400/50" />
                   </div>
