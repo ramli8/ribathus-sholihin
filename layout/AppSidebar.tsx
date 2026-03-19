@@ -15,7 +15,6 @@ import {
   GridIcon,
   ListIcon,
   PlugInIcon,
-  HorizontaLDots,
   ChevronDownIcon,
 } from '../icons/index';
 
@@ -292,6 +291,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
           {isExpanded || isHovered || isMobileOpen ? (
             <div className="flex items-center gap-3">
               {profil?.logoUrl ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={profil.logoUrl}
                   alt={brandingName}
@@ -316,7 +316,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
-            <div>{renderMenuItems(filteredNavItems, 'main')}</div>
+            <div>{renderMenuItems(filteredNavItems)}</div>
           </div>
         </nav>
       </div>

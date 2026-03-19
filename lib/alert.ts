@@ -2,9 +2,11 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 
 // Helper to check if dark mode is active
 const isDarkMode = () => {
-  return document.documentElement.classList.contains('dark') ||
-         document.body.classList.contains('dark') ||
-         window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return (
+    document.documentElement.classList.contains('dark') ||
+    document.body.classList.contains('dark') ||
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  );
 };
 
 const getThemeColors = () => {
@@ -94,7 +96,7 @@ export const alert = {
     return Swal.fire({
       ...getBaseConfig(),
       ...config,
-    });
+    } as SweetAlertOptions);
   },
 };
 
