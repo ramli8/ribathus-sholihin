@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useTheme } from 'next-themes';
-import { Menu, X, Sun, Moon, ArrowRight } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
@@ -30,6 +31,9 @@ export default function Navigasi() {
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -62,13 +66,16 @@ export default function Navigasi() {
           {/* Logo */}
           <Link href="#" className="flex items-center gap-3 group">
             {profile?.logoUrl ? (
-              <img
+              <Image
                 src={profile.logoUrl}
                 alt={brandingName}
+                width={40}
+                height={40}
                 className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300"
+                unoptimized
               />
             ) : (
-              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white font-bold tracking-tighter text-lg shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
+              <div className="w-10 h-10 bg-linear-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white font-bold tracking-tighter text-lg shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
                 {brandingName.substring(0, 2).toUpperCase()}
               </div>
             )}
@@ -141,7 +148,7 @@ export default function Navigasi() {
             className="lg:hidden absolute left-4 right-4 top-full mt-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/50 dark:border-slate-700/50 rounded-3xl overflow-hidden"
           >
             <div className="p-6 flex flex-col gap-2">
-              {navLinks.map((link, index) => {
+              {navLinks.map((link) => {
                 const targetHref =
                   pathname === '/' ? link.href : `/${link.href}`;
                 return (

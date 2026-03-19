@@ -95,11 +95,12 @@ export default function AdminPendidikanPage() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const safeParseJSON = (
     jsonString: string | undefined | null,
-    defaultValue: any
+    defaultValue: unknown
   ) => {
     if (!jsonString) return defaultValue;
     try {
@@ -272,32 +273,14 @@ export default function AdminPendidikanPage() {
     }
   };
 
-  const handleDeleteBrosur = async () => {
-    if (!formData.psbBrosurUrl) return;
-
-    const filename = formData.psbBrosurUrl.split('/').pop();
-    if (!filename) return;
-
-    try {
-      await fetch('/api/upload/delete', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          filename,
-          folder: 'brosur',
-        }),
-      });
-      setFormData((prev) => ({ ...prev, psbBrosurUrl: '' }));
-      alert.success('Brosur berhasil dihapus');
-    } catch (error) {
-      console.error('Failed to delete file:', error);
-      alert.error('Gagal menghapus brosur');
-    }
-  };
-
   // Helper for rendering selected icons
   const renderIcon = (iconName: string) => {
-    const Icon = (LucideIcons as any)[iconName];
+    const Icon = (
+      LucideIcons as unknown as Record<
+        string,
+        React.ComponentType<{ size?: number }>
+      >
+    )[iconName];
     return Icon ? <Icon size={18} /> : null;
   };
 
@@ -398,11 +381,11 @@ export default function AdminPendidikanPage() {
               </label>
               {formData.pendidikanFormalList.map((item, index) => (
                 <div key={item.id} className="flex items-center gap-3">
-                  <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-500">
+                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-500">
                     {renderIcon(item.icon)}
                   </div>
                   <select
-                    className="flex-shrink-0 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                    className="shrink-0 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                     value={item.icon}
                     onChange={(e) => {
                       const newList = [...formData.pendidikanFormalList];
@@ -421,7 +404,7 @@ export default function AdminPendidikanPage() {
                   </select>
                   <input
                     type="text"
-                    className="flex-grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                    className="grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                     placeholder="Nama program..."
                     value={item.name}
                     onChange={(e) => {
@@ -506,11 +489,11 @@ export default function AdminPendidikanPage() {
               </label>
               {formData.pendidikanDiniyahList.map((item, index) => (
                 <div key={item.id} className="flex items-center gap-3">
-                  <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-500">
+                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-500">
                     {renderIcon(item.icon)}
                   </div>
                   <select
-                    className="flex-shrink-0 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                    className="shrink-0 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                     value={item.icon}
                     onChange={(e) => {
                       const newList = [...formData.pendidikanDiniyahList];
@@ -529,7 +512,7 @@ export default function AdminPendidikanPage() {
                   </select>
                   <input
                     type="text"
-                    className="flex-grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                    className="grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                     placeholder="Nama program..."
                     value={item.name}
                     onChange={(e) => {
@@ -662,8 +645,7 @@ export default function AdminPendidikanPage() {
                   <div key={item.id} className="flex items-center gap-2">
                     <input
                       type="text"
-                      className="flex-grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
-                      placeholder="Syarat..."
+                      className="grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                       value={item.value}
                       onChange={(e) => {
                         const newList = [...formData.psbSyaratList];
@@ -714,7 +696,7 @@ export default function AdminPendidikanPage() {
                     </div>
                     <input
                       type="text"
-                      className="flex-grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                      className="grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                       placeholder="Alur..."
                       value={item.value}
                       onChange={(e) => {

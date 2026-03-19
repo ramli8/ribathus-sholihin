@@ -9,9 +9,9 @@ import {
   Youtube,
   MessageCircle,
   Clock,
-  ArrowRight,
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const fadeUp = {
@@ -36,13 +36,6 @@ const quickLinks = [
   'Program Pendidikan',
   'Pendaftaran Santri',
   'Galeri Kegiatan',
-];
-
-const socialLinks = [
-  { icon: Instagram, href: '#', label: 'Instagram' },
-  { icon: Facebook, href: '#', label: 'Facebook' },
-  { icon: Youtube, href: '#', label: 'YouTube' },
-  { icon: MessageCircle, href: '#', label: 'WhatsApp' },
 ];
 
 import { useProfil } from '@/hooks/useProfil';
@@ -96,7 +89,7 @@ export default function Kontak() {
       className="relative pt-24 md:pt-32 pb-12 overflow-hidden bg-slate-900"
     >
       {/* Modern Gradient Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-slate-950 z-0" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-slate-950 z-0" />
 
       {/* Animated Glassmorphism Orbs for Footer */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex justify-center items-center">
@@ -143,13 +136,16 @@ export default function Kontak() {
           >
             <Link href="#" className="flex items-center gap-4 mb-8 group">
               {profile?.logoUrl ? (
-                <img
+                <Image
                   src={profile.logoUrl}
                   alt={brandingName}
+                  width={56}
+                  height={56}
                   className="w-14 h-14 object-contain group-hover:scale-105 transition-transform duration-300"
+                  unoptimized
                 />
               ) : (
-                <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
+                <div className="w-14 h-14 bg-linear-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
                   {brandingName.substring(0, 2).toUpperCase()}
                 </div>
               )}
@@ -160,7 +156,7 @@ export default function Kontak() {
               </div>
             </Link>
 
-            <p className="text-slate-300/90 text-sm md:text-base leading-relaxed mb-8 flex-grow font-light">
+            <p className="text-slate-300/90 text-sm md:text-base leading-relaxed mb-8 grow font-light">
               {profile?.deskripsi ||
                 'Mencetak generasi rabbani yang tangguh secara spiritual dan intelektual, mencerahkan peradaban dengan landasan Ahlussunnah wal Jamaah.'}
             </p>
@@ -194,7 +190,7 @@ export default function Kontak() {
             className="lg:col-span-3 p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.1)] hover:bg-white/10 transition-colors duration-500"
           >
             <h4 className="flex items-center gap-2 text-sm font-semibold text-white uppercase tracking-wider mb-8">
-              <span className="w-8 h-[1px] bg-emerald-500"></span>
+              <span className="w-8 h-px bg-emerald-500"></span>
               Tautan Cepat
             </h4>
             <ul className="space-y-4">
@@ -218,7 +214,7 @@ export default function Kontak() {
             className="lg:col-span-5 p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.1)] hover:bg-white/10 transition-colors duration-500"
           >
             <h4 className="flex items-center gap-2 text-sm font-semibold text-white uppercase tracking-wider mb-8">
-              <span className="w-8 h-[1px] bg-emerald-500"></span>
+              <span className="w-8 h-px bg-emerald-500"></span>
               Hubungi Kami
             </h4>
             <ul className="space-y-6">
@@ -226,7 +222,7 @@ export default function Kontak() {
                 const Icon = info.icon;
                 return (
                   <li key={idx} className="flex items-start gap-4 group">
-                    <div className="w-10 h-10 rounded-2xl bg-white/5 backdrop-blur-md flex items-center justify-center text-emerald-400 flex-shrink-0 border border-white/10 group-hover:bg-emerald-500/20 group-hover:text-emerald-300 transition-colors duration-300">
+                    <div className="w-10 h-10 rounded-2xl bg-white/5 backdrop-blur-md flex items-center justify-center text-emerald-400 shrink-0 border border-white/10 group-hover:bg-emerald-500/20 group-hover:text-emerald-300 transition-colors duration-300">
                       <Icon size={18} />
                     </div>
                     <div className="text-left">
@@ -261,7 +257,7 @@ export default function Kontak() {
             <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-700 z-10 pointer-events-none" />
 
             {/* Overlay Gradient that fades on hover */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10 pointer-events-none opacity-100 group-hover:opacity-0 transition-opacity duration-700" />
+            <div className="absolute inset-0 bg-linear-to-t from-slate-900/80 via-transparent to-transparent z-10 pointer-events-none opacity-100 group-hover:opacity-0 transition-opacity duration-700" />
 
             {/* Map Placeholder Content (Visible before interaction) */}
             <div className="absolute bottom-6 left-6 z-20 flex items-center gap-3 transform group-hover:translate-y-4 group-hover:opacity-0 transition-all duration-500">
@@ -287,7 +283,7 @@ export default function Kontak() {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full grayscale-[50%] contrast-[1.2] opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                className="w-full h-full grayscale-50 contrast-[1.2] opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
                 title="Lokasi Pesantren"
                 sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
               />
@@ -319,21 +315,21 @@ export default function Kontak() {
           <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 text-sm font-medium">
             <Link
               href="#"
-              className="text-slate-400 hover:text-emerald-400 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] after:bg-emerald-400 hover:after:w-full after:transition-all after:duration-300"
+              className="text-slate-400 hover:text-emerald-400 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-px after:bg-emerald-400 hover:after:w-full after:transition-all after:duration-300"
             >
               Kebijakan Privasi
             </Link>
             <div className="w-1 h-1 rounded-full bg-slate-700 hidden md:block" />
             <Link
               href="#"
-              className="text-slate-400 hover:text-emerald-400 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] after:bg-emerald-400 hover:after:w-full after:transition-all after:duration-300"
+              className="text-slate-400 hover:text-emerald-400 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-px after:bg-emerald-400 hover:after:w-full after:transition-all after:duration-300"
             >
               Syarat & Ketentuan
             </Link>
             <div className="w-1 h-1 rounded-full bg-slate-700 hidden md:block" />
             <Link
               href="#"
-              className="text-slate-400 hover:text-emerald-400 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] after:bg-emerald-400 hover:after:w-full after:transition-all after:duration-300"
+              className="text-slate-400 hover:text-emerald-400 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-px after:bg-emerald-400 hover:after:w-full after:transition-all after:duration-300"
             >
               Peta Situs
             </Link>

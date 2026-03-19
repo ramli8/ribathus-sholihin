@@ -91,7 +91,10 @@ const defaultFacilities: FasilitasItem[] = [
 
 const renderIcon = (iconName: string, size = 24) => {
   const Icon = (
-    LucideIcons as Record<string, React.ComponentType<{ size?: number }>>
+    LucideIcons as unknown as Record<
+      string,
+      React.ComponentType<{ size?: number }>
+    >
   )[iconName];
   return Icon ? <Icon size={size} /> : <Building2 size={size} />;
 };
@@ -130,7 +133,7 @@ export default function Fasilitas() {
       className="py-24 md:py-32 bg-slate-50 dark:bg-slate-950 relative overflow-hidden"
     >
       {/* Soft Minimalist Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-100 via-slate-50 to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 opacity-90 z-0" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-slate-100 via-slate-50 to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 opacity-90 z-0" />
 
       {/* Animated Glassmorphism Orbs */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex justify-center items-center">
@@ -180,7 +183,7 @@ export default function Fasilitas() {
           </div>
           <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6 font-heading tracking-tight">
             {fasilitasTitle}{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400">
               {fasilitasTitleHighlight}
             </span>
           </h3>
@@ -201,7 +204,13 @@ export default function Fasilitas() {
             <motion.div
               key={fac.id || idx}
               variants={fadeUp}
-              onClick={() => setSelectedImage({ url: fac.image, title: fac.title, desc: fac.desc })}
+              onClick={() =>
+                setSelectedImage({
+                  url: fac.image,
+                  title: fac.title,
+                  desc: fac.desc,
+                })
+              }
               className={`group relative rounded-3xl overflow-hidden bg-white/40 dark:bg-slate-800/40 backdrop-blur-2xl border border-white/60 dark:border-slate-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_8px_30px_rgba(16,185,129,0.1)] hover:-translate-y-1 cursor-pointer ${fac.colSpan}`}
             >
               {/* Background Image */}
@@ -216,7 +225,7 @@ export default function Fasilitas() {
                     unoptimized={fac.image.startsWith('/images/')}
                   />
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent group-hover:from-slate-900/95 group-hover:via-slate-900/50 transition-colors duration-500" />
+                  <div className="absolute inset-0 bg-linear-to-t from-slate-900/90 via-slate-900/40 to-transparent group-hover:from-slate-900/95 group-hover:via-slate-900/50 transition-colors duration-500" />
                 </div>
               </div>
 

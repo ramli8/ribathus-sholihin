@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight, Play, Sparkles, X } from 'lucide-react';
-import Link from 'next/link';
+import { Play, X } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useProfil } from '@/hooks/useProfil';
@@ -42,7 +41,7 @@ export default function Beranda() {
   return (
     <section
       id="#"
-      className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950"
+      className="relative min-h-dvh flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950"
     >
       {/* Absolute Background Setup */}
       <div className="absolute inset-0 z-0">
@@ -55,7 +54,7 @@ export default function Beranda() {
           priority
         />
         {/* Soft Minimalist Gradient Overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white via-slate-50 to-slate-100 dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 opacity-90" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-white via-slate-50 to-slate-100 dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 opacity-90" />
       </div>
 
       {/* Subtle Animated Orbs (Glassmorphism Core) */}
@@ -95,7 +94,7 @@ export default function Beranda() {
           transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
           className="group relative mb-8 md:mb-12 cursor-pointer"
         >
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
+          <div className="absolute -inset-0.5 bg-linear-to-r from-emerald-500 to-teal-500 rounded-full blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
         </motion.div>
 
         {/* Hero Typography - Minimalist & Grand */}
@@ -113,7 +112,7 @@ export default function Beranda() {
             {profile?.heroTitle?.split("Qur'ani")[0] || 'Mencetak Generasi '}
             <br className="hidden md:block" />
             <span className="relative whitespace-nowrap">
-              <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-700 dark:from-emerald-400 dark:via-teal-400 dark:to-emerald-500">
+              <span className="relative z-10 text-transparent bg-clip-text bg-linear-to-br from-emerald-600 via-teal-600 to-emerald-700 dark:from-emerald-400 dark:via-teal-400 dark:to-emerald-500">
                 Qur&apos;ani
               </span>
               <span className="absolute -bottom-2 left-0 right-0 h-3 bg-emerald-200/50 dark:bg-emerald-900/50 -rotate-1 skew-x-12 z-0 rounded-sm"></span>
@@ -170,7 +169,7 @@ export default function Beranda() {
               key={stat.label}
               className="relative overflow-hidden flex flex-col items-center justify-center p-6 md:p-8 rounded-3xl bg-white/40 dark:bg-slate-800/40 backdrop-blur-2xl border border-white/60 dark:border-slate-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.02)] transition-all duration-500 hover:-translate-y-1 hover:bg-white/60 dark:hover:bg-slate-800/60 group"
             >
-              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 dark:from-emerald-500/5 dark:to-teal-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700"></div>
+              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-linear-to-br from-emerald-500/10 to-teal-500/10 dark:from-emerald-500/5 dark:to-teal-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700"></div>
 
               <span className="relative z-10 text-4xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-white mb-2 font-heading">
                 {stat.value}
@@ -191,7 +190,7 @@ export default function Beranda() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-9999 flex items-center justify-center bg-black/80 backdrop-blur-sm"
             onClick={() => setShowVideo(false)}
           >
             <motion.div
