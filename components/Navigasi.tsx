@@ -72,8 +72,8 @@ export default function Navigasi() {
                 {brandingName.substring(0, 2).toUpperCase()}
               </div>
             )}
-            <div className="flex-col hidden sm:flex text-left">
-              <span className="font-bold text-lg tracking-tight text-slate-900 dark:text-white font-heading leading-none">
+            <div className="flex flex-col text-left">
+              <span className="font-bold text-sm sm:text-lg tracking-tight text-slate-900 dark:text-white font-heading leading-none">
                 {brandingName}
               </span>
             </div>
@@ -107,22 +107,6 @@ export default function Navigasi() {
                 <Moon className="absolute h-[18px] w-[18px] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
               </button>
             )}
-
-            <Link
-              href="#pendaftaran"
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-slate-900 px-6 py-2.5 dark:bg-emerald-600 shadow-[0_0_20px_rgba(16,185,129,0.1)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(16,185,129,0.2)]"
-            >
-              <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-150%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(150%)]">
-                <div className="relative h-full w-8 bg-white/20" />
-              </div>
-              <span className="relative z-10 flex items-center gap-2 text-white text-sm font-semibold">
-                Daftar
-                <ArrowRight
-                  size={16}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
-              </span>
-            </Link>
           </div>
 
           {/* Mobile Toggle */}
@@ -173,15 +157,6 @@ export default function Navigasi() {
               })}
 
               <div className="w-full h-px bg-slate-200/50 dark:bg-slate-700/50 my-2" />
-
-              <Link
-                href="#pendaftaran"
-                className="mt-2 flex items-center justify-center gap-2 bg-slate-900 dark:bg-emerald-600 text-white py-4 rounded-2xl font-semibold shadow-lg shadow-emerald-500/10 active:scale-[0.98] transition-all"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Daftar Sekarang
-                <ArrowRight size={18} />
-              </Link>
             </div>
           </motion.div>
         )}

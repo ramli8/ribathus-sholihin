@@ -271,6 +271,7 @@ export default function Pendaftaran() {
                     href={profile.psbBrosurUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    download
                     className="group/btn flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold hover:bg-white/20 transition-all duration-300 w-full lg:w-auto"
                   >
                     <Download size={18} /> Unduh Brosur

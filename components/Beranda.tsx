@@ -96,22 +96,6 @@ export default function Beranda() {
           className="group relative mb-8 md:mb-12 cursor-pointer"
         >
           <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
-          <Link
-            href="#pendaftaran"
-            className="relative flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-slate-700/50 text-sm font-medium text-slate-700 dark:text-slate-300 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none hover:bg-white/80 dark:hover:bg-slate-800/80 transition-all duration-300"
-          >
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400">
-              <Sparkles className="h-3 w-3 text-white" />
-            </span>
-            <span>
-              Pendaftaran Santri Baru{' '}
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                2026/2027
-              </span>{' '}
-              Dibuka
-            </span>
-            <ArrowRight className="h-4 w-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
-          </Link>
         </motion.div>
 
         {/* Hero Typography - Minimalist & Grand */}
@@ -159,19 +143,6 @@ export default function Beranda() {
           transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full sm:w-auto mb-20 md:mb-24"
         >
-          <Link
-            href="#pendaftaran"
-            className="group relative flex h-14 w-full sm:w-auto items-center justify-center gap-2 overflow-hidden rounded-2xl bg-slate-900 dark:bg-emerald-600 px-8 text-white font-medium shadow-[0_0_40px_rgba(16,185,129,0.2)] dark:shadow-[0_0_40px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_60px_rgba(16,185,129,0.4)]"
-          >
-            <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-150%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(150%)]">
-              <div className="relative h-full w-8 bg-white/20" />
-            </div>
-            <span className="relative z-10 flex items-center gap-2">
-              Daftar Sekarang{' '}
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </span>
-          </Link>
-
           <button
             onClick={() => {
               if (profile?.youtubeUrl) {

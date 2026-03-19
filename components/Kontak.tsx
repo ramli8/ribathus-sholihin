@@ -83,8 +83,12 @@ export default function Kontak() {
     { icon: Instagram, href: profile?.instagramUrl || '', label: 'Instagram' },
     { icon: Facebook, href: profile?.facebookUrl || '', label: 'Facebook' },
     { icon: Youtube, href: profile?.youtubeChannelUrl || '', label: 'YouTube' },
-    { icon: MessageCircle, href: profile?.whatsappUrl || '', label: 'WhatsApp' },
-  ].filter(link => link.href !== '');
+    {
+      icon: MessageCircle,
+      href: profile?.whatsappUrl || '',
+      label: 'WhatsApp',
+    },
+  ].filter((link) => link.href !== '');
 
   return (
     <footer
@@ -139,15 +143,20 @@ export default function Kontak() {
             className="lg:col-span-4 p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.1)] flex flex-col h-full hover:bg-white/10 transition-colors duration-500"
           >
             <Link href="#" className="flex items-center gap-4 mb-8 group">
-              <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
-                {brandingName.substring(0, 2).toUpperCase()}
-              </div>
+              {profile?.logoUrl ? (
+                <img
+                  src={profile.logoUrl}
+                  alt={brandingName}
+                  className="w-14 h-14 object-contain group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
+                  {brandingName.substring(0, 2).toUpperCase()}
+                </div>
+              )}
               <div className="flex flex-col">
                 <span className="font-bold text-xl text-white font-heading tracking-tight text-left">
                   {brandingName}
-                </span>
-                <span className="text-sm text-emerald-300/80 font-medium tracking-wider uppercase text-left">
-                  Pondok Pesantren
                 </span>
               </div>
             </Link>
@@ -288,7 +297,8 @@ export default function Kontak() {
                 <div className="text-center p-8">
                   <MapPin size={48} className="mx-auto mb-4 text-emerald-500" />
                   <p className="text-slate-400 text-sm">
-                    Peta lokasi belum dikonfigurasi.<br />
+                    Peta lokasi belum dikonfigurasi.
+                    <br />
                     Silakan tambahkan di halaman pengaturan.
                   </p>
                 </div>

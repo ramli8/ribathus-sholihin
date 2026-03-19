@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: 'Website Profil Pondok Pesantren Ribathus Sholihin',
 };
 
-import { ThemeProvider } from '@/context/ThemeContext';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import { SidebarProvider } from '@/context/SidebarContext';
 
 export default function RootLayout({
@@ -28,9 +28,9 @@ export default function RootLayout({
   return (
     <html lang="id" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${sans.variable} ${outfit.variable} antialiased min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans text-zinc-800 dark:text-zinc-200`}
+        className={`${sans.variable} ${outfit.variable} antialiased min-h-screen bg-zinc-50 font-sans text-zinc-800`}
       >
-        <ThemeProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <SidebarProvider>{children}</SidebarProvider>
         </ThemeProvider>
       </body>

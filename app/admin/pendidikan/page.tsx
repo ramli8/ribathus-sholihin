@@ -172,6 +172,7 @@ export default function AdminPendidikanPage() {
       psbSyaratList: JSON.stringify(formData.psbSyaratList.map((i) => i.value)),
       psbAlurList: JSON.stringify(formData.psbAlurList.map((i) => i.value)),
       psbBiayaList: JSON.stringify(formData.psbBiayaList),
+      psbBrosurUrl: formData.psbBrosurUrl,
     };
 
     try {
@@ -199,10 +200,25 @@ export default function AdminPendidikanPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      alert.error('Tipe file tidak didukung. Gunakan PDF, JPG, PNG, WebP, atau GIF');
+      e.target.value = '';
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert.error('Ukuran file maksimal 10MB');
+      e.target.value = '';
+      return;
+    }
+
     setUploadingBrosur(true);
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('type', 'brosur');
+    formData.append('folder', 'brosur');
 
     try {
       const res = await fetch('/api/upload', {
@@ -212,15 +228,59 @@ export default function AdminPendidikanPage() {
       const data = await res.json();
 
       if (data.success) {
-        setFormData((prev) => ({ ...prev, psbBrosurUrl: data.url }));
+        // Delete old file if exists
+        if (formData.psbBrosurUrl) {
+          const oldFilename = formData.psbBrosurUrl.split('/').pop();
+          if (oldFilename) {
+            try {
+              await fetch('/api/upload/delete', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  filename: oldFilename,
+                  folder: 'brosur',
+                }),
+              });
+            } catch (error) {
+              console.error('Failed to delete old file:', error);
+            }
+          }
+        }
+        
+        setFormData((prev) => ({ ...prev, psbBrosurUrl: data.data.url }));
         alert.success('Brosur berhasil diunggah');
       } else {
-        alert.error('Gagal mengunggah brosur');
+        alert.error('Gagal mengunggah brosur', data.error || 'Silakan coba lagi');
       }
     } catch (error) {
+      console.error('Upload error:', error);
       alert.error('Terjadi kesalahan saat mengunggah');
     } finally {
       setUploadingBrosur(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleDeleteBrosur = async () => {
+    if (!formData.psbBrosurUrl) return;
+    
+    const filename = formData.psbBrosurUrl.split('/').pop();
+    if (!filename) return;
+
+    try {
+      await fetch('/api/upload/delete', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filename,
+          folder: 'brosur',
+        }),
+      });
+      setFormData((prev) => ({ ...prev, psbBrosurUrl: '' }));
+      alert.success('Brosur berhasil dihapus');
+    } catch (error) {
+      console.error('Failed to delete file:', error);
+      alert.error('Gagal menghapus brosur');
     }
   };
 
@@ -749,7 +809,7 @@ export default function AdminPendidikanPage() {
               <div className="flex items-center gap-4">
                 <input
                   type="file"
-                  accept="application/pdf"
+                  accept="application/pdf,image/jpeg,image/png,image/webp,image/gif"
                   onChange={handleUploadBrosur}
                   className="hidden"
                   id="upload-brosur"
@@ -760,7 +820,7 @@ export default function AdminPendidikanPage() {
                 >
                   <Upload size={20} />
                   <span className="text-sm font-medium">
-                    {uploadingBrosur ? 'Mengunggah...' : 'Unggah Brosur (PDF)'}
+                    {uploadingBrosur ? 'Mengunggah...' : 'Unggah Brosur (PDF/Image)'}
                   </span>
                 </label>
                 {formData.psbBrosurUrl && (
@@ -768,15 +828,15 @@ export default function AdminPendidikanPage() {
                     href={formData.psbBrosurUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-emerald-600 hover:underline"
+                    className="flex items-center gap-2 text-sm text-emerald-600 hover:text-emerald-700 font-medium py-1 px-3 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
                   >
-                    Lihat Brosur Saat Ini
+                    <Eye size={16} /> Lihat Brosur
                   </a>
                 )}
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Pilih file PDF untuk diunggah sebagai brosur resmi. Url brosur
-                yang tersimpan akan dibagikan ke pengunjung web.
+                Pilih file PDF atau gambar (JPG, PNG, WebP, GIF) untuk diunggah sebagai brosur resmi. 
+                Url brosur yang tersimpan akan dibagikan ke pengunjung web.
               </p>
             </div>
           </div>
