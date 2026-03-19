@@ -12,10 +12,54 @@ const outfit = Outfit({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-  title: 'Pondok Pesantren Ribathus Sholihin',
-  description: 'Website Profil Pondok Pesantren Ribathus Sholihin',
-};
+import { getProfil } from '@/services/profilService';
+
+export async function generateMetadata(): Promise<Metadata> {
+  let profil = null;
+  try {
+    profil = await getProfil();
+  } catch (error) {
+    console.error('Failed to fetch profil for metadata:', error);
+  }
+
+  const nama = profil?.nama || 'Pondok Pesantren Ribathus Sholihin';
+  const deskripsi =
+    profil?.deskripsi || 'Website Profil Pondok Pesantren Ribathus Sholihin';
+  const logoUrl = profil?.logoUrl || '/favicon.ico';
+
+  return {
+    title: {
+      default: nama,
+      template: `%s | ${nama}`,
+    },
+    description: deskripsi,
+    icons: {
+      icon: logoUrl,
+      apple: logoUrl,
+    },
+    openGraph: {
+      title: nama,
+      description: deskripsi,
+      siteName: nama,
+      images: [
+        {
+          url: logoUrl,
+          width: 800,
+          height: 600,
+          alt: `Logo ${nama}`,
+        },
+      ],
+      locale: 'id_ID',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: nama,
+      description: deskripsi,
+      images: [logoUrl],
+    },
+  };
+}
 
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { SidebarProvider } from '@/context/SidebarContext';
