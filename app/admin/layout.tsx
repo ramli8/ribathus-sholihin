@@ -70,7 +70,7 @@ export default function AdminLayout({
 
   // Render admin pages with layout
   return (
-    <div className="flex h-screen overflow-hidden bg-white dark:bg-gray-dark">
+    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-dark">
       <AppSidebar user={user} />
       <div
         className={`relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto transition-all duration-300 ease-in-out ${

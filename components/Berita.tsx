@@ -166,8 +166,6 @@ export default function Berita() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
         >
           {beritaList.slice(0, 3).map((berita, idx) => {
-            const isFeatured = idx === 0;
-
             return (
               <motion.div
                 key={berita.id}
@@ -178,7 +176,7 @@ export default function Berita() {
               >
                 <Link
                   href={`/berita/${berita.slug}`}
-                  className="group block relative rounded-2xl sm:rounded-[2rem] overflow-hidden bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-sm hover:shadow-xl transition-all duration-300 h-[22rem] sm:h-[28rem] hover:-translate-y-2 flex flex-col"
+                  className="group block relative rounded-2xl sm:rounded-[2rem] overflow-hidden bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-sm hover:shadow-xl transition-all duration-300 h-full min-h-[28rem] hover:-translate-y-2 flex flex-col"
                 >
                   <div className="relative h-48 sm:h-56 bg-slate-100 dark:bg-zinc-800 overflow-hidden shrink-0">
                     {berita.coverUrl ? (
@@ -197,8 +195,10 @@ export default function Berita() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none" />
 
                     {/* Category Badge Floating on Image */}
-                    <div className="absolute top-6 left-6 inline-flex items-center px-3 py-1.5 rounded-lg bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-medium tracking-wider shadow-lg">
-                      {berita.kategori || 'Umum'}
+                    <div className="absolute top-4 left-4 z-20">
+                      <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-emerald-600 dark:text-emerald-400 font-bold text-[10px] tracking-widest shadow-lg uppercase border border-white/40 dark:border-slate-700/50">
+                        {berita.kategori || 'Umum'}
+                      </span>
                     </div>
                   </div>
 
@@ -228,7 +228,7 @@ export default function Berita() {
                     </h3>
 
                     {/* Excerpt */}
-                    <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2 md:line-clamp-3 leading-relaxed grow">
+                    <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-2 md:line-clamp-3 leading-relaxed">
                       {berita.isi
                         .replace(/<[^>]*>?/g, '')
                         .replace(/&nbsp;/g, ' ')
@@ -237,7 +237,7 @@ export default function Berita() {
                     </p>
 
                     {/* Read More Link */}
-                    <div className="mt-auto flex items-center justify-between text-sm pt-4 border-t border-slate-100 dark:border-zinc-800">
+                    <div className="mt-auto flex items-center justify-between text-sm pt-5 border-t border-slate-100 dark:border-zinc-800">
                       <span className="font-semibold text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors">
                         Baca Detail
                       </span>

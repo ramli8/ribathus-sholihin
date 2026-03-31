@@ -122,7 +122,7 @@ function LoginForm() {
                 <img
                   src={profil.logoUrl}
                   alt={brandingName}
-                  className="w-20 h-20 object-contain rounded-2xl shadow-lg shadow-emerald-500/30"
+                  className="h-20 w-auto object-contain"
                 />
               ) : (
                 <div className="w-20 h-20 bg-linear-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white font-bold text-3xl shadow-lg shadow-emerald-500/30">

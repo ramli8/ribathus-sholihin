@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
@@ -23,6 +23,7 @@ import {
   FormTextarea,
   SectionTitle,
 } from '@/components/common/FormComponents';
+import ImageModal from '@/components/common/ImageModal';
 
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 import 'react-quill-new/dist/quill.snow.css';
@@ -41,7 +42,6 @@ interface Berita {
 }
 
 export default function AdminBeritaPage() {
-  const router = useRouter();
   const [beritaList, setBeritaList] = useState<Berita[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -56,6 +56,7 @@ export default function AdminBeritaPage() {
     published: true,
   });
   const [uploading, setUploading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   // Header section state
   const [profilId, setProfilId] = useState<number | null>(null);
@@ -246,8 +247,32 @@ export default function AdminBeritaPage() {
 
       const data = await res.json();
       if (data.success) {
-        setFormData((prev) => ({ ...prev, coverUrl: data.data.url }));
-        alert.success('Gambar berhasil diupload!');
+        // Delete old file if exists
+        const oldImage = formData.coverUrl;
+        if (oldImage) {
+          const parts = oldImage.split('/');
+          const filename = parts[parts.length - 1];
+          if (filename) {
+            await fetch('/api/upload/delete', {
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ filename, folder: 'berita' }),
+            }).catch(console.error);
+          }
+        }
+
+        const newUrl = data.data.url;
+        setFormData((prev) => ({ ...prev, coverUrl: newUrl }));
+
+        if (editingId) {
+          await fetch(`/api/berita/${editingId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ coverUrl: newUrl }),
+          });
+        }
+
+        alert.success('Gambar berhasil diupload dan disimpan!');
       } else {
         alert.error(data.error || 'Upload gagal');
       }
@@ -255,6 +280,42 @@ export default function AdminBeritaPage() {
       alert.error('Upload gagal', 'Terjadi kesalahan saat upload');
     } finally {
       setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleRemoveCover = async () => {
+    const confirmed = await alert.confirm(
+      'Hapus Cover',
+      'Yakin ingin menghapus cover image ini? Gambar akan dihapus permanen.'
+    );
+    if (!confirmed) return;
+
+    if (formData.coverUrl) {
+      const parts = formData.coverUrl.split('/');
+      const filename = parts[parts.length - 1];
+      if (filename) {
+        await fetch('/api/upload/delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename, folder: 'berita' }),
+        }).catch(console.error);
+      }
+    }
+
+    setFormData((prev) => ({ ...prev, coverUrl: '' }));
+
+    if (editingId) {
+      try {
+        await fetch(`/api/berita/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ coverUrl: '' }),
+        });
+        alert.success('Cover image berhasil dihapus!');
+      } catch {
+        alert.error('Gagal memperbarui database');
+      }
     }
   };
 
@@ -463,13 +524,31 @@ export default function AdminBeritaPage() {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Cover Image
               </label>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                Rekomendasi: 1280 × 720 px (16:9 Landscape, format JPG/PNG)
+              </p>
               <div className="flex items-center gap-4">
                 {formData.coverUrl && (
-                  <img
-                    src={formData.coverUrl}
-                    alt="Cover preview"
-                    className="w-20 h-20 object-cover rounded-sm border border-gray-200"
-                  />
+                  <div>
+                    <div className="relative group w-fit">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={formData.coverUrl}
+                        alt="Cover preview"
+                        onClick={() => setPreviewImage(formData.coverUrl)}
+                        className="w-20 h-20 object-cover rounded-sm border border-gray-200 cursor-pointer"
+                      />
+                      <button
+                      type="button"
+                      onClick={handleRemoveCover}
+                      className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                      title="Hapus Cover"
+                    >
+                      <X size={14} />
+                    </button>
+                    </div>
+                    <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">✨ Klik gambar untuk membesarkan</p>
+                  </div>
                 )}
                 <div className="flex-1">
                   <input
@@ -477,18 +556,18 @@ export default function AdminBeritaPage() {
                     accept="image/*"
                     onChange={handleUpload}
                     disabled={uploading}
-                    className="block w-full text-sm text-gray-500
-                      file:mr-4 file:py-2 file:px-4
-                      file:rounded-sm file:border-0
-                      file:text-sm file:font-medium
-                      file:bg-emerald-50 file:text-emerald-700
-                      hover:file:bg-emerald-100"
+                    className="hidden"
+                    id="upload-cover-berita"
                   />
-                  {uploading && (
-                    <p className="text-xs text-gray-500 mt-1">
-                      Mengupload gambar...
-                    </p>
-                  )}
+                  <label
+                    htmlFor="upload-cover-berita"
+                    className={`inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors cursor-pointer font-medium text-sm ${
+                      uploading ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    <Upload size={18} />
+                    <span>{uploading ? 'Mengupload...' : 'Unggah Cover'}</span>
+                  </label>
                 </div>
               </div>
             </div>
@@ -557,11 +636,16 @@ export default function AdminBeritaPage() {
             >
               <div className="flex items-start gap-4">
                 {berita.coverUrl ? (
-                  <img
-                    src={berita.coverUrl}
-                    alt={berita.judul}
-                    className="w-20 h-16 object-cover rounded-lg flex-shrink-0 border border-gray-200 dark:border-gray-700"
-                  />
+                  <div>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={berita.coverUrl}
+                      alt={berita.judul}
+                      onClick={() => setPreviewImage(berita.coverUrl!)}
+                      className="w-20 h-16 object-cover rounded-lg flex-shrink-0 border border-gray-200 dark:border-gray-700 cursor-pointer"
+                    />
+                    <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium select-none w-max">✨ Klik zoom</p>
+                  </div>
                 ) : (
                   <div className="w-20 h-16 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center flex-shrink-0 border border-gray-200 dark:border-gray-700">
                     <Newspaper size={24} className="text-gray-400" />
@@ -646,6 +730,13 @@ export default function AdminBeritaPage() {
         )}
         </div>
       </motion.div>
+
+      <ImageModal
+        isOpen={!!previewImage}
+        onClose={() => setPreviewImage(null)}
+        imageUrl={previewImage || ''}
+        title="Preview Cover Berita"
+      />
     </div>
   );
 }

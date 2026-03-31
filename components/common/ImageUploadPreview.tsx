@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { Upload, X, Image as ImageIcon } from 'lucide-react';
 import alert from '@/lib/alert';
+import ImageModal from '@/components/common/ImageModal';
 
 interface ImageUploadPreviewProps {
   label: string;
@@ -35,6 +36,7 @@ export default function ImageUploadPreview({
   showPreview = true,
 }: ImageUploadPreviewProps) {
   const [uploading, setUploading] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   // Use value directly from props, no need for useEffect tracking
   const localValue = value || '';
@@ -160,21 +162,25 @@ export default function ImageUploadPreview({
 
         {/* Preview */}
         {showPreview && value && (
-          <div className="relative group">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={value}
-              alt="Preview"
-              className={`${width} ${height} object-cover rounded-lg border border-gray-200 dark:border-gray-700`}
-            />
-            <button
-              type="button"
-              onClick={handleRemove}
-              className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
-              title="Hapus gambar"
-            >
-              <X size={16} />
-            </button>
+          <div>
+            <div className="relative group w-fit">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={value}
+                alt="Preview"
+                onClick={() => setIsPreviewOpen(true)}
+                className={`${width} ${height} object-cover bg-white rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer`}
+              />
+              <button
+                type="button"
+                onClick={handleRemove}
+                className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                title="Hapus gambar"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">✨ Klik gambar untuk membesarkan</p>
           </div>
         )}
       </div>
@@ -194,6 +200,15 @@ export default function ImageUploadPreview({
             </p>
           </div>
         </div>
+      )}
+
+      {isPreviewOpen && (
+        <ImageModal
+          isOpen={isPreviewOpen}
+          onClose={() => setIsPreviewOpen(false)}
+          imageUrl={value}
+          title={label}
+        />
       )}
     </div>
   );

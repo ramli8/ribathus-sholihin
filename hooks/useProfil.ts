@@ -83,6 +83,7 @@ export interface ProfilData {
   statsSantri?: number;
   statsAsatidz?: number;
   heroTitle?: string;
+  heroTitleHighlight?: string;
   heroSubtitle?: string;
   youtubeUrl?: string;
   statsLulusan?: number;

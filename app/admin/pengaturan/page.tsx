@@ -229,7 +229,7 @@ export default function AdminPengaturanPage() {
                   width="w-32"
                   height="h-32"
                   placeholder="Upload Logo"
-                  description="Rekomendasi: 200 × 200 px (format PNG/SVG)"
+                  description="Rekomendasi: 500 × 500 px (1:1 Persegi, format PNG Transparan)"
                 />
               </div>
             </>

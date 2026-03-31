@@ -65,7 +65,7 @@ export default function Navigasi() {
           )}
         >
           {/* Logo */}
-          <Link href="#" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-3 group">
             {profile?.logoUrl ? (
               <Image
                 src={profile.logoUrl}

@@ -256,7 +256,18 @@ export default function AdminPendidikanPage() {
           }
         }
 
-        setFormData((prev) => ({ ...prev, psbBrosurUrl: data.data.url }));
+        const newUrl = data.data.url;
+        setFormData((prev) => ({ ...prev, psbBrosurUrl: newUrl }));
+
+        // Auto save to DB
+        if (profilId) {
+          await fetch(`/api/profil/${profilId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ psbBrosurUrl: newUrl }),
+          });
+        }
+        
         alert.success('Brosur berhasil diunggah');
       } else {
         alert.error(
@@ -270,6 +281,41 @@ export default function AdminPendidikanPage() {
     } finally {
       setUploadingBrosur(false);
       e.target.value = '';
+    }
+  };
+
+  const handleRemoveBrosur = async () => {
+    const confirmed = await alert.confirm(
+      'Hapus Brosur',
+      'Yakin ingin menghapus file brosur ini? File akan dihapus permanen.'
+    );
+    if (!confirmed) return;
+
+    if (formData.psbBrosurUrl) {
+      const parts = formData.psbBrosurUrl.split('/');
+      const filename = parts[parts.length - 1];
+      if (filename) {
+        await fetch('/api/upload/delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename, folder: 'brosur' }),
+        }).catch(console.error);
+      }
+    }
+
+    setFormData((prev) => ({ ...prev, psbBrosurUrl: '' }));
+
+    if (profilId) {
+      try {
+        await fetch(`/api/profil/${profilId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ psbBrosurUrl: '' }),
+        });
+        alert.success('Brosur berhasil dihapus!');
+      } catch {
+        alert.error('Gagal memperbarui database');
+      }
     }
   };
 
@@ -799,6 +845,9 @@ export default function AdminPendidikanPage() {
 
             <SectionTitle title="E. File Brosur" />
             <div className="space-y-4">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                Rekomendasi: PDF/Gambar format vertikal Kualitas Tinggi, ukuran max 5MB.
+              </p>
               <div className="flex items-center gap-4">
                 <input
                   type="file"
@@ -809,24 +858,36 @@ export default function AdminPendidikanPage() {
                 />
                 <label
                   htmlFor="upload-brosur"
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg cursor-pointer text-gray-700 dark:text-gray-300 transition-colors duration-200"
+                  className={`flex items-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors cursor-pointer font-medium text-sm ${
+                    uploadingBrosur ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
                 >
-                  <Upload size={20} />
-                  <span className="text-sm font-medium">
+                  <Upload size={18} />
+                  <span>
                     {uploadingBrosur
                       ? 'Mengunggah...'
                       : 'Unggah Brosur (PDF/Image)'}
                   </span>
                 </label>
                 {formData.psbBrosurUrl && (
-                  <a
-                    href={formData.psbBrosurUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-emerald-600 hover:text-emerald-700 font-medium py-1 px-3 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
-                  >
-                    <Eye size={16} /> Lihat Brosur
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={formData.psbBrosurUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-sm text-emerald-600 hover:text-emerald-700 font-medium py-1 px-3 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
+                    >
+                      <Eye size={16} /> Lihat Brosur
+                    </a>
+                    <button
+                      type="button"
+                      onClick={handleRemoveBrosur}
+                      className="p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                      title="Hapus Brosur"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
                 )}
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400">

@@ -43,6 +43,7 @@ model ProfilPesantren {
   statsAsatidz Int     @default(0)
   // Homepage Hero Section
   heroTitle   String?  @default("Mencetak Generasi Qur'ani & Berakhlakul Karimah")
+  heroTitleHighlight String? @default("Qur'ani")
   heroSubtitle String? @default("Membangun peradaban Islam yang rahmatan lil 'alamin melalui pendidikan berkualitas dengan harmoni ilmu dunia dan akhirat.")
   youtubeUrl  String?
   statsLulusan Int?    @default(100)

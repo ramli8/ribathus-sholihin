@@ -9,6 +9,7 @@ import {
   FormTextarea,
   SectionTitle,
 } from '@/components/common/FormComponents';
+import ImageModal from '@/components/common/ImageModal';
 
 import * as LucideIcons from 'lucide-react';
 
@@ -52,6 +53,7 @@ export default function AdminFasilitasPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<FasilitasFormData>({
     fasilitasTitle: '',
@@ -151,12 +153,34 @@ export default function AdminFasilitasPage() {
       });
       const data = await res.json();
 
-      if (data.success) {
-        setFormData((prev) => {
-          const newList = [...prev.fasilitasList];
-          newList[index] = { ...newList[index], image: data.data.url };
-          return { ...prev, fasilitasList: newList };
-        });
+      if (data.success && data.data?.url) {
+        const oldImage = formData.fasilitasList[index]?.image;
+        if (oldImage) {
+          const parts = oldImage.split('/');
+          const filename = parts[parts.length - 1];
+          if (filename) {
+            await fetch('/api/upload/delete', {
+               method: 'DELETE',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ filename, folder: 'fasilitas' })
+            }).catch(console.error);
+          }
+        }
+
+        const newUrl = data.data.url;
+        const newList = [...formData.fasilitasList];
+        newList[index] = { ...newList[index], image: newUrl };
+        setFormData((prev) => ({ ...prev, fasilitasList: newList }));
+
+        // Auto save to DB
+        if (profilId) {
+          await fetch(`/api/profil/${profilId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fasilitasList: JSON.stringify(newList) })
+          });
+        }
+        
         alert.success('Gambar berhasil diunggah');
       } else {
         alert.error('Gagal mengunggah gambar');
@@ -165,6 +189,45 @@ export default function AdminFasilitasPage() {
       alert.error('Terjadi kesalahan saat mengunggah');
     } finally {
       setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleRemoveImage = async (index: number) => {
+    const confirmed = await alert.confirm(
+      'Hapus Gambar',
+      'Yakin ingin menghapus gambar fasilitas ini? Gambar akan dihapus permanen.'
+    );
+    if (!confirmed) return;
+
+    const oldImage = formData.fasilitasList[index]?.image;
+    if (oldImage) {
+      const parts = oldImage.split('/');
+      const filename = parts[parts.length - 1];
+      if (filename) {
+        await fetch('/api/upload/delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename, folder: 'fasilitas' }),
+        }).catch(console.error);
+      }
+    }
+
+    const newList = [...formData.fasilitasList];
+    newList[index] = { ...newList[index], image: '' };
+    setFormData((prev) => ({ ...prev, fasilitasList: newList }));
+
+    if (profilId) {
+      try {
+        await fetch(`/api/profil/${profilId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fasilitasList: JSON.stringify(newList) }),
+        });
+        alert.success('Gambar fasilitas berhasil dihapus!');
+      } catch {
+        alert.error('Gagal memperbarui database');
+      }
     }
   };
 
@@ -340,6 +403,9 @@ export default function AdminFasilitasPage() {
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Gambar Fasilitas
                       </label>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                        Rekomendasi: 800 × 600 px (4:3 Landscape, format JPG/PNG)
+                      </p>
                       <div className="flex items-center gap-4">
                         <input
                           type="file"
@@ -350,34 +416,34 @@ export default function AdminFasilitasPage() {
                         />
                         <label
                           htmlFor={`upload-fasilitas-${index}`}
-                          className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg cursor-pointer text-gray-700 dark:text-gray-300 transition-colors"
+                          className={`flex items-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors cursor-pointer font-medium text-sm ${
+                            uploading ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
                         >
                           <Upload size={18} />
-                          <span className="text-sm">
+                          <span>
                             {uploading ? 'Mengunggah...' : 'Upload Gambar'}
                           </span>
                         </label>
                         {item.image && (
-                          <div className="relative">
-                            <img
-                              src={item.image}
-                              alt={item.title}
-                              className="h-20 w-32 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const newList = [...formData.fasilitasList];
-                                newList[index].image = '';
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  fasilitasList: newList,
-                                }));
-                              }}
-                              className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
-                            >
-                              <X size={14} />
-                            </button>
+                          <div>
+                            <div className="relative w-max">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={item.image}
+                                alt={item.title}
+                                onClick={() => setPreviewImage(item.image)}
+                                className="h-20 w-32 object-cover rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveImage(index)}
+                                className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                              >
+                                <X size={14} />
+                              </button>
+                            </div>
+                            <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">✨ Klik gambar untuk membesarkan</p>
                           </div>
                         )}
                       </div>
@@ -456,6 +522,13 @@ export default function AdminFasilitasPage() {
           </div>
         </form>
       </motion.div>
+
+      <ImageModal
+        isOpen={!!previewImage}
+        onClose={() => setPreviewImage(null)}
+        imageUrl={previewImage || ''}
+        title="Preview Fasilitas"
+      />
     </div>
   );
 }

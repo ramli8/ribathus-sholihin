@@ -120,12 +120,12 @@ export const UploadButton: React.FC<UploadButtonProps> = ({
       />
       <label
         htmlFor={`upload-${label.toLowerCase().replace(/\s/g, '-')}`}
-        className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 
-          hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg cursor-pointer 
-          text-gray-700 dark:text-gray-300 transition-colors duration-200"
+        className={`flex items-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors cursor-pointer font-medium text-sm ${
+          uploading ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
       >
-        <Upload size={20} />
-        <span className="text-sm font-medium">{uploading ? 'Uploading...' : label}</span>
+        <Upload size={18} />
+        <span>{uploading ? 'Mengupload...' : label}</span>
       </label>
     </>
   );

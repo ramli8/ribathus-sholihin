@@ -12,22 +12,48 @@ export default function Beranda() {
 
   const stats = [
     {
-      value: `${profile?.statsSantri || 1000}+`,
+      value: `${profile?.statsSantri ?? 0}+`,
       label: 'Santri Aktif',
     },
     {
-      value: `${profile?.statsTahun || 35}+`,
+      value: `${profile?.statsTahun ?? 0}+`,
       label: 'Tahun Mengabdi',
     },
     {
-      value: `${profile?.statsAsatidz || 50}+`,
+      value: `${profile?.statsAsatidz ?? 0}+`,
       label: 'Pengajar Ahli',
     },
     {
-      value: `${profile?.statsLulusan ?? 100}%`,
+      value: `${profile?.statsLulusan ?? 0}%`,
       label: 'Lulusan Unggul',
     },
   ];
+
+  const renderHeroTitle = () => {
+    const title = profile?.heroTitle || '';
+    const highlight = profile?.heroTitleHighlight || '';
+
+    if (!title) return null;
+
+    if (!highlight || !title.includes(highlight)) {
+      return <>{title}</>;
+    }
+
+    const parts = title.split(highlight);
+    return (
+      <>
+        {parts[0]}
+        <br className="hidden md:block" />
+        <span className="relative whitespace-nowrap">
+          <span className="relative z-10 text-transparent bg-clip-text bg-linear-to-br from-emerald-600 via-teal-600 to-emerald-700 dark:from-emerald-400 dark:via-teal-400 dark:to-emerald-500">
+            {highlight}
+          </span>
+          <span className="absolute -bottom-2 left-0 right-0 h-3 bg-emerald-200/50 dark:bg-emerald-900/50 -rotate-1 skew-x-12 z-0 rounded-sm"></span>
+        </span>{' '}
+        {parts.slice(1).join(highlight)}
+      </>
+    );
+  };
 
   const getYoutubeEmbedUrl = (url: string) => {
     if (!url) return '';
@@ -109,15 +135,7 @@ export default function Beranda() {
             }}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-6 font-heading"
           >
-            {profile?.heroTitle?.split("Qur'ani")[0] || 'Mencetak Generasi '}
-            <br className="hidden md:block" />
-            <span className="relative whitespace-nowrap">
-              <span className="relative z-10 text-transparent bg-clip-text bg-linear-to-br from-emerald-600 via-teal-600 to-emerald-700 dark:from-emerald-400 dark:via-teal-400 dark:to-emerald-500">
-                Qur&apos;ani
-              </span>
-              <span className="absolute -bottom-2 left-0 right-0 h-3 bg-emerald-200/50 dark:bg-emerald-900/50 -rotate-1 skew-x-12 z-0 rounded-sm"></span>
-            </span>{' '}
-            {profile?.heroTitle?.split("Qur'ani")[1] || '& Berakhlakul Karimah'}
+            {renderHeroTitle()}
           </motion.h1>
 
           <motion.p
@@ -130,8 +148,7 @@ export default function Beranda() {
             }}
             className="text-lg md:text-2xl text-slate-600 dark:text-slate-400 font-light max-w-3xl mx-auto leading-relaxed"
           >
-            {profile?.heroSubtitle ||
-              "Membangun peradaban Islam yang rahmatan lil 'alamin melalui pendidikan berkualitas dengan harmoni ilmu dunia dan akhirat."}
+            {profile?.heroSubtitle || ''}
           </motion.p>
         </div>
 

@@ -12,6 +12,7 @@ import {
 
 interface BerandaFormData {
   heroTitle: string;
+  heroTitleHighlight: string;
   heroSubtitle: string;
   youtubeUrl: string;
   statsSantri: number | string;
@@ -27,6 +28,7 @@ export default function AdminBerandaPage() {
   const [previewVideo, setPreviewVideo] = useState(false);
   const [formData, setFormData] = useState<BerandaFormData>({
     heroTitle: '',
+    heroTitleHighlight: '',
     heroSubtitle: '',
     youtubeUrl: '',
     statsSantri: 0,
@@ -47,6 +49,7 @@ export default function AdminBerandaPage() {
         setProfilId(data.data.id);
         setFormData({
           heroTitle: data.data.heroTitle || '',
+          heroTitleHighlight: data.data.heroTitleHighlight || '',
           heroSubtitle: data.data.heroSubtitle || '',
           youtubeUrl: data.data.youtubeUrl || '',
           statsSantri: data.data.statsSantri || 0,
@@ -148,6 +151,17 @@ export default function AdminBerandaPage() {
                   setFormData((prev) => ({
                     ...prev,
                     heroTitle: e.target.value,
+                  }))
+                }
+              />
+              <FormInput
+                label="Teks Highlight (Hero)"
+                placeholder="Qur'ani"
+                value={formData.heroTitleHighlight}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    heroTitleHighlight: e.target.value,
                   }))
                 }
               />

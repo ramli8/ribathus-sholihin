@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Save, Eye, X } from 'lucide-react';
-import alert from '@/lib/alert';
+import { BookOpen, MapPin, Eye, Upload, Save, X, Phone, Mail } from 'lucide-react';
 import {
   FormInput,
   FormTextarea,
   SectionTitle,
   UploadButton,
 } from '@/components/common/FormComponents';
+import alert from '@/lib/alert';
+import ImageModal from '@/components/common/ImageModal';
 
 interface ProfilFormData {
   nama: string;
@@ -33,6 +34,7 @@ export default function AdminProfilPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [formData, setFormData] = useState<ProfilFormData>({
     nama: '',
     alamat: '',
@@ -128,8 +130,31 @@ export default function AdminProfilPage() {
       });
       const data = await res.json();
       if (data.success) {
-        setFormData((prev) => ({ ...prev, [field]: data.data.url }));
-        alert.success('Gambar berhasil diupload!');
+        // Delete old file if exists
+        const oldImage = formData[field];
+        if (oldImage) {
+          const parts = oldImage.split('/');
+          const filename = parts[parts.length - 1];
+          await fetch('/api/upload/delete', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename, folder: 'profil' }),
+          }).catch(console.error);
+        }
+
+        const newUrl = data.data.url;
+        setFormData((prev) => ({ ...prev, [field]: newUrl }));
+
+        // Auto save to DB
+        if (profilId) {
+          await fetch(`/api/profil/${profilId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ [field]: newUrl }),
+          });
+        }
+        
+        alert.success('Gambar berhasil diupload dan disimpan!');
       } else {
         alert.error(data.error || 'Upload gagal');
       }
@@ -137,6 +162,45 @@ export default function AdminProfilPage() {
       alert.error('Upload gagal');
     } finally {
       setUploading(false);
+      e.target.value = ''; // Reset input
+    }
+  };
+
+  const handleRemoveImage = async (field: 'logoUrl' | 'pengasuhFotoUrl') => {
+    const confirmed = await alert.confirm(
+      'Hapus Gambar',
+      'Yakin ingin menghapus gambar ini? Gambar akan dihapus permanen.'
+    );
+    if (!confirmed) return;
+
+    const oldImage = formData[field];
+    if (oldImage) {
+      const parts = oldImage.split('/');
+      const filename = parts[parts.length - 1];
+      try {
+        await fetch('/api/upload/delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename, folder: 'profil' }),
+        });
+      } catch (error) {
+        console.error('Failed to delete physical file');
+      }
+    }
+
+    setFormData((prev) => ({ ...prev, [field]: '' }));
+
+    if (profilId) {
+      try {
+        await fetch(`/api/profil/${profilId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ [field]: '' }),
+        });
+        alert.success('Gambar berhasil dihapus!');
+      } catch {
+        alert.error('Gagal memperbarui database');
+      }
     }
   };
 
@@ -294,24 +358,24 @@ export default function AdminProfilPage() {
                     onChange={(e) => handleUpload(e, 'pengasuhFotoUrl')}
                   />
                   {formData.pengasuhFotoUrl && (
-                    <div className="relative">
-                      <img
-                        src={formData.pengasuhFotoUrl}
-                        alt="Foto Pengasuh"
-                        className="h-20 w-20 object-cover rounded-xl border border-gray-200 dark:border-gray-600"
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            pengasuhFotoUrl: '',
-                          }))
-                        }
-                        className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
-                      >
-                        <X size={14} />
-                      </button>
+                    <div>
+                      <div className="relative w-max">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={formData.pengasuhFotoUrl}
+                          alt="Foto Pengasuh"
+                          onClick={() => setPreviewImage(formData.pengasuhFotoUrl)}
+                          className="h-20 w-20 object-cover rounded-xl border border-gray-200 dark:border-gray-600 cursor-pointer"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage('pengasuhFotoUrl')}
+                          className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                      <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">✨ Klik gambar untuk membesarkan</p>
                     </div>
                   )}
                 </div>
@@ -332,6 +396,13 @@ export default function AdminProfilPage() {
           </div>
         </form>
       </motion.div>
+
+      <ImageModal
+        isOpen={!!previewImage}
+        onClose={() => setPreviewImage(null)}
+        imageUrl={previewImage || ''}
+        title="Preview Foto Profil"
+      />
     </div>
   );
 }

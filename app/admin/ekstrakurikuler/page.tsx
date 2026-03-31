@@ -9,6 +9,7 @@ import {
   FormTextarea,
   SectionTitle,
 } from '@/components/common/FormComponents';
+import ImageModal from '@/components/common/ImageModal';
 
 interface EkstraItem {
   id: string;
@@ -36,6 +37,7 @@ export default function AdminEkstrakurikulerPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<EkstraFormData>({
     ekstraTitle: '',
@@ -166,11 +168,19 @@ export default function AdminEkstrakurikulerPage() {
           }
         }
 
-        setFormData((prev) => {
-          const newList = [...prev.ekstraList];
-          newList[index] = { ...newList[index], image: data.data.url };
-          return { ...prev, ekstraList: newList };
-        });
+        const newUrl = data.data.url;
+        const newList = [...formData.ekstraList];
+        newList[index] = { ...newList[index], image: newUrl };
+        setFormData((prev) => ({ ...prev, ekstraList: newList }));
+
+        // Auto save to DB
+        if (profilId) {
+          await fetch(`/api/profil/${profilId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ekstraList: JSON.stringify(newList) }),
+          });
+        }
         alert.success('Gambar berhasil diunggah');
       } else {
         alert.error('Gagal mengunggah gambar');
@@ -180,6 +190,44 @@ export default function AdminEkstrakurikulerPage() {
     } finally {
       setUploading(false);
       e.target.value = '';
+    }
+  };
+
+  const handleRemoveImage = async (index: number) => {
+    const confirmed = await alert.confirm(
+      'Hapus Gambar',
+      'Yakin ingin menghapus gambar ini? Gambar akan dihapus permanen.'
+    );
+    if (!confirmed) return;
+
+    const oldImage = formData.ekstraList[index]?.image;
+    if (oldImage) {
+      const parts = oldImage.split('/');
+      const filename = parts[parts.length - 1];
+      if (filename) {
+        await fetch('/api/upload/delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename, folder: 'ekstrakurikuler' }),
+        }).catch(console.error);
+      }
+    }
+
+    const newList = [...formData.ekstraList];
+    newList[index] = { ...newList[index], image: '' };
+    setFormData((prev) => ({ ...prev, ekstraList: newList }));
+
+    if (profilId) {
+      try {
+        await fetch(`/api/profil/${profilId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ekstraList: JSON.stringify(newList) }),
+        });
+        alert.success('Gambar berhasil dihapus!');
+      } catch {
+        alert.error('Gagal memperbarui database');
+      }
     }
   };
 
@@ -347,7 +395,7 @@ export default function AdminEkstrakurikulerPage() {
                       Gambar
                     </label>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                      Rekomendasi: 800 × 600 px (format JPG/PNG)
+                      Rekomendasi: 800 × 600 px (4:3 Landscape, format JPG/PNG)
                     </p>
                     <div className="flex items-center gap-4">
                       <input
@@ -368,27 +416,25 @@ export default function AdminEkstrakurikulerPage() {
                       </label>
 
                       {item.image && (
-                        <div className="relative group">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={item.image}
-                            alt={item.name || 'Preview'}
-                            className="w-full h-48 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setFormData((prev) => {
-                                const newList = [...prev.ekstraList];
-                                newList[index] = { ...newList[index], image: '' };
-                                return { ...prev, ekstraList: newList };
-                              });
-                            }}
-                            className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
-                            title="Hapus gambar"
-                          >
+                        <div>
+                          <div className="relative group w-fit">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={item.image}
+                              alt={item.name || 'Preview'}
+                              onClick={() => setPreviewImage(item.image)}
+                              className="w-full h-48 object-cover rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveImage(index)}
+                              className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                              title="Hapus gambar"
+                            >
                             <X size={16} />
-                          </button>
+                            </button>
+                          </div>
+                          <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">✨ Klik gambar untuk membesarkan</p>
                         </div>
                       )}
 
@@ -429,6 +475,13 @@ export default function AdminEkstrakurikulerPage() {
           </div>
         </form>
       </motion.div>
+
+      <ImageModal
+        isOpen={!!previewImage}
+        onClose={() => setPreviewImage(null)}
+        imageUrl={previewImage || ''}
+        title="Preview Ekstrakurikuler"
+      />
     </div>
   );
 }

@@ -1,11 +1,10 @@
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 
-// Helper to check if dark mode is active
 const isDarkMode = () => {
+  if (typeof document === 'undefined') return false;
   return (
     document.documentElement.classList.contains('dark') ||
-    document.body.classList.contains('dark') ||
-    window.matchMedia('(prefers-color-scheme: dark)').matches
+    document.body.classList.contains('dark')
   );
 };
 
