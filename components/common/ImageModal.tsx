@@ -9,6 +9,7 @@ interface ImageModalProps {
   onClose: () => void;
   imageUrl: string;
   title?: string;
+  description?: string;
 }
 
 export default function ImageModal({
@@ -16,6 +17,7 @@ export default function ImageModal({
   onClose,
   imageUrl,
   title,
+  description,
 }: ImageModalProps) {
   // Close on escape key
   useEffect(() => {
@@ -76,6 +78,12 @@ export default function ImageModal({
                   className="max-w-[95vw] md:max-w-5xl max-h-[85vh] object-contain"
                 />
               </div>
+              {(title || description) && (
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent text-white">
+                  {title && <h3 className="font-bold text-lg leading-tight shadow-sm tracking-wide">{title}</h3>}
+                  {description && <p className="text-sm mt-1 text-white/90 font-medium">{description}</p>}
+                </div>
+              )}
             </div>
           </motion.div>
         </>
