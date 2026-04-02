@@ -1,36 +1,22 @@
-'use client';
+import { getProfil } from '@/services/profilService';
+import db from '@/lib/db';
+import HomeClient from './HomeClient';
 
-import { useProfil } from '@/hooks/useProfil';
-import LoadingScreen from '@/components/common/LoadingScreen';
-import Navigasi from '@/components/Navigasi';
-import Beranda from '@/components/Beranda';
-import Profil from '@/components/Profil';
-import Pendidikan from '@/components/Pendidikan';
-import Pendaftaran from '@/components/Pendaftaran';
-import Fasilitas from '@/components/Fasilitas';
-import Kegiatan from '@/components/Kegiatan';
-import Berita from '@/components/Berita';
-import Donasi from '@/components/Donasi';
-import Kontak from '@/components/Kontak';
+export const revalidate = 60; // Revalidate setiap 60 detik
 
-export default function Home() {
-  const { loading } = useProfil();
+export default async function Home() {
+  // Fetch semua data di server — 0 loading di client
+  const [profil, beritaList, fasilitasList, ekstraList] = await Promise.all([
+    getProfil(),
+    db.berita.findMany({
+      where: { published: true },
+      orderBy: { createdAt: 'desc' },
+      take: 6,
+    }),
+    // Fasilitas & Ekstrakurikuler data is in profil, no extra fetch needed
+    Promise.resolve(null),
+    Promise.resolve(null),
+  ]);
 
-  return (
-    <>
-      <LoadingScreen isLoading={loading} />
-      <main className="min-h-screen bg-white dark:bg-black font-sans scroll-smooth">
-        <Navigasi />
-        <Beranda />
-        <Profil />
-        <Pendidikan />
-        <Pendaftaran />
-        <Fasilitas />
-        <Kegiatan />
-        <Donasi />
-        <Berita />
-        <Kontak />
-      </main>
-    </>
-  );
+  return <HomeClient profil={profil} beritaList={beritaList} />;
 }
