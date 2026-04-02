@@ -353,7 +353,7 @@ export default function AdminBeritaPage() {
           </button>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors"
+            className="inline-flex items-center justify-center gap-3 px-4 py-2 bg-stone-900 dark:bg-emerald-800 text-stone-100 dark:text-emerald-50 text-[12px] font-bold tracking-widest uppercase rounded-xl hover:bg-stone-800 dark:hover:bg-emerald-900 transition-colors shadow-sm disabled:opacity-50"
           >
             <Plus size={16} />
             <span className="hidden sm:inline">Tambah Berita</span>
@@ -405,7 +405,7 @@ export default function AdminBeritaPage() {
               type="button"
               onClick={handleSaveHeader}
               disabled={savingHeader}
-              className="flex items-center gap-2 px-6 py-2 bg-emerald-500 text-white text-sm rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-3 px-6 py-2 bg-stone-900 dark:bg-emerald-800 text-stone-100 dark:text-emerald-50 text-[12px] font-bold tracking-widest uppercase rounded-xl hover:bg-stone-800 dark:hover:bg-emerald-900 transition-colors shadow-sm disabled:opacity-50"
             >
               <Save size={20} />
               {savingHeader ? 'MEMPROSES ...' : 'Simpan Header'}
