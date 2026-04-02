@@ -30,7 +30,7 @@ const staggerContainer = {
 export default function Kontak() {
   const { data: profile } = useProfil();
 
-  const brandingName = profile?.nama || 'Ribathus Sholihin';
+  const brandingName = profile?.nama || '';
 
   const contactInfo = [
     {
@@ -195,7 +195,7 @@ export default function Kontak() {
           <p className="text-stone-500 text-[11px] font-normal uppercase tracking-widest text-center">
             © {new Date().getFullYear()}{' '}
             <span className="text-stone-400 font-bold ml-1">
-              Yayasan Ribathus Sholihin
+              Yayasan {brandingName}
             </span>
             . Hak Cipta Dilindungi Undang-Undang.
           </p>

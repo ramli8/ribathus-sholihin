@@ -24,7 +24,7 @@ export default function Profil() {
   }
 
   const profile = data || {
-    nama: 'Ribathus Sholihin',
+    nama: '',
     alamat: 'Alamat tidak tersedia',
     deskripsi:
       'Kami berkomitmen mencetak generasi santri yang mandiri, berprestasi, dan berakhlakul karimah.',

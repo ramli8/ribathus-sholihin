@@ -30,7 +30,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
       .then((data) => {
         if (data.success && data.data) {
           setProfil({
-            nama: data.data.nama || 'Ribathus Sholihin',
+            nama: data.data.nama || '',
             logoUrl: data.data.logoUrl,
           });
         }
@@ -38,7 +38,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
       .catch(console.error);
   }, []);
 
-  const brandingName = profil?.nama || 'Ribathus Sholihin';
+  const brandingName = profil?.nama || '';
   const initials = brandingName.substring(0, 2).toUpperCase();
 
   const handleToggle = () => {

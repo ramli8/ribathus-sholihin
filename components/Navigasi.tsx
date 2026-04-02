@@ -64,7 +64,7 @@ export default function Navigasi() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const brandingName = profile?.nama || 'Ribathus Sholihin';
+  const brandingName = profile?.nama || '';
 
   return (
     <nav

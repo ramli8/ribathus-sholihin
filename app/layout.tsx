@@ -22,9 +22,9 @@ export async function generateMetadata(): Promise<Metadata> {
     console.error('Failed to fetch profil for metadata:', error);
   }
 
-  const nama = profil?.nama || 'Pondok Pesantren Ribathus Sholihin';
+  const nama = profil?.nama || '';
   const deskripsi =
-    profil?.deskripsi || 'Website Profil Pondok Pesantren Ribathus Sholihin';
+    profil?.deskripsi || '';
   const logoUrl = profil?.logoUrl || '/favicon.ico';
 
   return {
