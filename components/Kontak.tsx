@@ -10,7 +10,7 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useProfil } from '@/hooks/useProfil';
+import type { ProfilData } from '@/hooks/useProfil';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -27,8 +27,7 @@ const staggerContainer = {
   },
 };
 
-export default function Kontak() {
-  const { data: profile } = useProfil();
+export default function Kontak({ profile }: { profile: ProfilData | null }) {
 
   const brandingName = profile?.nama || '';
 

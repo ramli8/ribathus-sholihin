@@ -24,7 +24,7 @@ const staggerContainer = {
   },
 };
 
-import { useProfil } from '@/hooks/useProfil';
+import type { ProfilData } from '@/hooks/useProfil';
 
 const fallbackSyarat = [
   'Mengisi formulir online',
@@ -47,8 +47,7 @@ const fallbackBiaya = [
   { label: 'SPP Bulanan', value: 'Rp 650k' },
 ];
 
-export default function Pendaftaran() {
-  const { data: profile } = useProfil();
+export default function Pendaftaran({ profile }: { profile: ProfilData | null }) {
 
   const parseList = (
     jsonString: string | undefined,

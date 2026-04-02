@@ -8,7 +8,7 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 };
 
-import { useProfil } from '@/hooks/useProfil';
+import type { ProfilData } from '@/hooks/useProfil';
 import * as LucideIcons from 'lucide-react';
 
 const fallbackFormal = [
@@ -23,8 +23,7 @@ const fallbackDiniyah = [
   { name: 'Kajian Bahasa (Arab & Inggris)', icon: 'Globe' },
 ];
 
-export default function Pendidikan() {
-  const { data: profile } = useProfil();
+export default function Pendidikan({ profile }: { profile: ProfilData | null }) {
 
   // Helper to safely parse the JSON strings
   const parseProgramList = (

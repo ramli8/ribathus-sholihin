@@ -4,7 +4,7 @@ import { ArrowRight, CreditCard, Copy, Check, QrCode } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useProfil } from '@/hooks/useProfil';
+import type { ProfilData } from '@/hooks/useProfil';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -27,10 +27,9 @@ interface BankAccount {
   name: string;
 }
 
-export default function Donasi() {
+export default function Donasi({ profile }: { profile: ProfilData | null }) {
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
   const [qrisPattern, setQrisPattern] = useState<boolean[]>([]);
-  const { data: profile } = useProfil();
 
   useEffect(() => {
     setQrisPattern(Array.from({ length: 36 }, () => Math.random() > 0.5));

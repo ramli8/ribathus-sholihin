@@ -3,10 +3,9 @@
 import { useState } from 'react';
 import { Play, ArrowRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useProfil } from '@/hooks/useProfil';
+import type { ProfilData } from '@/hooks/useProfil';
 
-export default function Beranda() {
-  const { data: profile } = useProfil();
+export default function Beranda({ profile }: { profile: ProfilData | null }) {
   const [showVideo, setShowVideo] = useState(false);
 
   const stats = [

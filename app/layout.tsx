@@ -12,12 +12,12 @@ const outfit = Outfit({
   subsets: ['latin'],
 });
 
-import { getProfil } from '@/services/profilService';
+import { getCachedProfil } from '@/lib/cache';
 
 export async function generateMetadata(): Promise<Metadata> {
   let profil = null;
   try {
-    profil = await getProfil();
+    profil = await getCachedProfil();
   } catch (error) {
     console.error('Failed to fetch profil for metadata:', error);
   }

@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 
-import { useProfil } from '@/hooks/useProfil';
+import type { ProfilData } from '@/hooks/useProfil';
 
 const navLinks = [
   { name: 'Beranda', href: '#' },
@@ -21,12 +21,11 @@ const navLinks = [
   { name: 'Berita', href: '#berita' },
 ];
 
-export default function Navigasi() {
+export default function Navigasi({ profile }: { profile: ProfilData | null }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { data: profile } = useProfil();
   const pathname = usePathname();
   const [activeSection, setActiveSection] = useState('#');
 

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Building2, ZoomIn } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
-import { useProfil } from '@/hooks/useProfil';
+import type { ProfilData } from '@/hooks/useProfil';
 import { useState } from 'react';
 import ImageModal from '@/components/common/ImageModal';
 
@@ -99,8 +99,7 @@ const renderIcon = (iconName: string, size = 24) => {
   return Icon ? <Icon size={size} /> : <Building2 size={size} />;
 };
 
-export default function Fasilitas() {
-  const { data: profile } = useProfil();
+export default function Fasilitas({ profile }: { profile: ProfilData | null }) {
   const [selectedImage, setSelectedImage] = useState<{
     url: string;
     title: string;

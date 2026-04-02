@@ -1,36 +1,16 @@
-'use client';
+import { getCachedProfil, getCachedBeritaPublished } from '@/lib/cache';
+import HomeContent from '@/components/HomeContent';
 
-import { useProfil } from '@/hooks/useProfil';
-import LoadingScreen from '@/components/common/LoadingScreen';
-import Navigasi from '@/components/Navigasi';
-import Beranda from '@/components/Beranda';
-import Profil from '@/components/Profil';
-import Pendidikan from '@/components/Pendidikan';
-import Pendaftaran from '@/components/Pendaftaran';
-import Fasilitas from '@/components/Fasilitas';
-import Kegiatan from '@/components/Kegiatan';
-import Berita from '@/components/Berita';
-import Donasi from '@/components/Donasi';
-import Kontak from '@/components/Kontak';
+export default async function Home() {
+  // Fetch ALL data once on the server, cached for 60s via ISR
+  const [profil, beritaList] = await Promise.all([
+    getCachedProfil(),
+    getCachedBeritaPublished(),
+  ]);
 
-export default function Home() {
-  const { loading } = useProfil();
+  // Serialize dates for client components
+  const serializedProfil = profil ? JSON.parse(JSON.stringify(profil)) : null;
+  const serializedBerita = beritaList.map((b) => JSON.parse(JSON.stringify(b)));
 
-  return (
-    <>
-      <LoadingScreen isLoading={loading} />
-      <main className="min-h-screen bg-white dark:bg-black font-sans scroll-smooth">
-        <Navigasi />
-        <Beranda />
-        <Profil />
-        <Pendidikan />
-        <Pendaftaran />
-        <Fasilitas />
-        <Kegiatan />
-        <Donasi />
-        <Berita />
-        <Kontak />
-      </main>
-    </>
-  );
+  return <HomeContent profile={serializedProfil} beritaList={serializedBerita} />;
 }

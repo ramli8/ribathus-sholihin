@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -8,20 +7,20 @@ import {
   ArrowRight,
   Calendar,
   User,
-  BookOpen,
+
   Clock,
   Newspaper,
 } from 'lucide-react';
-import { useProfil } from '@/hooks/useProfil';
+import type { ProfilData } from '@/hooks/useProfil';
 
 interface Berita {
   id: number;
   judul: string;
   slug: string;
   isi: string;
-  coverUrl?: string;
-  kategori?: string;
-  penulis?: string;
+  coverUrl?: string | null;
+  kategori?: string | null;
+  penulis?: string | null;
   viewed: number;
   published: boolean;
   createdAt: string;
@@ -43,28 +42,18 @@ const staggerContainer = {
   },
 };
 
-export default function Berita() {
-  const [beritaList, setBeritaList] = useState<Berita[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { data: profile } = useProfil();
+interface BeritaProps {
+  profile: ProfilData | null;
+  beritaList: Berita[];
+}
+
+export default function Berita({ profile, beritaList }: BeritaProps) {
 
   const beritaTitle = profile?.beritaTitle || 'Warta';
   const beritaTitleHighlight = profile?.beritaTitleHighlight || 'Terkini';
   const beritaDesc =
     profile?.beritaDesc ||
     'Ikuti perkembangan pondok, warta kegiatan santri, hingga goresan pena inspiratif dari jajaran asatidz.';
-
-  useEffect(() => {
-    fetch('/api/berita?published=true')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setBeritaList(data.data);
-        }
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('id-ID', {
@@ -80,18 +69,6 @@ export default function Berita() {
     return `${minutes} min`;
   };
 
-  if (loading) {
-    return (
-      <section
-        id="berita"
-        className="py-16 md:py-24 bg-stone-50 dark:bg-stone-950"
-      >
-        <div className="container mx-auto px-4 text-center">
-          <div className="animate-pulse text-stone-400 font-medium">Memuat berita...</div>
-        </div>
-      </section>
-    );
-  }
   return (
     <section
       id="berita"

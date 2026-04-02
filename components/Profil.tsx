@@ -3,25 +3,14 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { BookOpen, Target, Compass, Users } from 'lucide-react';
-import { useProfil } from '@/hooks/useProfil';
+import type { ProfilData } from '@/hooks/useProfil';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0 },
 };
 
-export default function Profil() {
-  const { data, loading } = useProfil();
-
-  if (loading) {
-    return (
-      <section id="profil" className="py-24 text-center bg-stone-50 dark:bg-stone-950">
-        <div className="animate-pulse text-stone-400 text-lg">
-          Memuat profil pesantren...
-        </div>
-      </section>
-    );
-  }
+export default function Profil({ profile: data }: { profile: ProfilData | null }) {
 
   const profile = data || {
     nama: '',

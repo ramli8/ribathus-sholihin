@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ZoomIn } from 'lucide-react';
-import { useProfil } from '@/hooks/useProfil';
+import type { ProfilData } from '@/hooks/useProfil';
 import { useState } from 'react';
 import ImageModal from '@/components/common/ImageModal';
 
@@ -97,8 +97,7 @@ const defaultActivities: EkstraItem[] = [
   },
 ];
 
-export default function Kegiatan() {
-  const { data: profile } = useProfil();
+export default function Kegiatan({ profile }: { profile: ProfilData | null }) {
   const [selectedImage, setSelectedImage] = useState<{
     url: string;
     name: string;
