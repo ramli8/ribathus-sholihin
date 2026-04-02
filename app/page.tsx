@@ -1,3 +1,7 @@
+'use client';
+
+import { useProfil } from '@/hooks/useProfil';
+import LoadingScreen from '@/components/common/LoadingScreen';
 import Navigasi from '@/components/Navigasi';
 import Beranda from '@/components/Beranda';
 import Profil from '@/components/Profil';
@@ -10,18 +14,23 @@ import Donasi from '@/components/Donasi';
 import Kontak from '@/components/Kontak';
 
 export default function Home() {
+  const { loading } = useProfil();
+
   return (
-    <main className="min-h-screen bg-white dark:bg-black font-sans scroll-smooth">
-      <Navigasi />
-      <Beranda />
-      <Profil />
-      <Pendidikan />
-      <Pendaftaran />
-      <Fasilitas />
-      <Kegiatan />
-      <Berita />
-      <Donasi />
-      <Kontak />
-    </main>
+    <>
+      <LoadingScreen isLoading={loading} />
+      <main className="min-h-screen bg-white dark:bg-black font-sans scroll-smooth">
+        <Navigasi />
+        <Beranda />
+        <Profil />
+        <Pendidikan />
+        <Pendaftaran />
+        <Fasilitas />
+        <Kegiatan />
+        <Donasi />
+        <Berita />
+        <Kontak />
+      </main>
+    </>
   );
 }

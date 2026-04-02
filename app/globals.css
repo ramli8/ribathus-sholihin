@@ -297,6 +297,20 @@
   color: #f1f5f9 !important;
 }
 
+/* Force dark mode on WYSIWYG / prose content that has inline styles */
+.dark .prose * {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+.dark .prose img {
+  background-color: transparent !important;
+}
+
+.dark .prose a {
+  color: #6ee7b7 !important;
+}
+
 @layer utilities {
   input[type='date']::-webkit-inner-spin-button,
   input[type='time']::-webkit-inner-spin-button,

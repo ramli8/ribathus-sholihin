@@ -17,6 +17,7 @@ const navLinks = [
   { name: 'Pendidikan', href: '#pendidikan' },
   { name: 'Fasilitas', href: '#fasilitas' },
   { name: 'Kegiatan', href: '#kegiatan' },
+  { name: 'Donasi', href: '#donasi' },
   { name: 'Berita', href: '#berita' },
 ];
 
@@ -89,7 +90,7 @@ export default function Navigasi() {
                 unoptimized
               />
             ) : (
-              <div className="w-9 h-9 bg-emerald-700 dark:bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-sm tracking-tight">
+              <div className="w-9 h-9 bg-stone-900 dark:bg-stone-100 rounded-lg flex items-center justify-center text-white dark:text-stone-900 font-bold text-sm tracking-tight">
                 {brandingName.substring(0, 2).toUpperCase()}
               </div>
             )}
@@ -113,8 +114,8 @@ export default function Navigasi() {
                   className={cn(
                     "text-base font-semibold transition-colors",
                     isActive
-                      ? "text-emerald-700 dark:text-emerald-400"
-                      : "text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400"
+                      ? "text-stone-900 dark:text-white"
+                      : "text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white"
                   )}
                 >
                   {link.name}
@@ -187,8 +188,8 @@ export default function Navigasi() {
                     className={cn(
                       "py-3 px-4 text-lg font-semibold rounded-xl transition-colors",
                       isActive 
-                        ? "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20" 
-                        : "text-slate-800 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                        ? "text-stone-900 dark:text-white bg-stone-100 dark:bg-stone-800" 
+                        : "text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-stone-800"
                     )}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
