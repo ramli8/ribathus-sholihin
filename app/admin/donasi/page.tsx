@@ -121,20 +121,23 @@ export default function AdminDonasiPage() {
 
   if (loading) {
     return (
-      <div className="text-center py-12 text-gray-400">Memuat...</div>
+      <div className="text-center py-12 text-[11px] uppercase tracking-widest text-stone-400 font-bold">
+        MEMUAT KONTEN...
+      </div>
     );
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl md:text-3xl font-bold font-heading tracking-tight text-stone-900 dark:text-stone-100">
             Kelola Donasi
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Atur informasi donasi, rekening bank, QRIS, dan link konfirmasi WhatsApp
+          <p className="text-[12px] font-bold text-stone-500 dark:text-stone-400 mt-2 tracking-wide">
+            Atur informasi donasi, rekening bank, QRIS, dan link konfirmasi
+            WhatsApp
           </p>
         </div>
       </div>
@@ -143,7 +146,7 @@ export default function AdminDonasiPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+        className="p-8 md:p-10 rounded-[2rem] bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 shadow-sm"
       >
         <form onSubmit={handleSave} className="space-y-8">
           {/* Header Donasi */}
@@ -179,7 +182,7 @@ export default function AdminDonasiPage() {
           </div>
 
           {/* Rekening Bank */}
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-6 border-t border-stone-200 dark:border-stone-800">
             <SectionTitle title="Rekening Bank" />
             <div className="flex justify-end mb-4">
               <button
@@ -194,10 +197,10 @@ export default function AdminDonasiPage() {
               {bankAccounts.map((account, idx) => (
                 <div
                   key={idx}
-                  className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 space-y-3"
+                  className="p-4 rounded-xl border border-stone-200 dark:border-stone-800 bg-gray-50 dark:bg-stone-950/50 space-y-3"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  <div className="flex items-center justify-between mb-8">
+                    <span className="text-sm font-semibold text-stone-700 dark:text-stone-300">
                       Rekening #{idx + 1}
                     </span>
                     <button
@@ -240,11 +243,11 @@ export default function AdminDonasiPage() {
           </div>
 
           {/* QRIS & E-Wallet */}
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-6 border-t border-stone-200 dark:border-stone-800">
             <SectionTitle title="QRIS & E-Wallet" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">
                   Gambar QRIS
                 </label>
                 <ImageUploadPreview
@@ -265,7 +268,7 @@ export default function AdminDonasiPage() {
                   onChange={(e) => setDonasiWallets(e.target.value)}
                   placeholder="GoPay,OVO,DANA,ShopeePay,BCA,Mandiri"
                 />
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-stone-400 mt-1">
                   Contoh: GoPay,OVO,DANA,ShopeePay
                 </p>
               </div>
@@ -273,10 +276,11 @@ export default function AdminDonasiPage() {
           </div>
 
           {/* Konfirmasi Transfer */}
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-6 border-t border-stone-200 dark:border-stone-800">
             <SectionTitle title="Konfirmasi Transfer (WhatsApp)" />
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 mb-4">
-              Tombol "Konfirmasi Transfer" di halaman utama akan membuka WhatsApp ke nomor ini.
+            <p className="text-sm text-stone-500 dark:text-stone-400 mt-4 mb-4">
+              Tombol "Konfirmasi Transfer" di halaman utama akan membuka
+              WhatsApp ke nomor ini.
             </p>
             <FormInput
               label="Nomor WhatsApp"
@@ -284,20 +288,20 @@ export default function AdminDonasiPage() {
               onChange={(e) => setDonasiWhatsappNumber(e.target.value)}
               placeholder="6281234567890 (tanpa + atau spasi)"
             />
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-stone-400 mt-1">
               Format internasional tanpa tanda + (contoh: 6281234567890)
             </p>
           </div>
 
           {/* Submit Button */}
-          <div className="flex gap-2 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex gap-2 pt-6 border-t border-stone-200 dark:border-stone-800">
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center gap-2 px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-stone-900 dark:bg-emerald-800 text-stone-100 dark:text-emerald-50 text-[12px] font-bold tracking-widest uppercase rounded-xl hover:bg-stone-800 dark:hover:bg-emerald-900 transition-colors shadow-sm disabled:opacity-50"
             >
               <Save size={20} />
-              {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
+              {saving ? 'MEMPROSES ...' : 'SIMPAN '}
             </button>
           </div>
         </form>

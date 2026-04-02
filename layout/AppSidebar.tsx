@@ -168,31 +168,23 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
               onClick={() => handleSubmenuToggle(index)}
               className={`menu-item group ${
                 openSubmenu?.type === 'main' && openSubmenu?.index === index
-                  ? 'menu-item-active'
-                  : 'menu-item-inactive'
-              } cursor-pointer ${
+                  ? 'bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100'
+                  : 'text-stone-600 hover:bg-stone-50 dark:text-stone-400 dark:hover:bg-stone-800'
+              } cursor-pointer rounded-xl transition-colors font-medium flex items-center px-4 py-3 w-full ${
                 !isExpanded && !isHovered
                   ? 'lg:justify-center'
                   : 'lg:justify-start'
               }`}
             >
-              <span
-                className={`${
-                  openSubmenu?.type === 'main' && openSubmenu?.index === index
-                    ? 'menu-item-icon-active'
-                    : 'menu-item-icon-inactive'
-                }`}
-              >
-                {nav.icon}
-              </span>
+              <span className="shrink-0">{nav.icon}</span>
               {(isExpanded || isHovered || isMobileOpen) && (
-                <span className={`menu-item-text`}>{nav.name}</span>
+                <span className="ml-3 text-[13px] font-bold uppercase tracking-widest leading-none mt-0.5">{nav.name}</span>
               )}
               {(isExpanded || isHovered || isMobileOpen) && (
                 <ChevronDownIcon
                   className={`ml-auto w-5 h-5 transition-transform duration-200 ${
                     openSubmenu?.type === 'main' && openSubmenu?.index === index
-                      ? 'rotate-180 text-brand-500'
+                      ? 'rotate-180 text-emerald-800 dark:text-emerald-500'
                       : ''
                   }`}
                 />
@@ -202,21 +194,19 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
             nav.path && (
               <Link
                 href={nav.path}
-                className={`menu-item group ${
-                  isActive(nav.path) ? 'menu-item-active' : 'menu-item-inactive'
+                className={`menu-item group flex items-center px-4 py-3 rounded-xl transition-colors font-medium ${
+                  isActive(nav.path) 
+                  ? 'bg-stone-100 dark:bg-stone-800 text-emerald-900 border border-stone-200 dark:border-stone-700 dark:text-emerald-400 shadow-sm' 
+                  : 'text-stone-600 hover:bg-stone-50 border border-transparent dark:text-stone-400 dark:hover:bg-stone-800'
+                } ${
+                  !isExpanded && !isHovered
+                    ? 'lg:justify-center'
+                    : 'lg:justify-start'
                 }`}
               >
-                <span
-                  className={`${
-                    isActive(nav.path)
-                      ? 'menu-item-icon-active'
-                      : 'menu-item-icon-inactive'
-                  }`}
-                >
-                  {nav.icon}
-                </span>
+                <span className="shrink-0">{nav.icon}</span>
                 {(isExpanded || isHovered || isMobileOpen) && (
-                  <span className={`menu-item-text`}>{nav.name}</span>
+                  <span className="ml-4 text-[11px] font-bold uppercase tracking-[0.15em] leading-none mt-[1px]">{nav.name}</span>
                 )}
               </Link>
             )
@@ -239,10 +229,10 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
                   <li key={subItem.name}>
                     <Link
                       href={subItem.path}
-                      className={`menu-dropdown-item ${
+                      className={`block py-2 px-4 rounded-lg text-xs font-bold uppercase tracking-widest ${
                         isActive(subItem.path)
-                          ? 'menu-dropdown-item-active'
-                          : 'menu-dropdown-item-inactive'
+                          ? 'text-emerald-800 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/30'
+                          : 'text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-200'
                       }`}
                     >
                       {subItem.name}
@@ -259,7 +249,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+      className={`fixed mt-[72px] flex flex-col lg:mt-0 top-0 px-4 left-0 bg-stone-50 dark:bg-stone-950 dark:border-stone-800 text-stone-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-stone-200 
         ${
           isExpanded || isMobileOpen
             ? 'w-[290px]'
@@ -274,36 +264,41 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
     >
       <div
         className={`py-8 flex ${
-          !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start'
+          !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start ml-2'
         }`}
       >
         <Link href="/admin/beranda">
           {isExpanded || isHovered || isMobileOpen ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               {profil?.logoUrl ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={profil.logoUrl}
                   alt={brandingName}
-                  className="w-9 h-9 object-contain rounded"
+                  className="w-10 h-10 object-contain rounded-md"
                 />
               ) : (
-                <div className="w-9 h-9 bg-linear-to-br from-emerald-500 to-teal-600 rounded flex items-center justify-center text-white font-bold text-lg">
+                <div className="w-10 h-10 bg-stone-900 dark:bg-stone-800 border border-stone-800 rounded-md flex items-center justify-center text-stone-100 font-bold text-lg">
                   {initials}
                 </div>
               )}
-              <span className="text-gray-900 dark:text-white text-xl font-bold tracking-tight">
-                {brandingName}
-              </span>
+              <div className="flex flex-col">
+                <span className="text-stone-900 dark:text-white text-base font-bold font-heading tracking-tight leading-tight">
+                  Beranda Admin
+                </span>
+                <span className="text-stone-500 dark:text-stone-400 text-[9px] font-bold uppercase tracking-widest mt-0.5">
+                  {brandingName}
+                </span>
+              </div>
             </div>
           ) : (
-            <div className="w-8 h-8 bg-linear-to-br from-emerald-500 to-teal-600 rounded flex items-center justify-center text-white font-bold text-sm">
+            <div className="w-10 h-10 bg-stone-900 dark:bg-stone-800 border border-stone-800 rounded-md flex items-center justify-center text-stone-100 font-bold text-lg">
               {initials.substring(0, 1)}
             </div>
           )}
         </Link>
       </div>
-      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar mt-4">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
             <div>{renderMenuItems(filteredNavItems)}</div>

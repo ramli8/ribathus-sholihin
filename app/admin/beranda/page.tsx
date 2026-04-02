@@ -115,30 +115,34 @@ export default function AdminBerandaPage() {
   };
 
   if (loading) {
-    return <div className="text-center py-12 text-gray-400">Memuat...</div>;
+    return (
+      <div className="text-center py-12 text-[11px] uppercase tracking-widest text-stone-400 font-bold">
+        MEMUAT KONTEN...
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl md:text-3xl font-bold font-heading tracking-tight text-stone-900 dark:text-stone-100">
             Kelola Beranda
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Atur konten hero section dan statistik yang tampil di halaman utama
+          <p className="text-[12px] font-bold text-stone-500 dark:text-stone-400 mt-2 tracking-wide">
+            Atur konten hero section dan statistik layar utama
           </p>
         </div>
       </div>
 
       {/* Form */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+        className="p-8 md:p-10 rounded-[2rem] bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 shadow-sm"
       >
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-10">
           {/* Hero Section */}
           <div>
             <SectionTitle title="Hero Section" />
@@ -181,7 +185,7 @@ export default function AdminBerandaPage() {
           </div>
 
           {/* YouTube Video */}
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-8 border-t border-stone-100 dark:border-stone-800">
             <SectionTitle title="Video Profil Sekolah" />
             <div className="space-y-4">
               <FormInput
@@ -195,10 +199,8 @@ export default function AdminBerandaPage() {
                   }))
                 }
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Masukkan URL YouTube. Video ini akan ditampilkan sebagai modal
-                embed ketika pengunjung klik tombol &quot;Tonton Profil
-                Sekolah&quot;.
+              <p className="text-[11px] font-bold tracking-wide text-stone-500 dark:text-stone-400">
+                URL Modul Video YouTube (akan berjalan *autoplay* dalam pop-up)
               </p>
 
               {/* Preview button */}
@@ -206,20 +208,20 @@ export default function AdminBerandaPage() {
                 <button
                   type="button"
                   onClick={() => setPreviewVideo(true)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 text-[11px] uppercase tracking-widest font-bold text-stone-700 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl hover:bg-stone-200 dark:hover:bg-stone-700 shadow-sm transition-colors"
                 >
-                  <Play size={16} />
-                  Preview Video
+                  <Play size={14} />
+                  PRATINJAU VIDEO
                 </button>
               )}
             </div>
           </div>
 
           {/* Statistik */}
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-            <SectionTitle title="Statistik Beranda" />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-              Angka-angka ini ditampilkan di bagian bawah hero section
+          <div className="pt-8 border-t border-stone-100 dark:border-stone-800">
+            <SectionTitle title="Statistik Dasbor" />
+            <p className="text-[11px] font-bold tracking-wide text-stone-500 dark:text-stone-400 mb-6">
+              Angka-angka fundamental yang terukir di kaki struktur hero
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <FormInput
@@ -270,14 +272,14 @@ export default function AdminBerandaPage() {
           </div>
 
           {/* Submit */}
-          <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex gap-2 pt-8 border-t border-stone-100 dark:border-stone-800">
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center gap-2 px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-stone-900 dark:bg-emerald-800 text-stone-100 dark:text-emerald-50 text-[12px] font-bold tracking-widest uppercase rounded-xl hover:bg-stone-800 dark:hover:bg-emerald-900 transition-colors shadow-sm disabled:opacity-50"
             >
-              <Save size={20} />
-              {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
+              <Save size={18} />
+              {saving ? 'MEMPROSES ...' : 'SIMPAN '}
             </button>
           </div>
         </form>

@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Play, X } from 'lucide-react';
-import Image from 'next/image';
+import { Play, ArrowRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useProfil } from '@/hooks/useProfil';
 
@@ -43,13 +42,11 @@ export default function Beranda() {
     return (
       <>
         {parts[0]}
-        <br className="hidden md:block" />
-        <span className="relative whitespace-nowrap">
-          <span className="relative z-10 text-transparent bg-clip-text bg-linear-to-br from-emerald-600 via-teal-600 to-emerald-700 dark:from-emerald-400 dark:via-teal-400 dark:to-emerald-500">
-            {highlight}
-          </span>
-          <span className="absolute -bottom-2 left-0 right-0 h-3 bg-emerald-200/50 dark:bg-emerald-900/50 -rotate-1 skew-x-12 z-0 rounded-sm"></span>
-        </span>{' '}
+        <br className="hidden lg:block" />
+        <span className="text-emerald-900 dark:text-emerald-500 relative whitespace-nowrap">
+          {highlight}
+        </span>
+        <br className="hidden lg:block" />
         {parts.slice(1).join(highlight)}
       </>
     );
@@ -57,184 +54,164 @@ export default function Beranda() {
 
   const getYoutubeEmbedUrl = (url: string) => {
     if (!url) return '';
-    const regExp =
-      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     const videoId = match && match[2].length === 11 ? match[2] : null;
-    return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1` : '';
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+  };
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  };
+  
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
   };
 
   return (
     <section
       id="#"
-      className="relative min-h-dvh flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950"
+      className="relative bg-stone-50 dark:bg-stone-950 pt-32 pb-4 lg:pt-40 lg:pb-8 overflow-hidden flex flex-col justify-center"
     >
-      {/* Absolute Background Setup */}
-      <div className="absolute inset-0 z-0">
-        {/* Abstract Background Image for Texture */}
-        <Image
-          src="https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=2070&auto=format&fit=crop"
-          alt="Abstract Background"
-          fill
-          className="object-cover opacity-[0.03] dark:opacity-[0.02] mix-blend-luminosity"
-          priority
-        />
-        {/* Soft Minimalist Gradient Overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-white via-slate-50 to-slate-100 dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 opacity-90" />
-      </div>
+      {/* 
+        NO BACKGROUND GRAPHICS. ZERO ORNAMENTS.
+        Murni tipografi dan layout yang tajam (Editorial Design). 
+      */}
 
-      {/* Subtle Animated Orbs (Glassmorphism Core) */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex justify-center items-center">
-        <motion.div
-          animate={{
-            rotate: 360,
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-          className="absolute -top-[20%] right-[10%] w-[40vw] h-[40vw] max-w-[600px] max-h-[600px] rounded-full bg-emerald-300/20 dark:bg-emerald-800/20 blur-[120px]"
-        />
-        <motion.div
-          animate={{
-            rotate: -360,
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-          className="absolute top-[40%] -left-[10%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] rounded-full bg-teal-300/20 dark:bg-teal-900/20 blur-[130px]"
-        />
-      </div>
+      {/* Subtle Texture to prevent 'empty void' feeling on large monitors */}
+      <div 
+        className="absolute inset-0 opacity-[0.04] pointer-events-none z-0 mix-blend-multiply dark:mix-blend-screen"
+        style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)', backgroundSize: '32px 32px' }}
+      ></div>
 
-      {/* Main Content Container */}
-      <div className="container relative z-10 px-4 sm:px-6 mx-auto max-w-7xl pt-32 pb-20 md:py-32 flex flex-col items-center justify-center min-h-screen">
-        {/* Floating Minimalist Top Badge */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-          className="group relative mb-8 md:mb-12 cursor-pointer"
-        >
-          <div className="absolute -inset-0.5 bg-linear-to-r from-emerald-500 to-teal-500 rounded-full blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
-        </motion.div>
-
-        {/* Hero Typography - Minimalist & Grand */}
-        <div className="text-center max-w-5xl mx-auto mb-10 md:mb-14">
-          <motion.h1
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.1,
-              ease: [0.25, 0.1, 0.25, 1],
-            }}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-6 font-heading"
+      <div className="container relative z-10 px-4 sm:px-6 mx-auto max-w-7xl">
+        
+        {/* Centered Editorial Layout Container */}
+        <div className="flex flex-col items-center justify-center max-w-4xl mx-auto text-center mt-12">
+          
+          <motion.div 
+            className="flex flex-col items-center w-full"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
           >
-            {renderHeroTitle()}
-          </motion.h1>
+            <motion.h1
+              variants={fadeInUp}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] font-bold tracking-tight text-stone-900 dark:text-stone-100 leading-[1.08] mb-6"
+            >
+              {renderHeroTitle()}
+            </motion.h1>
 
-          <motion.p
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.2,
-              ease: [0.25, 0.1, 0.25, 1],
-            }}
-            className="text-lg md:text-2xl text-slate-600 dark:text-slate-400 font-light max-w-3xl mx-auto leading-relaxed"
-          >
-            {profile?.heroSubtitle || ''}
-          </motion.p>
+            <motion.p
+              variants={fadeInUp}
+              className="text-lg md:text-xl text-stone-600 dark:text-stone-400 font-normal leading-relaxed mb-8 max-w-3xl mx-auto"
+            >
+              {profile?.heroSubtitle || 'Mencetak generasi yang unggul dalam ilmu agama, berakhlak mulia, dan siap menghadapi tantangan zaman.'}
+            </motion.p>
+            
+            <motion.div
+              variants={fadeInUp}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
+            >
+              <a
+                href="#pendaftaran"
+                className="w-full sm:w-auto flex items-center justify-center h-14 px-10 rounded-xl bg-emerald-900 hover:bg-stone-900 dark:bg-emerald-800 dark:hover:bg-stone-100 dark:hover:text-stone-900 text-white font-medium transition-colors"
+              >
+                Pendaftaran Santri
+                <ArrowRight className="ml-3 w-4 h-4" />
+              </a>
+              
+              {profile?.youtubeUrl && (
+                <button
+                  type="button"
+                  onClick={() => setShowVideo(true)}
+                  className="w-full sm:w-auto flex items-center justify-center h-14 px-10 rounded-xl bg-transparent text-stone-800 dark:text-stone-200 font-medium transition-colors border border-stone-300 dark:border-stone-800 hover:border-emerald-900 dark:hover:border-emerald-500 group"
+                >
+                  <Play className="w-4 h-4 mr-3 text-stone-500 group-hover:text-emerald-900 dark:group-hover:text-emerald-400 transition-colors" />
+                  Tonton Video
+                </button>
+              )}
+            </motion.div>
+          </motion.div>
         </div>
 
-        {/* Modern Minimal CTA Section */}
+        {/* Restored Bento Stats Cards */}
         <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full sm:w-auto mb-20 md:mb-24"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="mt-16 lg:mt-24 pb-4 max-w-6xl mx-auto w-full"
         >
-          <button
-            onClick={() => {
-              if (profile?.youtubeUrl) {
-                setShowVideo(true);
-              }
-            }}
-            className="group flex h-14 w-full sm:w-auto items-center justify-center gap-3 rounded-2xl bg-white/40 dark:bg-slate-800/40 backdrop-blur-xl border border-white/50 dark:border-slate-700/50 px-8 text-slate-700 dark:text-slate-200 font-medium transition-all duration-300 hover:bg-white/60 dark:hover:bg-slate-800/60 hover:scale-[1.02]"
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white transition-transform group-hover:scale-110">
-              <Play className="h-3.5 w-3.5 ml-0.5" fill="currentColor" />
-            </div>
-            Tonton Profil Sekolah
-          </button>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {stats.map((stat, index) => (
+              <div 
+                key={index} 
+                className="bg-white dark:bg-stone-900 rounded-[1.25rem] md:rounded-4xl p-6 lg:p-8 flex flex-col justify-end min-h-[140px] md:min-h-[160px] relative overflow-hidden ring-1 ring-stone-200/50 dark:ring-stone-800 shadow-sm transition-transform duration-300 hover:-translate-y-1 group"
+              >
+                <span className="relative z-10 text-4xl md:text-5xl font-bold tracking-tight text-stone-900 dark:text-stone-100 mb-1.5 font-heading">
+                  {stat.value}
+                </span>
+                <span className="relative z-10 text-[13px] md:text-[14px] font-semibold tracking-wide text-emerald-800 dark:text-emerald-500 uppercase">
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </div>
         </motion.div>
 
-        {/* Minimalist Floating Stats */}
+        {/* Scroll Indicator (Mouse Outline) */}
         <motion.div
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 w-full max-w-5xl mx-auto"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="mt-24 lg:mt-32 pb-16 flex flex-col items-center justify-center w-full"
         >
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="relative overflow-hidden flex flex-col items-center justify-center p-6 md:p-8 rounded-3xl bg-white/40 dark:bg-slate-800/40 backdrop-blur-2xl border border-white/60 dark:border-slate-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.02)] transition-all duration-500 hover:-translate-y-1 hover:bg-white/60 dark:hover:bg-slate-800/60 group"
-            >
-              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-linear-to-br from-emerald-500/10 to-teal-500/10 dark:from-emerald-500/5 dark:to-teal-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700"></div>
-
-              <span className="relative z-10 text-4xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-white mb-2 font-heading">
-                {stat.value}
-              </span>
-              <span className="relative z-10 text-slate-500 dark:text-slate-400 text-sm md:text-base font-medium">
-                {stat.label}
-              </span>
-            </div>
-          ))}
+          <div className="w-[32px] h-[52px] rounded-full border-2 border-stone-300 dark:border-stone-700 flex justify-center p-2 mb-4 relative">
+            <motion.div 
+              className="w-1.5 h-3 bg-stone-400 dark:bg-stone-500 rounded-full"
+              animate={{ y: [0, 16, 0], opacity: [1, 0, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </div>
+          <span className="text-[10px] font-bold tracking-[0.2em] text-stone-400 dark:text-stone-500 uppercase">
+            Jelajahi
+          </span>
         </motion.div>
+
       </div>
 
-      {/* YouTube Embed Modal */}
+      {/* Video Modal Display */}
       <AnimatePresence>
         {showVideo && profile?.youtubeUrl && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-9999 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/80 backdrop-blur-sm"
             onClick={() => setShowVideo(false)}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-              className="relative w-full max-w-4xl mx-4 aspect-video"
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/20"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close Button */}
               <button
+                type="button"
+                className="absolute -top-12 right-0 p-2 text-white/70 hover:text-white transition-colors"
                 onClick={() => setShowVideo(false)}
-                className="absolute -top-12 right-0 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
               >
-                <span className="text-sm font-medium">Tutup</span>
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors">
-                  <X className="h-4 w-4" />
-                </div>
+                <X className="w-8 h-8" />
               </button>
-
-              {/* Video Iframe */}
               <iframe
-                src={getYoutubeEmbedUrl(profile.youtubeUrl)}
-                className="w-full h-full rounded-2xl shadow-2xl"
+                src={`${getYoutubeEmbedUrl(profile.youtubeUrl)}?autoplay=1`}
+                className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
+                title="Profil Pondok Pesantren Video"
               />
             </motion.div>
           </motion.div>

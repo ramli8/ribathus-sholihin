@@ -2,7 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, MapPin, Eye, Upload, Save, X, Phone, Mail } from 'lucide-react';
+import {
+  BookOpen,
+  MapPin,
+  Eye,
+  Upload,
+  Save,
+  X,
+  Phone,
+  Mail,
+} from 'lucide-react';
 import {
   FormInput,
   FormTextarea,
@@ -71,7 +80,8 @@ export default function AdminProfilPage() {
           telepon: data.data.telepon || '',
           email: data.data.email || '',
           profilHeaderTitle: data.data.profilHeaderTitle || '',
-          profilHeaderTitleHighlight: data.data.profilHeaderTitleHighlight || '',
+          profilHeaderTitleHighlight:
+            data.data.profilHeaderTitleHighlight || '',
           pengasuh: data.data.pengasuh || '',
           pengasuhFotoUrl: data.data.pengasuhFotoUrl || '',
           pengasuhDeskripsi: data.data.pengasuhDeskripsi || '',
@@ -153,7 +163,7 @@ export default function AdminProfilPage() {
             body: JSON.stringify({ [field]: newUrl }),
           });
         }
-        
+
         alert.success('Gambar berhasil diupload dan disimpan!');
       } else {
         alert.error(data.error || 'Upload gagal');
@@ -205,18 +215,22 @@ export default function AdminProfilPage() {
   };
 
   if (loading) {
-    return <div className="text-center py-12 text-gray-400">Memuat...</div>;
+    return (
+      <div className="text-center py-12 text-[11px] uppercase tracking-widest text-stone-400 font-bold">
+        MEMUAT KONTEN...
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl md:text-3xl font-bold font-heading tracking-tight text-stone-900 dark:text-stone-100">
             Profil Pesantren
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-[12px] font-bold text-stone-500 dark:text-stone-400 mt-2 tracking-wide">
             Kelola informasi profil yang tampil di section Profil halaman utama
           </p>
         </div>
@@ -226,9 +240,9 @@ export default function AdminProfilPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+        className="p-8 md:p-10 rounded-[2rem] bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 shadow-sm"
       >
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-10">
           {/* Deskripsi (Tentang Kami) */}
           <div>
             <SectionTitle title="Tentang Kami (Deskripsi Utama)" />
@@ -275,7 +289,7 @@ export default function AdminProfilPage() {
           </div>
 
           {/* Sejarah */}
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-8 border-t border-stone-100 dark:border-stone-800">
             <SectionTitle title="Jejak Langkah & Sejarah" />
             <div className="space-y-4">
               <FormTextarea
@@ -294,7 +308,7 @@ export default function AdminProfilPage() {
           </div>
 
           {/* Visi & Misi */}
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-8 border-t border-stone-100 dark:border-stone-800">
             <SectionTitle title="Visi & Misi" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormTextarea
@@ -317,7 +331,7 @@ export default function AdminProfilPage() {
           </div>
 
           {/* Pengasuh */}
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-8 border-t border-stone-100 dark:border-stone-800">
             <SectionTitle title="Profil Pengasuh" />
             <div className="space-y-4">
               <FormInput
@@ -344,10 +358,10 @@ export default function AdminProfilPage() {
               />
               {/* Foto Pengasuh */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">
                   Foto Pengasuh
                 </label>
-                <p className="text-xs text-gray-400 mb-2">
+                <p className="text-xs text-stone-400 mb-2">
                   Rekomendasi: 400 × 400 px (1:1 rasio persegi,
                   portrait/close-up)
                 </p>
@@ -364,8 +378,10 @@ export default function AdminProfilPage() {
                         <img
                           src={formData.pengasuhFotoUrl}
                           alt="Foto Pengasuh"
-                          onClick={() => setPreviewImage(formData.pengasuhFotoUrl)}
-                          className="h-20 w-20 object-cover rounded-xl border border-gray-200 dark:border-gray-600 cursor-pointer"
+                          onClick={() =>
+                            setPreviewImage(formData.pengasuhFotoUrl)
+                          }
+                          className="h-20 w-20 object-cover rounded-xl border border-stone-200 dark:border-stone-700 cursor-pointer"
                         />
                         <button
                           type="button"
@@ -375,7 +391,9 @@ export default function AdminProfilPage() {
                           <X size={14} />
                         </button>
                       </div>
-                      <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">✨ Klik gambar untuk membesarkan</p>
+                      <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">
+                        ✨ Klik gambar untuk membesarkan
+                      </p>
                     </div>
                   )}
                 </div>
@@ -384,14 +402,14 @@ export default function AdminProfilPage() {
           </div>
 
           {/* Submit */}
-          <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex gap-2 pt-4 border-t border-stone-200 dark:border-stone-800">
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center gap-2 px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-stone-900 dark:bg-emerald-800 text-stone-100 dark:text-emerald-50 text-[12px] font-bold tracking-widest uppercase rounded-xl hover:bg-stone-800 dark:hover:bg-emerald-900 transition-colors shadow-sm disabled:opacity-50"
             >
               <Save size={20} />
-              {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
+              {saving ? 'MEMPROSES ...' : 'SIMPAN '}
             </button>
           </div>
         </form>

@@ -18,7 +18,6 @@ const navLinks = [
   { name: 'Fasilitas', href: '#fasilitas' },
   { name: 'Kegiatan', href: '#kegiatan' },
   { name: 'Berita', href: '#berita' },
-  { name: 'Kontak', href: '#kontak' },
 ];
 
 export default function Navigasi() {
@@ -28,6 +27,7 @@ export default function Navigasi() {
   const [mounted, setMounted] = useState(false);
   const { data: profile } = useProfil();
   const pathname = usePathname();
+  const [activeSection, setActiveSection] = useState('#');
 
   useEffect(() => {
     const timer = setTimeout(() => setMounted(true), 0);
@@ -37,7 +37,28 @@ export default function Navigasi() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+
+      const sections = navLinks.map(l => l.href.substring(1));
+      let current = '#';
+      
+      if (window.scrollY < 300) {
+        current = '#';
+      } else {
+        for (const section of sections) {
+          if (!section) continue;
+          const element = document.getElementById(section);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+              current = `#${section}`;
+            }
+          }
+        }
+      }
+      setActiveSection(current);
     };
+    
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -45,57 +66,56 @@ export default function Navigasi() {
   const brandingName = profile?.nama || 'Ribathus Sholihin';
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+    <nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-        isScrolled ? 'py-4' : 'py-6'
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        isScrolled
+          ? 'bg-stone-50/90 dark:bg-stone-950/90 backdrop-blur-xl border-b border-stone-200/50 dark:border-stone-800/80 shadow-xs py-3'
+          : 'bg-transparent py-5 lg:py-6'
       )}
     >
       <div className="container px-4 sm:px-6 mx-auto max-w-7xl">
-        {/* Modern Minimalist Navigation Bar */}
-        <div
-          className={cn(
-            'flex items-center justify-between transition-all duration-500 rounded-full px-4 md:px-6 py-3 border border-transparent',
-            isScrolled
-              ? 'bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-none border-white/60 dark:border-slate-800/80'
-              : 'bg-transparent'
-          )}
-        >
+        <div className="flex items-center justify-between">
+          
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-3">
             {profile?.logoUrl ? (
               <Image
                 src={profile.logoUrl}
                 alt={brandingName}
                 width={40}
                 height={40}
-                className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300"
+                className="w-9 h-9 object-contain rounded-lg"
                 unoptimized
               />
             ) : (
-              <div className="w-10 h-10 bg-linear-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white font-bold tracking-tighter text-lg shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-300">
+              <div className="w-9 h-9 bg-emerald-700 dark:bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-sm tracking-tight">
                 {brandingName.substring(0, 2).toUpperCase()}
               </div>
             )}
             <div className="flex flex-col text-left">
-              <span className="font-bold text-sm sm:text-lg tracking-tight text-slate-900 dark:text-white font-heading leading-none">
+              <span className="font-bold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white leading-none">
                 {brandingName}
               </span>
             </div>
           </Link>
 
-          {/* Desktop Menu - Floating Pill Style */}
-          <div className="hidden lg:flex items-center gap-1 px-4 py-1.5 rounded-full bg-slate-50/50 dark:bg-slate-800/30 backdrop-blur-md border border-slate-200/50 dark:border-slate-700/50">
+          {/* Desktop Menu - Clean & Flat */}
+          <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => {
               const targetHref = pathname === '/' ? link.href : `/${link.href}`;
+              const isActive = activeSection === link.href;
+
               return (
                 <Link
                   key={link.name}
                   href={targetHref}
-                  className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors rounded-full hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"
+                  className={cn(
+                    "text-base font-semibold transition-colors",
+                    isActive
+                      ? "text-emerald-700 dark:text-emerald-400"
+                      : "text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400"
+                  )}
                 >
                   {link.name}
                 </Link>
@@ -103,18 +123,25 @@ export default function Navigasi() {
             })}
           </div>
 
-          {/* Actions */}
-          <div className="hidden lg:flex items-center gap-3">
+          {/* Actions Desktop */}
+          <div className="hidden lg:flex items-center gap-4">
             {mounted && (
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="relative w-10 h-10 flex items-center justify-center rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-transparent dark:border-slate-800"
+                className="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 aria-label="Toggle Theme"
               >
-                <Sun className="h-[18px] w-[18px] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                <Moon className="absolute h-[18px] w-[18px] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                <Sun className="h-5 w-5 hidden dark:block" />
+                <Moon className="h-5 w-5 block dark:hidden" />
               </button>
             )}
+            
+            <Link
+              href="#kontak"
+              className="hidden lg:flex items-center px-7 py-2.5 text-[13px] uppercase tracking-widest font-bold text-stone-100 bg-stone-900 border border-stone-800 hover:bg-stone-800 dark:text-stone-900 dark:bg-stone-100 dark:hover:bg-white rounded-full transition-all shadow-sm"
+            >
+              Hubungi Kami
+            </Link>
           </div>
 
           {/* Mobile Toggle */}
@@ -122,53 +149,67 @@ export default function Navigasi() {
             {mounted && (
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="relative w-10 h-10 flex items-center justify-center rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="w-10 h-10 flex items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
-                <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                <Sun className="h-5 w-5 hidden dark:block" />
+                <Moon className="h-5 w-5 block dark:hidden" />
               </button>
             )}
             <button
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white transition-colors"
+              className="w-10 h-10 flex items-center justify-center rounded-lg text-slate-800 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu - Minimalist Glass Panel */}
+      {/* Mobile Menu - Solid & Clean Dropdown */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:hidden absolute left-4 right-4 top-full mt-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/50 dark:border-slate-700/50 rounded-3xl overflow-hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden absolute top-full left-0 right-0 bg-stone-50/95 dark:bg-stone-950/95 backdrop-blur-3xl border-b border-stone-200/50 dark:border-stone-800/80 shadow-lg overflow-hidden"
           >
-            <div className="p-6 flex flex-col gap-2">
+            <div className="p-4 flex flex-col gap-1">
               {navLinks.map((link) => {
-                const targetHref =
-                  pathname === '/' ? link.href : `/${link.href}`;
+                const targetHref = pathname === '/' ? link.href : `/${link.href}`;
+                const isActive = activeSection === link.href;
+                
                 return (
                   <Link
                     key={link.name}
                     href={targetHref}
-                    className="py-3 px-4 text-base font-medium text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-white dark:hover:bg-slate-800 rounded-2xl transition-all"
+                    className={cn(
+                      "py-3 px-4 text-lg font-semibold rounded-xl transition-colors",
+                      isActive 
+                        ? "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20" 
+                        : "text-slate-800 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                    )}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.name}
                   </Link>
                 );
               })}
-
-              <div className="w-full h-px bg-slate-200/50 dark:bg-slate-700/50 my-2" />
+              
+              <div className="mt-4 pt-4 border-t border-stone-200/50 dark:border-stone-800/80">
+                <Link
+                  href="#kontak"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full flex justify-center py-3.5 text-[13px] uppercase tracking-widest font-bold text-stone-100 bg-stone-900 border border-stone-800 hover:bg-stone-800 dark:text-stone-900 dark:bg-stone-100 dark:hover:bg-white rounded-xl shadow-sm transition-colors"
+                >
+                  Hubungi Kami
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </nav>
   );
 }

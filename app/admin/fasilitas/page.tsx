@@ -160,9 +160,9 @@ export default function AdminFasilitasPage() {
           const filename = parts[parts.length - 1];
           if (filename) {
             await fetch('/api/upload/delete', {
-               method: 'DELETE',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ filename, folder: 'fasilitas' })
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ filename, folder: 'fasilitas' }),
             }).catch(console.error);
           }
         }
@@ -177,10 +177,10 @@ export default function AdminFasilitasPage() {
           await fetch(`/api/profil/${profilId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fasilitasList: JSON.stringify(newList) })
+            body: JSON.stringify({ fasilitasList: JSON.stringify(newList) }),
           });
         }
-        
+
         alert.success('Gambar berhasil diunggah');
       } else {
         alert.error('Gagal mengunggah gambar');
@@ -237,18 +237,22 @@ export default function AdminFasilitasPage() {
   };
 
   if (loading) {
-    return <div className="text-center py-12 text-gray-400">Memuat...</div>;
+    return (
+      <div className="text-center py-12 text-[11px] uppercase tracking-widest text-stone-400 font-bold">
+        MEMUAT KONTEN...
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl md:text-3xl font-bold font-heading tracking-tight text-stone-900 dark:text-stone-100">
             Kelola Fasilitas
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-[12px] font-bold text-stone-500 dark:text-stone-400 mt-2 tracking-wide">
             Atur konten fasilitas yang tampil di halaman utama
           </p>
         </div>
@@ -258,7 +262,7 @@ export default function AdminFasilitasPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+        className="p-8 md:p-10 rounded-[2rem] bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 shadow-sm"
       >
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Header Section */}
@@ -303,9 +307,9 @@ export default function AdminFasilitasPage() {
           </div>
 
           {/* Fasilitas List */}
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-6 border-t border-stone-200 dark:border-stone-800">
             <SectionTitle title="Daftar Fasilitas" />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+            <p className="text-xs text-stone-500 dark:text-stone-400 mb-4">
               Tambah, edit, atau hapus fasilitas yang akan ditampilkan. Setiap
               fasilitas memiliki judul, deskripsi, ikon, dan gambar.
             </p>
@@ -314,10 +318,10 @@ export default function AdminFasilitasPage() {
               {formData.fasilitasList.map((item, index) => (
                 <div
                   key={item.id}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700"
+                  className="p-4 rounded-xl bg-gray-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800"
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    <h4 className="text-sm font-semibold text-stone-700 dark:text-stone-300">
                       Fasilitas #{index + 1}
                     </h4>
                     <button
@@ -353,15 +357,15 @@ export default function AdminFasilitasPage() {
                     />
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">
                         Ikon
                       </label>
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-500">
+                        <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-stone-100 dark:bg-stone-800 rounded-lg text-stone-500">
                           {renderIcon(item.icon)}
                         </div>
                         <select
-                          className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                          className="w-full bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                           value={item.icon}
                           onChange={(e) => {
                             const newList = [...formData.fasilitasList];
@@ -400,11 +404,12 @@ export default function AdminFasilitasPage() {
 
                     {/* Image Upload */}
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">
                         Gambar Fasilitas
                       </label>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                        Rekomendasi: 800 × 600 px (4:3 Landscape, format JPG/PNG)
+                      <p className="text-xs text-stone-500 dark:text-stone-400 mb-2">
+                        Rekomendasi: 800 × 600 px (4:3 Landscape, format
+                        JPG/PNG)
                       </p>
                       <div className="flex items-center gap-4">
                         <input
@@ -433,7 +438,7 @@ export default function AdminFasilitasPage() {
                                 src={item.image}
                                 alt={item.title}
                                 onClick={() => setPreviewImage(item.image)}
-                                className="h-20 w-32 object-cover rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer"
+                                className="h-20 w-32 object-cover rounded-lg border border-stone-200 dark:border-stone-700 cursor-pointer"
                               />
                               <button
                                 type="button"
@@ -443,7 +448,9 @@ export default function AdminFasilitasPage() {
                                 <X size={14} />
                               </button>
                             </div>
-                            <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">✨ Klik gambar untuk membesarkan</p>
+                            <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">
+                              ✨ Klik gambar untuk membesarkan
+                            </p>
                           </div>
                         )}
                       </div>
@@ -451,11 +458,11 @@ export default function AdminFasilitasPage() {
 
                     {/* ColSpan Selection */}
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">
                         Ukuran Tampilan (Bento Grid)
                       </label>
                       <select
-                        className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                        className="w-full bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                         value={item.colSpan}
                         onChange={(e) => {
                           const newList = [...formData.fasilitasList];
@@ -474,7 +481,7 @@ export default function AdminFasilitasPage() {
                           Tinggi (2 baris)
                         </option>
                       </select>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
                         Pilih ukuran tampilan: Kecil untuk kartu biasa, Besar
                         untuk kartu lebar, atau Tinggi untuk kartu memanjang
                         vertikal.
@@ -510,14 +517,14 @@ export default function AdminFasilitasPage() {
           </div>
 
           {/* Submit */}
-          <div className="flex gap-2 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex gap-2 pt-6 border-t border-stone-200 dark:border-stone-800">
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center gap-2 px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-stone-900 dark:bg-emerald-800 text-stone-100 dark:text-emerald-50 text-[12px] font-bold tracking-widest uppercase rounded-xl hover:bg-stone-800 dark:hover:bg-emerald-900 transition-colors shadow-sm disabled:opacity-50"
             >
               <Save size={20} />
-              {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
+              {saving ? 'MEMPROSES ...' : 'SIMPAN '}
             </button>
           </div>
         </form>

@@ -1,4 +1,4 @@
-  'use client';
+'use client';
 
 import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
@@ -255,17 +255,21 @@ export default function AdminEkstrakurikulerPage() {
   };
 
   if (loading) {
-    return <div className="text-center py-12 text-gray-400">Memuat...</div>;
+    return (
+      <div className="text-center py-12 text-[11px] uppercase tracking-widest text-stone-400 font-bold">
+        MEMUAT KONTEN...
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl md:text-3xl font-bold font-heading tracking-tight text-stone-900 dark:text-stone-100">
             Kelola Ekstrakurikuler
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-[12px] font-bold text-stone-500 dark:text-stone-400 mt-2 tracking-wide">
             Atur daftar kegiatan ekstrakurikuler yang tampil di halaman utama
           </p>
         </div>
@@ -274,7 +278,7 @@ export default function AdminEkstrakurikulerPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+        className="p-8 md:p-10 rounded-[2rem] bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 shadow-sm"
       >
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* SECTION: HEADER */}
@@ -313,9 +317,9 @@ export default function AdminEkstrakurikulerPage() {
           </div>
 
           {/* SECTION: DAFTAR EKSTRA */}
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-6 border-t border-stone-200 dark:border-stone-800">
             <SectionTitle title="B. Daftar Ekstrakurikuler" />
-            <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">
+            <p className="text-xs text-stone-400 dark:text-stone-500 mb-4">
               Setiap item ditampilkan sebagai kartu gambar di halaman utama.
               Atur ukuran layout masing-masing kartu.
             </p>
@@ -324,10 +328,10 @@ export default function AdminEkstrakurikulerPage() {
               {formData.ekstraList.map((item, index) => (
                 <div
                   key={item.id}
-                  className="p-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 space-y-4"
+                  className="p-4 rounded-xl border border-stone-200 dark:border-stone-700 bg-gray-50 dark:bg-stone-950/50 space-y-4"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  <div className="flex items-center justify-between mb-8">
+                    <span className="text-sm font-semibold text-stone-700 dark:text-stone-300">
                       Ekstra #{index + 1}
                     </span>
                     <button
@@ -347,7 +351,10 @@ export default function AdminEkstrakurikulerPage() {
                       onChange={(e) => {
                         setFormData((prev) => {
                           const newList = [...prev.ekstraList];
-                          newList[index] = { ...newList[index], name: e.target.value };
+                          newList[index] = {
+                            ...newList[index],
+                            name: e.target.value,
+                          };
                           return { ...prev, ekstraList: newList };
                         });
                       }}
@@ -359,7 +366,10 @@ export default function AdminEkstrakurikulerPage() {
                       onChange={(e) => {
                         setFormData((prev) => {
                           const newList = [...prev.ekstraList];
-                          newList[index] = { ...newList[index], desc: e.target.value };
+                          newList[index] = {
+                            ...newList[index],
+                            desc: e.target.value,
+                          };
                           return { ...prev, ekstraList: newList };
                         });
                       }}
@@ -367,16 +377,19 @@ export default function AdminEkstrakurikulerPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">
                       Ukuran Kartu (Layout)
                     </label>
                     <select
-                      className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                      className="w-full bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                       value={item.colSpan}
                       onChange={(e) => {
                         setFormData((prev) => {
                           const newList = [...prev.ekstraList];
-                          newList[index] = { ...newList[index], colSpan: e.target.value };
+                          newList[index] = {
+                            ...newList[index],
+                            colSpan: e.target.value,
+                          };
                           return { ...prev, ekstraList: newList };
                         });
                       }}
@@ -391,10 +404,10 @@ export default function AdminEkstrakurikulerPage() {
 
                   {/* Image Upload */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">
                       Gambar
                     </label>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                    <p className="text-xs text-stone-500 dark:text-stone-400 mb-2">
                       Rekomendasi: 800 × 600 px (4:3 Landscape, format JPG/PNG)
                     </p>
                     <div className="flex items-center gap-4">
@@ -412,7 +425,9 @@ export default function AdminEkstrakurikulerPage() {
                         }`}
                       >
                         <Upload size={18} />
-                        <span>{uploading ? 'Mengupload...' : 'Unggah Gambar'}</span>
+                        <span>
+                          {uploading ? 'Mengupload...' : 'Unggah Gambar'}
+                        </span>
                       </label>
 
                       {item.image && (
@@ -423,7 +438,7 @@ export default function AdminEkstrakurikulerPage() {
                               src={item.image}
                               alt={item.name || 'Preview'}
                               onClick={() => setPreviewImage(item.image)}
-                              className="w-full h-48 object-cover rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer"
+                              className="w-full h-48 object-cover rounded-lg border border-stone-200 dark:border-stone-800 cursor-pointer"
                             />
                             <button
                               type="button"
@@ -431,17 +446,19 @@ export default function AdminEkstrakurikulerPage() {
                               className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
                               title="Hapus gambar"
                             >
-                            <X size={16} />
+                              <X size={16} />
                             </button>
                           </div>
-                          <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">✨ Klik gambar untuk membesarkan</p>
+                          <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">
+                            ✨ Klik gambar untuk membesarkan
+                          </p>
                         </div>
                       )}
 
                       {!item.image && (
-                        <div className="w-full h-48 bg-gray-100 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center">
+                        <div className="w-full h-48 bg-stone-100 dark:bg-stone-900 rounded-lg border-2 border-dashed border-stone-300 dark:border-stone-800 flex items-center justify-center">
                           <div className="text-center">
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="text-sm text-stone-500 dark:text-stone-400">
                               Belum ada gambar
                             </p>
                           </div>
@@ -463,14 +480,14 @@ export default function AdminEkstrakurikulerPage() {
           </div>
 
           {/* Submit */}
-          <div className="flex gap-2 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex gap-2 pt-6 border-t border-stone-200 dark:border-stone-800">
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center gap-2 px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-stone-900 dark:bg-emerald-800 text-stone-100 dark:text-emerald-50 text-[12px] font-bold tracking-widest uppercase rounded-xl hover:bg-stone-800 dark:hover:bg-emerald-900 transition-colors shadow-sm disabled:opacity-50"
             >
               <Save size={20} />
-              {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
+              {saving ? 'MEMPROSES ...' : 'SIMPAN '}
             </button>
           </div>
         </form>

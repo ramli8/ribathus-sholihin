@@ -321,26 +321,28 @@ export default function AdminBeritaPage() {
 
   if (loading) {
     return (
-      <div className="text-center py-12 text-gray-400">Memuat...</div>
+      <div className="text-center py-12 text-[11px] uppercase tracking-widest text-stone-400 font-bold">
+        MEMUAT KONTEN...
+      </div>
     );
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl md:text-3xl font-bold font-heading tracking-tight text-stone-900 dark:text-stone-100">
             Kelola Berita
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-[12px] font-bold text-stone-500 dark:text-stone-400 mt-2 tracking-wide">
             Kelola berita, artikel, dan header section berita di halaman utama
           </p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowHeaderSettings(!showHeaderSettings)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className="flex items-center gap-1.5 px-4 py-2 bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-sm font-medium rounded-lg hover:bg-stone-200 dark:hover:bg-gray-600 transition-colors"
           >
             {showHeaderSettings ? (
               <ChevronUp size={16} />
@@ -364,10 +366,10 @@ export default function AdminBeritaPage() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+          className="p-8 md:p-10 rounded-[2rem] bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 shadow-sm"
         >
           <SectionTitle title="Header Section Berita" />
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 mb-6">
+          <p className="text-sm text-stone-500 dark:text-stone-400 mt-4 mb-6">
             Teks yang muncul di atas daftar berita di halaman utama website.
           </p>
           <div className="space-y-4">
@@ -406,7 +408,7 @@ export default function AdminBeritaPage() {
               className="flex items-center gap-2 px-6 py-2 bg-emerald-500 text-white text-sm rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50"
             >
               <Save size={20} />
-              {savingHeader ? 'Menyimpan...' : 'Simpan Header'}
+              {savingHeader ? 'MEMPROSES ...' : 'Simpan Header'}
             </button>
           </div>
         </motion.div>
@@ -417,10 +419,10 @@ export default function AdminBeritaPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+          className="p-8 md:p-10 rounded-[2rem] bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 shadow-sm"
         >
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-stone-200 dark:border-stone-800">
+            <h2 className="text-lg font-semibold text-stone-900 dark:text-white">
               {editingId ? 'Edit Berita' : 'Tambah Berita Baru'}
             </h2>
             <button
@@ -437,16 +439,16 @@ export default function AdminBeritaPage() {
                   published: false,
                 });
               }}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
             >
               <X size={20} />
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">
                   Judul Berita *
                 </label>
                 <input
@@ -460,7 +462,7 @@ export default function AdminBeritaPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">
                   Slug (URL)
                 </label>
                 <input
@@ -477,7 +479,7 @@ export default function AdminBeritaPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">
                   Kategori
                 </label>
                 <select
@@ -502,7 +504,7 @@ export default function AdminBeritaPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">
                   Penulis
                 </label>
                 <input
@@ -521,10 +523,10 @@ export default function AdminBeritaPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">
                 Cover Image
               </label>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              <p className="text-xs text-stone-500 dark:text-stone-400 mb-2">
                 Rekomendasi: 1280 × 720 px (16:9 Landscape, format JPG/PNG)
               </p>
               <div className="flex items-center gap-4">
@@ -536,18 +538,20 @@ export default function AdminBeritaPage() {
                         src={formData.coverUrl}
                         alt="Cover preview"
                         onClick={() => setPreviewImage(formData.coverUrl)}
-                        className="w-20 h-20 object-cover rounded-sm border border-gray-200 cursor-pointer"
+                        className="w-20 h-20 object-cover rounded-sm border border-stone-200 cursor-pointer"
                       />
                       <button
-                      type="button"
-                      onClick={handleRemoveCover}
-                      className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
-                      title="Hapus Cover"
-                    >
-                      <X size={14} />
-                    </button>
+                        type="button"
+                        onClick={handleRemoveCover}
+                        className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                        title="Hapus Cover"
+                      >
+                        <X size={14} />
+                      </button>
                     </div>
-                    <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">✨ Klik gambar untuk membesarkan</p>
+                    <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-2 font-medium">
+                      ✨ Klik gambar untuk membesarkan
+                    </p>
                   </div>
                 )}
                 <div className="flex-1">
@@ -573,10 +577,10 @@ export default function AdminBeritaPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">
                 Isi Berita *
               </label>
-              <div className="bg-white dark:bg-gray-800 rounded-lg">
+              <div className="bg-white dark:bg-stone-900 rounded-lg">
                 <ReactQuill
                   theme="snow"
                   value={formData.isi}
@@ -597,7 +601,7 @@ export default function AdminBeritaPage() {
               </div>
             </div>
 
-            <div className="flex gap-2 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex gap-2 pt-6 border-t border-stone-200 dark:border-stone-800">
               <button
                 type="submit"
                 className="flex items-center gap-2 px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
@@ -608,7 +612,7 @@ export default function AdminBeritaPage() {
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors dark:bg-gray-800 dark:text-gray-300"
+                className="px-6 py-2 bg-stone-100 text-stone-700 rounded-lg hover:bg-stone-200 transition-colors dark:bg-stone-900 dark:text-stone-300"
               >
                 Batal
               </button>
@@ -621,9 +625,9 @@ export default function AdminBeritaPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+        className="p-8 md:p-10 rounded-[2rem] bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 shadow-sm"
       >
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+        <h2 className="text-lg font-semibold text-stone-900 dark:text-white mb-6">
           Daftar Berita
         </h2>
         <div className="space-y-4">
@@ -632,7 +636,7 @@ export default function AdminBeritaPage() {
               key={berita.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"
+              className="p-4 rounded-xl border border-stone-200 dark:border-stone-800 hover:bg-gray-50 dark:hover:bg-stone-950/50 transition-colors"
             >
               <div className="flex items-start gap-4">
                 {berita.coverUrl ? (
@@ -642,19 +646,21 @@ export default function AdminBeritaPage() {
                       src={berita.coverUrl}
                       alt={berita.judul}
                       onClick={() => setPreviewImage(berita.coverUrl!)}
-                      className="w-20 h-16 object-cover rounded-lg flex-shrink-0 border border-gray-200 dark:border-gray-700 cursor-pointer"
+                      className="w-20 h-16 object-cover rounded-lg flex-shrink-0 border border-stone-200 dark:border-stone-800 cursor-pointer"
                     />
-                    <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium select-none w-max">✨ Klik zoom</p>
+                    <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium select-none w-max">
+                      ✨ Klik zoom
+                    </p>
                   </div>
                 ) : (
-                  <div className="w-20 h-16 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center flex-shrink-0 border border-gray-200 dark:border-gray-700">
-                    <Newspaper size={24} className="text-gray-400" />
+                  <div className="w-20 h-16 bg-stone-100 dark:bg-stone-900 rounded-lg flex items-center justify-center flex-shrink-0 border border-stone-200 dark:border-stone-800">
+                    <Newspaper size={24} className="text-stone-400" />
                   </div>
                 )}
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                    <h3 className="text-sm font-semibold text-stone-900 dark:text-white truncate">
                       {berita.judul}
                     </h3>
                     {berita.published ? (
@@ -662,16 +668,16 @@ export default function AdminBeritaPage() {
                         Published
                       </span>
                     ) : (
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium dark:bg-gray-800 dark:text-gray-400">
+                      <span className="px-2 py-1 bg-stone-100 text-stone-700 text-xs rounded-md font-medium dark:bg-stone-900 dark:text-stone-400">
                         Draft
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">
+                  <p className="text-sm text-stone-500 dark:text-stone-400 mb-2 line-clamp-2">
                     {berita.isi.substring(0, 100)}...
                   </p>
-                  <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                    <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-md font-medium text-gray-600 dark:text-gray-400">
+                  <div className="flex items-center gap-2 text-xs text-stone-500 dark:text-stone-400">
+                    <span className="px-2 py-1 bg-stone-100 dark:bg-stone-900 rounded-md font-medium text-stone-600 dark:text-stone-400">
                       {berita.kategori || 'Umum'}
                     </span>
                     <span>•</span>
@@ -692,13 +698,13 @@ export default function AdminBeritaPage() {
                     onClick={() =>
                       handleTogglePublish(berita.id, berita.published)
                     }
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                    className="p-2 hover:bg-stone-100 dark:hover:bg-stone-900 rounded-lg transition-colors"
                     title={berita.published ? 'Unpublish' : 'Publish'}
                   >
                     {berita.published ? (
-                      <EyeOff size={18} className="text-gray-500" />
+                      <EyeOff size={18} className="text-stone-500" />
                     ) : (
-                      <Eye size={18} className="text-gray-500" />
+                      <Eye size={18} className="text-stone-500" />
                     )}
                   </button>
                   <button
@@ -706,28 +712,36 @@ export default function AdminBeritaPage() {
                     className="p-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                     title="Edit"
                   >
-                    <Edit size={18} className="text-blue-600 dark:text-blue-400" />
+                    <Edit
+                      size={18}
+                      className="text-blue-600 dark:text-blue-400"
+                    />
                   </button>
                   <button
                     onClick={() => handleDelete(berita.id)}
                     className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                     title="Delete"
                   >
-                    <Trash2 size={18} className="text-red-600 dark:text-red-400" />
+                    <Trash2
+                      size={18}
+                      className="text-red-600 dark:text-red-400"
+                    />
                   </button>
                 </div>
               </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
 
-        {beritaList.length === 0 && (
-          <div className="py-12 text-center">
-            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Newspaper size={32} className="text-gray-400" />
+          {beritaList.length === 0 && (
+            <div className="py-12 text-center">
+              <div className="w-16 h-16 bg-stone-100 dark:bg-stone-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Newspaper size={32} className="text-stone-400" />
+              </div>
+              <p className="text-sm text-stone-500 dark:text-stone-400">
+                Belum ada berita
+              </p>
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Belum ada berita</p>
-          </div>
-        )}
+          )}
         </div>
       </motion.div>
 

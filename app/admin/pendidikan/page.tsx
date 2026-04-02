@@ -267,7 +267,7 @@ export default function AdminPendidikanPage() {
             body: JSON.stringify({ psbBrosurUrl: newUrl }),
           });
         }
-        
+
         alert.success('Brosur berhasil diunggah');
       } else {
         alert.error(
@@ -331,17 +331,21 @@ export default function AdminPendidikanPage() {
   };
 
   if (loading) {
-    return <div className="text-center py-12 text-gray-400">Memuat...</div>;
+    return (
+      <div className="text-center py-12 text-[11px] uppercase tracking-widest text-stone-400 font-bold">
+        MEMUAT KONTEN...
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl md:text-3xl font-bold font-heading tracking-tight text-stone-900 dark:text-stone-100">
             Kelola Pendidikan & PSB
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-[12px] font-bold text-stone-500 dark:text-stone-400 mt-2 tracking-wide">
             Atur konten Akademik, Kurikulum, dan Penerimaan Santri Baru
           </p>
         </div>
@@ -350,7 +354,7 @@ export default function AdminPendidikanPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+        className="p-8 md:p-10 rounded-[2rem] bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 shadow-sm"
       >
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* SECTION: PENDIDIKAN HEADER */}
@@ -394,7 +398,7 @@ export default function AdminPendidikanPage() {
           </div>
 
           {/* SECTION: PROGRAM FORMAL */}
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-6 border-t border-stone-200 dark:border-stone-800">
             <SectionTitle title="B. Program Pendidikan Formal" />
             <div className="space-y-4 mb-4">
               <FormInput
@@ -422,16 +426,16 @@ export default function AdminPendidikanPage() {
             </div>
 
             <div className="space-y-3">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-stone-700 dark:text-stone-300">
                 Daftar Program
               </label>
               {formData.pendidikanFormalList.map((item, index) => (
                 <div key={item.id} className="flex items-center gap-3">
-                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-500">
+                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-stone-100 dark:bg-stone-800 rounded-lg text-stone-500">
                     {renderIcon(item.icon)}
                   </div>
                   <select
-                    className="shrink-0 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                    className="shrink-0 bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                     value={item.icon}
                     onChange={(e) => {
                       const newList = [...formData.pendidikanFormalList];
@@ -450,7 +454,7 @@ export default function AdminPendidikanPage() {
                   </select>
                   <input
                     type="text"
-                    className="grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                    className="grow bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                     placeholder="Nama program..."
                     value={item.name}
                     onChange={(e) => {
@@ -502,7 +506,7 @@ export default function AdminPendidikanPage() {
           </div>
 
           {/* SECTION: PROGRAM DINIYAH */}
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-6 border-t border-stone-200 dark:border-stone-800">
             <SectionTitle title="C. Program Pendidikan Diniyah" />
             <div className="space-y-4 mb-4">
               <FormInput
@@ -530,16 +534,16 @@ export default function AdminPendidikanPage() {
             </div>
 
             <div className="space-y-3">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="block text-sm font-medium text-stone-700 dark:text-stone-300">
                 Daftar Program
               </label>
               {formData.pendidikanDiniyahList.map((item, index) => (
                 <div key={item.id} className="flex items-center gap-3">
-                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-500">
+                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-stone-100 dark:bg-stone-800 rounded-lg text-stone-500">
                     {renderIcon(item.icon)}
                   </div>
                   <select
-                    className="shrink-0 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                    className="shrink-0 bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                     value={item.icon}
                     onChange={(e) => {
                       const newList = [...formData.pendidikanDiniyahList];
@@ -558,7 +562,7 @@ export default function AdminPendidikanPage() {
                   </select>
                   <input
                     type="text"
-                    className="grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                    className="grow bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                     placeholder="Nama program..."
                     value={item.name}
                     onChange={(e) => {
@@ -610,7 +614,7 @@ export default function AdminPendidikanPage() {
           </div>
 
           {/* SECTION: DISIPLIN */}
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-6 border-t border-stone-200 dark:border-stone-800">
             <SectionTitle title="D. Sistem Disiplin" />
             <div className="space-y-4">
               <FormInput
@@ -640,7 +644,7 @@ export default function AdminPendidikanPage() {
 
           <div className="py-4">
             <div className="h-px bg-slate-800 w-full mb-4"></div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white uppercase tracking-wider">
+            <h2 className="text-xl font-bold text-stone-900 dark:text-white uppercase tracking-wider">
               Bagian Pendaftaran (PSB)
             </h2>
           </div>
@@ -682,7 +686,7 @@ export default function AdminPendidikanPage() {
           </div>
 
           {/* SECTION: PSB LISTS */}
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="pt-6 border-t border-stone-200 dark:border-stone-800 grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* SYARAT */}
             <div>
               <SectionTitle title="B. Syarat Berkas" />
@@ -691,7 +695,7 @@ export default function AdminPendidikanPage() {
                   <div key={item.id} className="flex items-center gap-2">
                     <input
                       type="text"
-                      className="grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                      className="grow bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                       value={item.value}
                       onChange={(e) => {
                         const newList = [...formData.psbSyaratList];
@@ -742,7 +746,7 @@ export default function AdminPendidikanPage() {
                     </div>
                     <input
                       type="text"
-                      className="grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                      className="grow bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                       placeholder="Alur..."
                       value={item.value}
                       onChange={(e) => {
@@ -785,14 +789,14 @@ export default function AdminPendidikanPage() {
           </div>
 
           {/* SECTION: BIAYA & CTA */}
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-6 border-t border-stone-200 dark:border-stone-800">
             <SectionTitle title="D. Investasi / Biaya" />
             <div className="space-y-3 mb-6">
               {formData.psbBiayaList.map((item, index) => (
                 <div key={item.id} className="flex items-center gap-3">
                   <input
                     type="text"
-                    className="w-1/2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                    className="w-1/2 bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                     placeholder="Nama Biaya (contoh: SPP Bulanan)"
                     value={item.label}
                     onChange={(e) => {
@@ -803,7 +807,7 @@ export default function AdminPendidikanPage() {
                   />
                   <input
                     type="text"
-                    className="w-1/2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                    className="w-1/2 bg-white dark:bg-stone-950 border border-stone-300 dark:border-stone-700 rounded-lg px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 dark:text-white"
                     placeholder="Nominal (contoh: Rp 650k)"
                     value={item.value}
                     onChange={(e) => {
@@ -845,8 +849,9 @@ export default function AdminPendidikanPage() {
 
             <SectionTitle title="E. File Brosur" />
             <div className="space-y-4">
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                Rekomendasi: PDF/Gambar format vertikal Kualitas Tinggi, ukuran max 5MB.
+              <p className="text-xs text-stone-500 dark:text-stone-400 mb-1">
+                Rekomendasi: PDF/Gambar format vertikal Kualitas Tinggi, ukuran
+                max 5MB.
               </p>
               <div className="flex items-center gap-4">
                 <input
@@ -890,7 +895,7 @@ export default function AdminPendidikanPage() {
                   </div>
                 )}
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-stone-500 dark:text-stone-400">
                 Pilih file PDF atau gambar (JPG, PNG, WebP, GIF) untuk diunggah
                 sebagai brosur resmi. Url brosur yang tersimpan akan dibagikan
                 ke pengunjung web.
@@ -899,14 +904,14 @@ export default function AdminPendidikanPage() {
           </div>
 
           {/* Submit */}
-          <div className="flex gap-2 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex gap-2 pt-6 border-t border-stone-200 dark:border-stone-800">
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center gap-2 px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-stone-900 dark:bg-emerald-800 text-stone-100 dark:text-emerald-50 text-[12px] font-bold tracking-widest uppercase rounded-xl hover:bg-stone-800 dark:hover:bg-emerald-900 transition-colors shadow-sm disabled:opacity-50"
             >
               <Save size={20} />
-              {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
+              {saving ? 'MEMPROSES ...' : 'SIMPAN '}
             </button>
           </div>
         </form>

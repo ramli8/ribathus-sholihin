@@ -40,11 +40,11 @@ export default function UserDropdown({ user }: UserDropdownProps) {
           </div>
         </div>
 
-        <div className="hidden text-left lg:block mr-2">
-          <span className="block font-medium text-theme-sm text-gray-900 dark:text-white">
+        <div className="hidden text-left lg:block mr-3">
+          <span className="block font-bold text-stone-900 dark:text-white leading-tight">
             {user?.username || 'Admin'}
           </span>
-          <span className="block text-xs text-gray-500 dark:text-gray-400 capitalize">
+          <span className="block text-[9px] font-bold uppercase tracking-widest text-stone-500 dark:text-stone-400 mt-1">
             {user?.role === 'superadmin' ? 'Super Admin' : 'Administrator'}
           </span>
         </div>
@@ -72,32 +72,20 @@ export default function UserDropdown({ user }: UserDropdownProps) {
       <Dropdown
         isOpen={isOpen}
         onClose={closeDropdown}
-        className="absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark"
+        className="absolute right-0 mt-4 flex w-[260px] flex-col rounded-3xl border border-stone-200/60 bg-white p-6 shadow-sm dark:border-stone-800 dark:bg-stone-900"
       >
-        <div>
-          <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+        <div className="pb-4 border-b border-stone-100 dark:border-stone-800">
+          <span className="block font-bold text-stone-900 dark:text-stone-100 tracking-tight text-lg">
             {user?.username || 'Admin'}
           </span>
-          <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
+          <span className="mt-2 block uppercase tracking-widest text-[10px] font-bold text-stone-400 dark:text-stone-500">
             {user?.role === 'superadmin' ? 'Super Admin' : 'Administrator'}
           </span>
         </div>
 
-        <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
-          <li>
-            <DropdownItem
-              onItemClick={closeDropdown}
-              tag="a"
-              href="/admin/pengaturan"
-              className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-              Account settings
-            </DropdownItem>
-          </li>
-        </ul>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-red-500 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-red-400"
+          className="flex items-center gap-3 mt-4 text-[11px] font-bold uppercase tracking-widest text-stone-600 rounded-xl group hover:bg-red-50 hover:text-red-600 dark:text-stone-400 dark:hover:bg-red-950 dark:hover:text-red-400 px-4 py-3 transition-colors"
         >
           Sign out
         </button>

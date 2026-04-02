@@ -58,67 +58,41 @@ export default function Pendidikan() {
   return (
     <section
       id="pendidikan"
-      className="py-24 md:py-32 bg-slate-50 dark:bg-slate-950 relative overflow-hidden"
+      className="py-16 md:py-24 bg-stone-50 dark:bg-stone-950 relative overflow-hidden"
     >
-      {/* Soft Minimalist Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-white via-slate-50 to-slate-100 dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 opacity-90 z-0" />
-
-      {/* Animated Glassmorphism Orbs */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex justify-center items-center">
-        <motion.div
-          animate={{
-            rotate: -360,
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-          className="absolute top-10 -left-20 w-[600px] h-[600px] bg-emerald-300/10 dark:bg-emerald-800/10 rounded-full blur-[120px]"
-        />
-        <motion.div
-          animate={{
-            rotate: 360,
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-          className="absolute -bottom-20 -right-20 w-[600px] h-[600px] bg-teal-300/10 dark:bg-teal-900/10 rounded-full blur-[120px]"
-        />
-      </div>
+      {/* 
+        Zero Ornaments Background. Earthy Editorial styling.
+        Semua blur, warna-warni rotasi dihilangkan demi kelas maksimal.
+      */}
 
       <div className="container px-4 sm:px-6 mx-auto max-w-7xl relative z-10">
-        {/* Header - Minimalist Glass */}
+        
+        {/* Editorial Header */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           variants={fadeUp}
-          className="text-center mb-16 md:mb-20 max-w-3xl mx-auto"
+          className="text-center mb-16 md:mb-24 max-w-3xl mx-auto"
         >
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-white/40 dark:border-slate-700/50 text-emerald-700 dark:text-emerald-300 text-sm font-medium shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none mb-6">
-            <BookOpen size={16} className="text-emerald-500" />
-            <span className="uppercase tracking-wider">Kurikulum Terpadu</span>
+          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-stone-200 dark:border-stone-800 text-stone-500 dark:text-stone-400 text-[11px] font-bold tracking-[0.2em] uppercase mb-8">
+            Kurikulum Terpadu
           </div>
-          <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6 font-heading tracking-tight">
+          <h3 className="text-3xl md:text-5xl lg:text-[4rem] font-bold text-stone-900 dark:text-stone-100 mb-6 font-heading tracking-tight leading-[1.1] text-balance">
             {profile?.pendidikanTitle || 'Pendidikan'}{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+            <span className="text-emerald-900 dark:text-emerald-500 block sm:inline">
               {profile?.pendidikanTitleHighlight || 'Komprehensif'}
             </span>
           </h3>
-          <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto whitespace-pre-line">
+          <p className="text-stone-600 dark:text-stone-400 text-lg md:text-xl font-normal leading-relaxed mt-6 whitespace-pre-line">
             {profile?.pendidikanDesc ||
               'Perpaduan harmonis antara kedalaman ilmu-ilmu keislaman salaf dan kecakapan sains teknologi kontemporer untuk mencetak generasi unggul.'}
           </p>
         </motion.div>
 
-        {/* Programs Grid - Bento Minimalist Glass Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-8 md:mb-12">
+        {/* Programs Grid - Pure Editorial Bento */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-6 md:gap-y-8 max-w-6xl mx-auto">
           {/* Formal Education */}
           <motion.div
             initial="hidden"
@@ -126,46 +100,41 @@ export default function Pendidikan() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
             variants={fadeUp}
-            className="group relative bg-white/40 dark:bg-slate-800/40 hover:bg-white/60 dark:hover:bg-slate-800/60 transition-all duration-500 backdrop-blur-2xl rounded-3xl p-8 md:p-10 border border-white/60 dark:border-slate-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden"
+            className="bg-white dark:bg-stone-900 rounded-[2rem] p-8 md:p-12 border border-stone-200/60 dark:border-stone-800 shadow-sm flex flex-col justify-start group hover:-translate-y-1 transition-transform duration-300"
           >
-            {/* Soft subtle glow on hover */}
-            <div className="absolute -top-24 -right-24 w-48 h-48 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-
-            <div className="relative z-10 flex flex-col h-full">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                  <GraduationCap size={24} />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-slate-900 dark:text-white font-heading">
-                    {profile?.pendidikanFormalTitle || 'Pendidikan Formal'}
-                  </h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 whitespace-pre-line">
-                    {profile?.pendidikanFormalDesc ||
-                      'Integrasi sains dan agama'}
-                  </p>
-                </div>
+            <div className="flex flex-col md:flex-row md:items-center gap-6 mb-10">
+              <div className="w-16 h-16 rounded-full border border-stone-200 dark:border-stone-700 flex items-center justify-center bg-stone-50 dark:bg-stone-800 shrink-0">
+                <GraduationCap className="w-7 h-7 text-emerald-800 dark:text-emerald-500" />
               </div>
+              <div>
+                <h4 className="text-2xl md:text-3xl font-bold text-stone-900 dark:text-stone-100 font-heading mb-2 group-hover:text-emerald-900 dark:group-hover:text-emerald-400 transition-colors">
+                  {profile?.pendidikanFormalTitle || 'Pendidikan Formal'}
+                </h4>
+                <p className="text-stone-500 dark:text-stone-400 font-normal leading-relaxed text-[15px] max-w-md">
+                  {profile?.pendidikanFormalDesc ||
+                    'Integrasi sains dan agama'}
+                </p>
+              </div>
+            </div>
 
-              <div className="space-y-4 flex-grow">
-                {formalPrograms.map(
-                  (program: Record<string, any>, idx: number) => {
-                    return (
-                      <div
-                        key={idx}
-                        className="group/item flex items-center gap-4 p-4 rounded-2xl bg-white/50 dark:bg-slate-700/30 hover:bg-white/80 dark:hover:bg-slate-700/60 transition-colors backdrop-blur-md border border-white/40 dark:border-white/5"
-                      >
-                        <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 group-hover/item:text-emerald-600 dark:group-hover/item:text-emerald-400 group-hover/item:bg-emerald-50 dark:group-hover/item:bg-emerald-900/20 transition-colors flex-shrink-0">
-                          {renderIcon(program.icon as string)}
-                        </div>
-                        <span className="text-slate-700 dark:text-slate-300 font-medium group-hover/item:text-slate-900 dark:group-hover/item:text-white transition-colors">
-                          {program.name as string}
-                        </span>
+            <div className="space-y-3 flex-grow">
+              {formalPrograms.map(
+                (program: Record<string, any>, idx: number) => {
+                  return (
+                    <div
+                      key={idx}
+                      className="group/item flex items-center gap-5 py-4 px-5 rounded-2xl border border-stone-100 dark:border-stone-800 hover:border-stone-200 dark:hover:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors"
+                    >
+                      <div className="w-12 h-12 rounded-full border border-stone-100 dark:border-stone-700 bg-white dark:bg-stone-800 flex items-center justify-center text-stone-500 dark:text-stone-400 group-hover/item:text-emerald-800 dark:group-hover/item:text-emerald-500 transition-colors shrink-0 shadow-sm">
+                        {renderIcon(program.icon as string, 20)}
                       </div>
-                    );
-                  }
-                )}
-              </div>
+                      <span className="text-stone-700 dark:text-stone-300 font-semibold group-hover/item:text-emerald-900 dark:group-hover/item:text-emerald-400 transition-colors">
+                        {program.name as string}
+                      </span>
+                    </div>
+                  );
+                }
+              )}
             </div>
           </motion.div>
 
@@ -176,78 +145,76 @@ export default function Pendidikan() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
             variants={fadeUp}
-            className="group relative bg-white/40 dark:bg-slate-800/40 hover:bg-white/60 dark:hover:bg-slate-800/60 transition-all duration-500 backdrop-blur-2xl rounded-3xl p-8 md:p-10 border border-white/60 dark:border-slate-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden"
+            className="bg-white dark:bg-stone-900 rounded-[2rem] p-8 md:p-12 border border-stone-200/60 dark:border-stone-800 shadow-sm flex flex-col justify-start group hover:-translate-y-1 transition-transform duration-300"
           >
-            {/* Soft subtle glow on hover */}
-            <div className="absolute -top-24 -right-24 w-48 h-48 bg-teal-500/10 dark:bg-teal-500/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-
-            <div className="relative z-10 flex flex-col h-full">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-600 dark:text-teal-400">
-                  <BookText size={24} />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-slate-900 dark:text-white font-heading">
-                    {profile?.pendidikanDiniyahTitle || 'Pendidikan Diniyah'}
-                  </h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 whitespace-pre-line">
-                    {profile?.pendidikanDiniyahDesc ||
-                      'Mengkaji warisan keilmuan Islam'}
-                  </p>
-                </div>
+            <div className="flex flex-col md:flex-row md:items-center gap-6 mb-10">
+              <div className="w-16 h-16 rounded-full border border-stone-200 dark:border-stone-700 flex items-center justify-center bg-stone-50 dark:bg-stone-800 shrink-0">
+                <BookText className="w-7 h-7 text-emerald-800 dark:text-emerald-500" />
               </div>
+              <div>
+                <h4 className="text-2xl md:text-3xl font-bold text-stone-900 dark:text-stone-100 font-heading mb-2 group-hover:text-emerald-900 dark:group-hover:text-emerald-400 transition-colors">
+                  {profile?.pendidikanDiniyahTitle || 'Pendidikan Diniyah'}
+                </h4>
+                <p className="text-stone-500 dark:text-stone-400 font-normal leading-relaxed text-[15px] max-w-md">
+                  {profile?.pendidikanDiniyahDesc ||
+                    'Mengkaji warisan keilmuan Islam'}
+                </p>
+              </div>
+            </div>
 
-              <div className="space-y-4 flex-grow">
-                {nonFormalPrograms.map(
-                  (program: Record<string, any>, idx: number) => {
-                    return (
-                      <div
-                        key={idx}
-                        className="group/item flex items-center gap-4 p-4 rounded-2xl bg-white/50 dark:bg-slate-700/30 hover:bg-white/80 dark:hover:bg-slate-700/60 transition-colors backdrop-blur-md border border-white/40 dark:border-white/5"
-                      >
-                        <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 group-hover/item:text-teal-600 dark:group-hover/item:text-teal-400 group-hover/item:bg-teal-50 dark:group-hover/item:bg-teal-900/20 transition-colors flex-shrink-0">
-                          {renderIcon(program.icon as string)}
-                        </div>
-                        <span className="text-slate-700 dark:text-slate-300 font-medium group-hover/item:text-slate-900 dark:group-hover/item:text-white transition-colors">
-                          {program.name as string}
-                        </span>
+            <div className="space-y-3 flex-grow">
+              {nonFormalPrograms.map(
+                (program: Record<string, any>, idx: number) => {
+                  return (
+                    <div
+                      key={idx}
+                      className="group/item flex items-center gap-5 py-4 px-5 rounded-2xl border border-stone-100 dark:border-stone-800 hover:border-stone-200 dark:hover:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors"
+                    >
+                      <div className="w-12 h-12 rounded-full border border-stone-100 dark:border-stone-700 bg-white dark:bg-stone-800 flex items-center justify-center text-stone-500 dark:text-stone-400 group-hover/item:text-emerald-800 dark:group-hover/item:text-emerald-500 transition-colors shrink-0 shadow-sm">
+                        {renderIcon(program.icon as string, 20)}
                       </div>
-                    );
-                  }
-                )}
-              </div>
+                      <span className="text-stone-700 dark:text-stone-300 font-semibold group-hover/item:text-emerald-900 dark:group-hover/item:text-emerald-400 transition-colors">
+                        {program.name as string}
+                      </span>
+                    </div>
+                  );
+                }
+              )}
             </div>
           </motion.div>
         </div>
 
-        {/* Daily Schedule - Highlight Card */}
+        {/* Daily Schedule - Highlight Slab */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
           variants={fadeUp}
-          className="relative rounded-3xl overflow-hidden group"
+          className="max-w-6xl mx-auto w-full mt-6 lg:mt-8"
         >
-          {/* Animated gradient border simulation */}
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500 opacity-90 group-hover:scale-105 transition-transform duration-1000" />
-          <div className="absolute inset-0 bg-slate-900/10 dark:bg-slate-950/20 blur-sm" />
-
-          <div className="relative z-10 p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-8 bg-black/5 dark:bg-black/20 backdrop-blur-md m-[1px] rounded-[calc(1.5rem-1px)]">
-            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white flex-shrink-0">
-              <Clock size={32} />
+          <div className="relative rounded-[2rem] bg-emerald-900 dark:bg-emerald-950 p-8 md:p-12 border border-emerald-800 flex flex-col md:flex-row items-center gap-8 group hover:-translate-y-1 transition-transform duration-300 overflow-hidden shadow-sm">
+            {/* Minimalist Watermark Icon */}
+            <div className="absolute -right-10 -bottom-10 text-emerald-800/30 dark:text-emerald-900/40 pointer-events-none group-hover:scale-110 transition-transform duration-700">
+              <Clock className="w-48 h-48" />
             </div>
-            <div className="text-center md:text-left">
-              <h4 className="text-2xl font-bold text-white mb-2 font-heading">
+
+            <div className="w-16 h-16 rounded-full border border-emerald-800/50 flex items-center justify-center bg-emerald-950/40 text-emerald-100 shrink-0 z-10 shadow-inner">
+              <Clock className="w-7 h-7" />
+            </div>
+            
+            <div className="text-center md:text-left z-10">
+              <h4 className="text-2xl md:text-3xl font-bold text-white mb-3 font-heading group-hover:text-emerald-300 transition-colors">
                 {profile?.pendidikanDisiplinTitle || 'Sistem Disiplin 24 Jam'}
               </h4>
-              <p className="text-emerald-50/90 font-light leading-relaxed text-base md:text-lg max-w-3xl whitespace-pre-line">
+              <p className="text-emerald-100/90 font-normal leading-relaxed text-base lg:text-lg max-w-3xl whitespace-pre-line">
                 {profile?.pendidikanDisiplinDesc ||
                   'Jadwal santri dikelola secara proporsional namun disiplin, dimulai dari qiyamullail sebelum subuh hingga mudzakarah di malam hari, membentuk rutinitas produktif dan ibadah yang istiqamah.'}
               </p>
             </div>
           </div>
         </motion.div>
+
       </div>
     </section>
   );

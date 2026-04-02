@@ -59,10 +59,10 @@ export default function AdminLayout({
   // Show loading for admin pages during auth check
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="flex items-center gap-3 text-gray-600">
-          <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-          <span>Loading...</span>
+      <div className="min-h-screen flex items-center justify-center bg-stone-50 dark:bg-stone-950">
+        <div className="flex items-center gap-3 text-stone-600 dark:text-stone-400">
+          <div className="w-8 h-8 border-4 border-stone-900 dark:border-stone-100 border-t-transparent dark:border-t-transparent rounded-full animate-spin" />
+          <span className="font-bold uppercase tracking-widest text-xs">Otentikasi...</span>
         </div>
       </div>
     );
@@ -70,7 +70,7 @@ export default function AdminLayout({
 
   // Render admin pages with layout
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-dark">
+    <div className="flex h-screen overflow-hidden bg-stone-50 dark:bg-stone-950 font-sans">
       <AppSidebar user={user} />
       <div
         className={`relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto transition-all duration-300 ease-in-out ${
@@ -79,7 +79,7 @@ export default function AdminLayout({
       >
         <AppHeader user={user} />
         <main>
-          <div className="p-4 mx-auto max-w-screen-2xl md:p-6 2xl:p-10">
+          <div className="p-4 md:p-8 lg:p-10 w-full">
             {children}
           </div>
         </main>
