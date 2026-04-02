@@ -1,9 +1,15 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface LoadingScreenProps {
   isLoading: boolean;
+}
+
+function SkeletonPulse({ className }: { className?: string }) {
+  return (
+    <div className={`animate-pulse rounded-xl bg-stone-200 dark:bg-stone-800 ${className || ''}`} />
+  );
 }
 
 export default function LoadingScreen({ isLoading }: LoadingScreenProps) {
@@ -13,62 +19,60 @@ export default function LoadingScreen({ isLoading }: LoadingScreenProps) {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: 'easeInOut' }}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-stone-50 dark:bg-stone-950"
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
+          className="fixed inset-0 z-[9999] bg-stone-50 dark:bg-stone-950 overflow-hidden"
         >
-          {/* Decorative top bar */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-stone-200 dark:bg-stone-800 overflow-hidden">
-            <motion.div
-              className="h-full bg-stone-900 dark:bg-stone-100"
-              initial={{ x: '-100%' }}
-              animate={{ x: '100%' }}
-              transition={{
-                repeat: Infinity,
-                duration: 1.2,
-                ease: 'easeInOut',
-              }}
-              style={{ width: '40%' }}
-            />
-          </div>
-
-          {/* Content */}
-          <div className="flex flex-col items-center gap-8">
-            {/* Pulse dot cluster */}
-            <div className="flex items-center gap-2">
-              {[0, 1, 2].map((i) => (
-                <motion.div
-                  key={i}
-                  className="w-2 h-2 rounded-full bg-stone-900 dark:bg-stone-100"
-                  animate={{
-                    scale: [1, 1.4, 1],
-                    opacity: [0.4, 1, 0.4],
-                  }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 1,
-                    delay: i * 0.2,
-                    ease: 'easeInOut',
-                  }}
-                />
+          {/* Skeleton Navbar */}
+          <div className="flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
+            <div className="flex items-center gap-3">
+              <SkeletonPulse className="w-9 h-9 rounded-lg" />
+              <SkeletonPulse className="w-32 h-4" />
+            </div>
+            <div className="hidden lg:flex items-center gap-6">
+              {[...Array(7)].map((_, i) => (
+                <SkeletonPulse key={i} className="w-16 h-3" />
               ))}
             </div>
+            <div className="hidden lg:flex items-center gap-3">
+              <SkeletonPulse className="w-9 h-9 rounded-lg" />
+              <SkeletonPulse className="w-28 h-10 rounded-full" />
+            </div>
+          </div>
 
-            {/* Text */}
-            <div className="text-center space-y-3">
-              <motion.p
-                className="text-[11px] font-bold uppercase tracking-[0.3em] text-stone-400 dark:text-stone-500"
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 2,
-                  ease: 'easeInOut',
-                }}
-              >
-                Memuat Konten
-              </motion.p>
-              <p className="text-[10px] tracking-widest text-stone-300 dark:text-stone-600 font-medium">
-                PONDOK PESANTREN RIBATHUS SHOLIHIN
-              </p>
+          {/* Skeleton Hero Section */}
+          <div className="max-w-4xl mx-auto px-6 text-center mt-20 lg:mt-28">
+            {/* Title skeleton */}
+            <div className="flex flex-col items-center gap-3 mb-8">
+              <SkeletonPulse className="w-[80%] h-10 md:h-14 rounded-2xl" />
+              <SkeletonPulse className="w-[60%] h-10 md:h-14 rounded-2xl" />
+              <SkeletonPulse className="w-[50%] h-10 md:h-14 rounded-2xl" />
+            </div>
+
+            {/* Subtitle skeleton */}
+            <div className="flex flex-col items-center gap-2 mb-10">
+              <SkeletonPulse className="w-[75%] h-4 md:h-5" />
+              <SkeletonPulse className="w-[55%] h-4 md:h-5" />
+            </div>
+
+            {/* CTA buttons skeleton */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <SkeletonPulse className="w-48 h-14 rounded-xl" />
+              <SkeletonPulse className="w-40 h-14 rounded-xl" />
+            </div>
+          </div>
+
+          {/* Skeleton Stats Cards */}
+          <div className="max-w-6xl mx-auto px-6 mt-16 lg:mt-24">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              {[...Array(4)].map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-white dark:bg-stone-900 rounded-[1.25rem] md:rounded-4xl p-6 lg:p-8 min-h-[140px] md:min-h-[160px] ring-1 ring-stone-200/50 dark:ring-stone-800 flex flex-col justify-end gap-3"
+                >
+                  <SkeletonPulse className="w-24 h-10" />
+                  <SkeletonPulse className="w-20 h-3" />
+                </div>
+              ))}
             </div>
           </div>
         </motion.div>
