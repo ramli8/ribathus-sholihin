@@ -34,8 +34,8 @@ export default function UserDropdown({ user }: UserDropdownProps) {
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle"
       >
-        <div className="mr-3 overflow-hidden rounded-full h-11 w-11 border-2 border-brand-500 p-0.5">
-          <div className="w-full h-full rounded-full bg-linear-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-bold">
+        <div className="mr-3 overflow-hidden rounded-full h-11 w-11 border-2 border-emerald-800 dark:border-emerald-500 p-0.5 transition-colors">
+          <div className="w-full h-full rounded-full bg-emerald-800 dark:bg-emerald-600 flex items-center justify-center text-white font-bold transition-colors">
             {user?.username?.charAt(0).toUpperCase() || 'A'}
           </div>
         </div>

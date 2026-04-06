@@ -74,16 +74,40 @@ export default function Beranda({ profile }: { profile: ProfilData | null }) {
       id="#"
       className="relative bg-stone-50 dark:bg-stone-950 pt-32 pb-4 lg:pt-40 lg:pb-8 overflow-hidden flex flex-col justify-center"
     >
-      {/* 
-        NO BACKGROUND GRAPHICS. ZERO ORNAMENTS.
-        Murni tipografi dan layout yang tajam (Editorial Design). 
-      */}
+      {/* Background Decor: Minimalist Masked Islamic Arabesque / Mashrabiya Pattern */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 flex justify-center">
+        
+        {/* Soft Ambient Top Glow */}
+        <div className="absolute top-0 w-[1000px] h-[500px] bg-emerald-600/5 dark:bg-emerald-500/5 rounded-full blur-[100px] -translate-y-1/2" aria-hidden="true" />
+        
+        {/* Masked Intricate Lattice Pattern fading from top to bottom */}
+        <div 
+          className="absolute top-0 inset-x-0 w-full h-[700px] opacity-[0.06] dark:opacity-[0.04]"
+          style={{
+            maskImage: 'linear-gradient(to bottom, black 0%, transparent 90%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 90%)'
+          }}
+        >
+          <svg className="w-full h-full text-stone-900 dark:text-stone-100" aria-hidden="true">
+            <defs>
+              <pattern id="mashrabiya-pattern" x="50" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                <g transform="translate(50 50)" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  {/* Geometric 8-Point Stars */}
+                  <rect x="-20" y="-20" width="40" height="40" />
+                  <rect x="-20" y="-20" width="40" height="40" transform="rotate(45)" />
+                  {/* Outer Lattice Connections connecting to adjacent tiles */}
+                  <path d="M 0,-28 L 0,-50 M 0,28 L 0,50 M -28,0 L -50,0 M 28,0 L 50,0" />
+                  <path d="M -20,-20 L -35,-35 M 20,20 L 35,35 M 20,-20 L 35,-35 M -20,20 L -35,35" />
+                  {/* Inner Details */}
+                  <circle cx="0" cy="0" r="10" strokeWidth="1" />
+                </g>
+              </pattern>
+            </defs>
+            <rect x="0" y="0" width="100%" height="100%" fill="url(#mashrabiya-pattern)" />
+          </svg>
+        </div>
 
-      {/* Subtle Texture to prevent 'empty void' feeling on large monitors */}
-      <div 
-        className="absolute inset-0 opacity-[0.04] pointer-events-none z-0 mix-blend-multiply dark:mix-blend-screen"
-        style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)', backgroundSize: '32px 32px' }}
-      ></div>
+      </div>
 
       <div className="container relative z-10 px-4 sm:px-6 mx-auto max-w-7xl">
         

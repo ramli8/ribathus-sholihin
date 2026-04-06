@@ -77,7 +77,7 @@ const navItems: NavItem[] = [
 ];
 
 const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
-  const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const { isExpanded, isMobileOpen, isHovered, setIsHovered, toggleMobileSidebar } = useSidebar();
   const pathname = usePathname();
   const [profil, setProfil] = useState<ProfilData | null>(null);
 
@@ -248,7 +248,16 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
   );
 
   return (
-    <aside
+    <>
+      {/* Mobile Overlay Backdrop */}
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-stone-900/50 dark:bg-stone-900/80 z-40 lg:hidden backdrop-blur-sm"
+          onClick={toggleMobileSidebar}
+          aria-hidden="true"
+        />
+      )}
+      <aside
       className={`fixed mt-[72px] flex flex-col lg:mt-0 top-0 px-4 left-0 bg-stone-50 dark:bg-stone-950 dark:border-stone-800 text-stone-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-stone-200 
         ${
           isExpanded || isMobileOpen
@@ -306,6 +315,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ user }) => {
         </nav>
       </div>
     </aside>
+    </>
   );
 };
 

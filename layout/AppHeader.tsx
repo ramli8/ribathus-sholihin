@@ -19,7 +19,6 @@ interface ProfilData {
 }
 
 const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
-  const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const [profil, setProfil] = useState<ProfilData | null>(null);
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
@@ -48,10 +47,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
       toggleMobileSidebar();
     }
   };
-
-  const toggleApplicationMenu = () => {
-    setApplicationMenuOpen(!isApplicationMenuOpen);
-  };
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -70,11 +65,11 @@ const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
   }, []);
 
   return (
-    <header className="sticky top-0 flex w-full bg-stone-50 border-stone-200 z-40 dark:border-stone-800 dark:bg-stone-950 lg:border-b">
-      <div className="flex flex-col items-center justify-between grow lg:flex-row lg:px-8 xl:px-10">
-        <div className="flex items-center justify-between w-full gap-2 px-4 py-4 border-b border-stone-200 dark:border-stone-800 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-5">
+    <header className="sticky top-0 flex w-full bg-stone-50 border-b border-stone-200 z-40 dark:border-stone-800 dark:bg-stone-950">
+      <div className="flex items-center justify-between grow px-4 py-3 lg:px-8 xl:px-10 lg:py-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <button
-            className="items-center justify-center w-11 h-11 text-stone-500 border-stone-200 dark:bg-stone-900 rounded-xl z-40 dark:border-stone-800 lg:flex dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 lg:border transition-colors hidden"
+            className="items-center justify-center w-11 h-11 text-stone-500 border-stone-200 dark:bg-stone-900 rounded-xl z-40 dark:border-stone-800 hidden lg:flex dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 border transition-colors"
             onClick={handleToggle}
             aria-label="Toggle Sidebar"
           >
@@ -88,8 +83,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
               </svg>
             )}
           </button>
+          
           <button
-            className="items-center justify-center w-11 h-11 text-stone-500 border-stone-200 dark:bg-stone-900 rounded-xl z-40 dark:border-stone-800 flex lg:hidden dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 border transition-colors"
+            className="items-center justify-center w-10 h-10 sm:w-11 sm:h-11 text-stone-500 border-stone-200 dark:bg-stone-900 rounded-xl z-40 dark:border-stone-800 flex lg:hidden dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 border transition-colors"
             onClick={handleToggle}
             aria-label="Toggle Sidebar"
           >
@@ -98,30 +94,19 @@ const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
             </svg>
           </button>
 
-          <Link href="/" className="lg:hidden">
-            <div className="flex items-center gap-3">
-              {profil?.logoUrl ? (
-                <img
-                  src={profil.logoUrl}
-                  alt={brandingName}
-                  className="w-9 h-9 object-contain rounded"
-                />
-              ) : (
-                <div className="w-9 h-9 border border-stone-800 bg-stone-900 rounded flex items-center justify-center text-white font-bold text-lg">
-                  {initials}
-                </div>
-              )}
-            </div>
+          <Link href="/" className="flex lg:hidden items-center">
+            {profil?.logoUrl ? (
+              <img
+                src={profil.logoUrl}
+                alt={brandingName}
+                className="w-9 h-9 object-contain rounded"
+              />
+            ) : (
+              <div className="w-9 h-9 border border-stone-800 bg-stone-900 rounded flex items-center justify-center text-white font-bold text-lg">
+                {initials}
+              </div>
+            )}
           </Link>
-
-          <button
-            onClick={toggleApplicationMenu}
-            className="flex items-center justify-center w-11 h-11 text-stone-700 rounded-xl z-40 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800 lg:hidden border border-transparent dark:border-stone-800"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M5.99902 10.4951C6.82745 10.4951 7.49902 11.1667 7.49902 11.9951V12.0051C7.49902 12.8335 6.82745 13.5051 5.99902 13.5051C5.1706 13.5051 4.49902 12.8335 4.49902 12.0051V11.9951C4.49902 11.1667 5.1706 10.4951 5.99902 10.4951ZM17.999 10.4951C18.8275 10.4951 19.499 11.1667 19.499 11.9951V12.0051C19.499 12.8335 18.8275 13.5051 17.999 13.5051C17.1706 13.5051 16.499 12.0051V11.9951V11.9951C16.499 11.1667 17.1706 10.4951 17.999 10.4951ZM13.499 11.9951C13.499 11.1667 12.8275 10.4951 11.999 10.4951C11.1706 10.4951 10.499 11.1667 10.499 11.9951V12.0051C10.499 12.8335 11.1706 13.5051 11.999 13.5051C12.8275 13.5051 13.499 12.8335 13.499 12.0051V11.9951Z" fill="currentColor"/>
-            </svg>
-          </button>
 
           <div className="hidden lg:flex items-center gap-2">
             <div className="text-[11px] uppercase tracking-widest font-bold text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 px-3 py-1.5 rounded-full">
@@ -132,15 +117,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({ user }) => {
             </span>
           </div>
         </div>
-        
-        <div
-          className={`${
-            isApplicationMenuOpen ? 'flex' : 'hidden'
-          } items-center justify-between w-full gap-4 px-5 py-4 lg:flex lg:justify-end lg:px-0 lg:shadow-none`}
-        >
-          <div className="flex items-center gap-2 2xsm:gap-3">
-            <ThemeToggleButton />
-          </div>
+
+        <div className="flex items-center gap-3 sm:gap-4">
+          <ThemeToggleButton />
           <UserDropdown user={user} />
         </div>
       </div>
