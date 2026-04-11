@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, User, ArrowLeft, Clock, ChevronRight } from 'lucide-react';
 import db from '@/lib/db';
-import DOMPurify from 'isomorphic-dompurify';
+import sanitizeHtml from 'sanitize-html';
 import { after } from 'next/server';
 
 export async function generateMetadata({
@@ -53,9 +53,13 @@ export default async function BeritaDetail({
 
   let sanitizedContent = '';
   try {
-    sanitizedContent = DOMPurify.sanitize(berita.isi);
+    sanitizedContent = sanitizeHtml(berita.isi, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'span', 'iframe', 'video', 'source', 'figure', 'figcaption']),
+      allowedAttributes: false,
+      allowedSchemes: ['http', 'https', 'data'],
+    });
   } catch (err) {
-    console.error("DOMPurify Error:", err);
+    console.error("Sanitize Error:", err);
     sanitizedContent = berita.isi; // fallback
   }
 
