@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Calendar, User, ArrowLeft, Clock, ChevronRight } from 'lucide-react';
 import db from '@/lib/db';
 import DOMPurify from 'isomorphic-dompurify';
+import { after } from 'next/server';
 
 export async function generateMetadata({
   params,
@@ -40,13 +41,7 @@ export default async function BeritaDetail({
     notFound();
   }
 
-  // Increment view asynchronously
-  await db.berita.update({
-    where: { id: berita.id },
-    data: { viewed: { increment: 1 } },
-  });
-
-  // Fetch recommended articles
+  // Fetch recommended articles BEFORE potentially erroring
   const recommendedBerita = await db.berita.findMany({
     where: {
       published: true,
@@ -56,25 +51,39 @@ export default async function BeritaDetail({
     take: 4,
   });
 
-  const formattedDate = new Date(berita.createdAt).toLocaleDateString('id-ID', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  let sanitizedContent = '';
+  try {
+    sanitizedContent = DOMPurify.sanitize(berita.isi);
+  } catch (err) {
+    console.error("DOMPurify Error:", err);
+    sanitizedContent = berita.isi; // fallback
+  }
+
+  after(() => {
+    // Increment view asynchronously
+    db.berita.update({
+      where: { id: berita.id },
+      data: { viewed: { increment: 1 } },
+    }).catch(err => console.error("Prisma Update Error:", err));
   });
 
-  const sanitizedContent = DOMPurify.sanitize(berita.isi);
+    const formattedDate = new Date(berita.createdAt).toLocaleDateString('id-ID', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
 
-  return (
-    <article className="min-h-screen bg-stone-50 dark:bg-stone-950 pt-32 pb-24 font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Link
-          href="/berita"
-          className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 mb-8 transition-colors bg-white dark:bg-stone-900 px-5 py-2.5 rounded-full border border-stone-200 dark:border-stone-800 shadow-sm hover:bg-stone-50 dark:hover:bg-stone-800"
-        >
-          <ArrowLeft size={14} strokeWidth={2.5} />
-          Kembali ke Arsip
-        </Link>
+    return (
+      <article className="min-h-screen bg-stone-50 dark:bg-stone-950 pt-32 pb-24 font-sans">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/berita"
+            className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 mb-8 transition-colors bg-white dark:bg-stone-900 px-5 py-2.5 rounded-full border border-stone-200 dark:border-stone-800 shadow-sm hover:bg-stone-50 dark:hover:bg-stone-800"
+          >
+            <ArrowLeft size={14} strokeWidth={2.5} />
+            Kembali ke Arsip
+          </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 items-start">
           {/* Main Content Column */}
